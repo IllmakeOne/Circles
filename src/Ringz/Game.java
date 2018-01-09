@@ -15,36 +15,36 @@ public class Game {
 	 * consturcotr for two players.
 	 * generates aborad and two players
 	 */
-	public Game(Player name1, Player name2) {
-		this.numberPlayers = 2;
+	public Game(Player[] players) {
+		this.numberPlayers = players.length;
 		this.board = new Board();
 		this.players = new Player[4];
-		this.players[0] = name1;
-		this.players[1] = name2;
-		
+		for (int i = 0; i < numberPlayers; i++) {
+			this.players[i] = players[i];
+		}		
 	}
 	
-	public Game(Player name1, Player name2, Player name3) {
-		this.numberPlayers = 3;
-		this.board = new Board();
-		this.players = new Player[4];
-		this.players[0] = name1;
-		this.players[1] = name2;
-		this.players[2] = name3;
-		
-	}
-	
-	public Game(Player name1, Player name2, Player name3, Player name4) {
-		this.numberPlayers = 4;
-		this.board = new Board();
-		this.players = new Player[4];
-		this.players[0] = name1;
-		this.players[1] = name2;
-		this.players[2] = name3;
-		this.players[3] = name4;
-		
-	}
-	
+//	public Game(Player name1, Player name2, Player name3) {
+//		this.numberPlayers = 3;
+//		this.board = new Board();
+//		this.players = new Player[4];
+//		this.players[0] = name1;
+//		this.players[1] = name2;
+//		this.players[2] = name3;
+//		
+//	}
+//	
+//	public Game(Player name1, Player name2, Player name3, Player name4) {
+//		this.numberPlayers = 4;
+//		this.board = new Board();
+//		this.players = new Player[4];
+//		this.players[0] = name1;
+//		this.players[1] = name2;
+//		this.players[2] = name3;
+//		this.players[3] = name4;
+//		
+//	}
+//	
 	
 	/**
 	 * play game
@@ -66,7 +66,12 @@ public class Game {
 	
 	
 	
+	/**
+	 * displays the winnder
+	 * @param indexWin
+	 */
 	public void winner(int indexWin) {
+		//WAH IF IT 2 PLAYERS HMMMMMMMMMMMM
 		if (numberPlayers == 2) {
 			switch (indexWin) {
 				case -1: {
@@ -87,24 +92,7 @@ public class Game {
 			}
 		}
 		
-		if (numberPlayers == 3) {
-			switch (indexWin) {
-				case -1: {
-					System.out.println("It is a draw"); break;
-				}
-				case 0: { 
-					System.out.println(players[0].getName() + "won"); break;
-				}
-				case 1: { 
-					System.out.println(players[1].getName() + "won"); break;
-				}
-				case 2: { 
-					System.out.println(players[2].getName() + "won"); break;
-				}
-			}
-		}
-		
-		if (numberPlayers == 4) {
+		if (numberPlayers == 4 || numberPlayers == 3) {
 			switch (indexWin) {
 				case -1: {
 					System.out.println("It is a draw"); break;
@@ -143,13 +131,7 @@ public class Game {
 	}
 	
 	
-	public static void main(String[] args) {
-		Game game = new Game(
-				new HumanPalyer(2, Color.BLUE, Color.YELLOW, "boi"), 
-				new HumanPalyer(2, Color.GREEN, Color.PURPLE, "boitoi"));
-		game.play();
-	
-	}
+S
 	
 
 }
