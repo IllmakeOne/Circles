@@ -21,7 +21,7 @@ public class BoardTest {
 	public void initialTest() {
 		for (int x = 0 ; x < Board.DIM;x++) {
 			for (int y = 0; y < Board.DIM;y++) {
-				assertEquals(bord.getField(x,0,0),Color.EMPTY);	
+				assertEquals(bord.getRing(x,0,0),Color.EMPTY);	
 			}
 		}
 	}

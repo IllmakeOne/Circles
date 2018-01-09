@@ -2,8 +2,6 @@ package Ringz;
 
 import java.util.Scanner;
 
-import Ringz.Board.Color;
-
 public class HumanPalyer implements Player {
 	 
 	

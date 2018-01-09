@@ -1,6 +1,6 @@
 package Ringz;
 
-import Ringz.Board.Color;
+import Ringz.Color;
 
 public interface Player {
 	
