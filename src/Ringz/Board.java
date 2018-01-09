@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
-
+//lalalalala comment git
 public class Board extends Observable {
 	
 	private Color[][][] bord;//x, y, pin
