@@ -28,6 +28,12 @@ public class Board extends Observable {
 		}
 		
 	}
+	/**
+	 * 
+	 * @param x x and y coordinate to be checked for a winner.
+	 * @param y
+	 * @return color of winner field.
+	 */
 	public Color fieldwon(int x, int y) {
 		Color[] pin = getPin(x,y);
 		if (!pin[4].equals(Color.EMPTY)) {//if there is a base this field is instant won.
