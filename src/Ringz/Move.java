@@ -2,7 +2,7 @@ package Ringz;
 
 import java.util.Scanner;
 
-import Ringz.Board.Color;
+import Ringz.Color;
 
 public class Move {
 	

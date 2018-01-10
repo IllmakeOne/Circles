@@ -1,6 +1,6 @@
 package Ringz;
 
-import Ringz.Board.Color;
+import Ringz.Color;
 
 public class Game {
 	
@@ -131,7 +131,7 @@ public class Game {
 	}
 	
 	
-S
+
 	
 
 }
