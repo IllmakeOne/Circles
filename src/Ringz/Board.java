@@ -39,7 +39,6 @@ public class Board extends Observable {
 		if (!pin[4].equals(Color.EMPTY)) {//if there is a base this field is instant won.
 			return pin[4];
 		}else {
-			arrayMaximum()
 		}
 		return null;
 	}
@@ -93,11 +92,11 @@ public class Board extends Observable {
 	}
 	public Color intIndex(int i) {
 		switch(i) {
-		case 0:{
-			return Color.BLUE;
-		}
-		case 1: {
-			return Color.PURPLE;
+			case 0:{
+				return Color.BLUE;
+			}
+			case 1: {
+				return Color.PURPLE;
 		}
 		case 2: {
 			return Color.YELLOW;
