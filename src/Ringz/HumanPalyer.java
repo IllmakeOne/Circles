@@ -87,10 +87,37 @@ public class HumanPalyer implements Player {
 		
 		return true;
 	}
+		
 	
 	/**
-	 * detemins the move of ahumba player form keyboard nput
-	 * 
+	 * reads form user three numbers, cirlce zize, lien and column.
+	 * @param move is the arraty int that remebrts the user's input
+	 * @param pi is the index of the color of the player
+	 */
+	public void readMove(int[] move, int pi) {
+		Scanner in = new Scanner(System.in);
+		int flag = 1;
+		String[] words;
+		while (flag == 1) {
+			System.out.println("Please give move \n"
+					+ "( first number the size of the piece, \n"
+					+ "second number the line and the thirds , the column \n");
+			String line = in.nextLine();
+			words = line.split(" ");
+			if (words.length == 3) {
+				for (int i = 0; i < words.length; i++) {
+					move[i] = Integer.parseInt(words[i]) - 1;
+				}
+				if (this.isValid(move, pi)) {
+					flag = 0;
+				}
+			}
+			in = new Scanner(System.in);
+		}
+	}
+	
+	/**
+	 * detemines the move of human player form keyboard input. 
 	 */
 	@Override
 	public Move determineMove() {
@@ -102,43 +129,9 @@ public class HumanPalyer implements Player {
 			if (c == this.color[1]) {
 				pi = 1;
 			}
-			Scanner in = new Scanner(System.in);
-			String[] words;
-			while (flag == 1) {
-				System.out.println("Please give move \n"
-						+ "( first number the size of the piece, \n"
-						+ "second number the line and the thirds , the column \n");
-				String line = in.nextLine();
-				words = line.split(" ");
-				if (words.length == 3) {
-					for (int i = 0; i < words.length; i++) {
-						move[i] = Integer.parseInt(words[i]) - 1;
-					}
-					if (this.isValid(move, pi)) {
-						flag = 0;
-					}
-				}
-				in = new Scanner(System.in);
-			}
+			readMove(move, pi);
 		} else {
-			Scanner in = new Scanner(System.in);
-			String[] words;
-			while (flag == 1) {
-				System.out.println("Please give move \n"
-						+ "( first number the size of the piece, \n"
-						+ "second number the line and the thirds , the column \n");
-				String line = in.nextLine();
-				words = line.split(" ");
-				if (words.length == 3) {
-					for (int i = 0; i < words.length; i++) {
-						move[i] = Integer.parseInt(words[i]) - 1;
-					}
-					if (this.isValid(move, pi)) {
-						flag = 0;
-					}
-				}
-				in = new Scanner(System.in);
-			}
+			readMove(move, pi);
 		}
 		
 		this.pieces[pi][move[0]] -= 1;

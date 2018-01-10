@@ -1,6 +1,7 @@
 package Ringz;
 
 import Ringz.Color;
+import Ringz.Board;
 
 public class Game {
 	
@@ -12,8 +13,7 @@ public class Game {
 	//----------------Constructors---------
 	
 	/**
-	 * consturcotr for two players.
-	 * generates aborad and two players
+	 * consturctor
 	 */
 	public Game(Player[] players) {
 		this.numberPlayers = players.length;
@@ -54,8 +54,10 @@ public class Game {
 		board.placeStart(players[current].getStart());
 		this.display();
 		while (this.board.isPayable()) {
-			System.out.println(this.players[current].getName() + " with the colors " +
-					this.players[current].getColor() + " please place ");
+			System.out.println(this.players[current].getName() 
+					+ " with the colors " +
+					this.players[current].getColor() 
+					+ " please place ");
 			if (this.makeMove(this.players[current])) {
 				current = (current + 1) % this.numberPlayers;
 				this.display();
@@ -70,30 +72,23 @@ public class Game {
 	 * displays the winnder
 	 * @param indexWin
 	 */
-	public void winner(int indexWin) {
-		//WAH IF IT 2 PLAYERS HMMMMMMMMMMMM
+	public void winner(int[] indexWin) {
 		if (numberPlayers == 2) {
-			switch (indexWin) {
-				case -1: {
-					System.out.println("It is a draw"); break;
-				}
-				case 0: { 
-					System.out.println(players[0].getName() + "won"); break;
-				}
-				case 1: { 
-					System.out.println(players[0].getName() + "won"); break;
-				}
-				case 2: { 
-					System.out.println(players[1].getName() + "won"); break;
-				}
-				case 3: { 
-					System.out.println(players[1].getName() + "won"); break;
+			int player1 = indexWin[0] + indexWin[1];
+			int player2 = indexWin[2] + indexWin[3];
+			if (player1 > player2) {
+				System.out.println("Player " + players[0].getName() + " won");
+			} else {
+				if (player1 < player2) {
+					System.out.println("Player " + players[1].getName() + " won");
+				} else {
+					System.out.println("It is a draw");
 				}
 			}
 		}
 		
 		if (numberPlayers == 4 || numberPlayers == 3) {
-			switch (indexWin) {
+			switch (Board.arrayMaximum(indexWin)) {
 				case -1: {
 					System.out.println("It is a draw"); break;
 				}
@@ -115,7 +110,7 @@ public class Game {
 	
 	/**
 	 * make a move 
-	 * @param play <- th eplayer making the move.
+	 * @param play <- the player making the move.
 	 * @param c1
 	 * @param c2
 	 */
@@ -130,8 +125,12 @@ public class Game {
 		this.board.display();
 	}
 	
-	
-
-	
-
+	public static void main(String[] args) {
+		Player[] players = new Player[2];
+		players[0] = new HumanPalyer(2, Color.BLUE, Color.PURPLE, "boi");
+		players[1] = new HumanPalyer(2, Color.YELLOW, Color.GREEN, "yaboi");
+		Game game = new Game(players);
+		game.play();
+		
+	}
 }

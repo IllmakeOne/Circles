@@ -7,10 +7,10 @@ import java.util.Observable;
 //lalalalala comment git
 public class Board extends Observable {
 	
-	private Color[][][] bord;//x, y, pin
+	private Color[][][] bord; //x, y, pin
 	public static final int DIM = 5;
-	public static final int DIFFPIECES = 5;//different amount of pieces(12 rings in 4 sizes, 3 bases)
-	private int[] sum;
+	public static final int DIFFPIECES = 5; 
+	//different amount of pieces(12 rings in 4 sizes, 3 bases)
 //	public enum Color { BLUE, PURPLE, YELLOW, GREEN, EMPTY };
 	
 	
@@ -36,7 +36,8 @@ public class Board extends Observable {
 	 */
 	public Color fieldwon(int x, int y) {
 		Color[] pin = getPin(x,y);
-		if (!pin[4].equals(Color.EMPTY)) {//if there is a base this field is instant won.
+		if (!pin[4].equals(Color.EMPTY)) {
+			//if there is a base this field is instant won.
 			return pin[4];
 		} else {
 		}
@@ -49,7 +50,7 @@ public class Board extends Observable {
 	 * @param array input array(pin on board) to be checked 
 	 * @return 
 	 */
-	public int arrayMaximum(int[] array) {
+	public static int arrayMaximum(int[] array) {
 		int max1 = 0, maxindex1 = 1;
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] >= max1) {
@@ -130,7 +131,7 @@ public class Board extends Observable {
 	 * index 0 blue, index 1 purple, index 2 yellow, index 3 green.
 	 * on each ndex it says how many points each has
 	 */
-	public int total() {
+	public int[] total() {
 		int[] sum = new int[4];
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
@@ -144,12 +145,12 @@ public class Board extends Observable {
 			}
 		}
 	
-		return arrayMaximum(sum);
+		return sum;
 	}
 	
 	
 	/**
-	 * places the first piece of the game
+	 * places the first piece of the game.
 	 * @param a
 	 */
 	public void placeStart(int[] a) {
