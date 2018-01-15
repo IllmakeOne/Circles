@@ -12,9 +12,9 @@ public class Move {
 	private int circle;
 	
 	public Move(int[] cord, Color c) {
+		circle = cord[0];
 		line = cord[1];
 		column = cord[2];
-		circle = cord[0];
 		this.color = c;
 	}
 	
@@ -32,6 +32,12 @@ public class Move {
 	
 	public Color getColor() {
 		return this.color;
+	}
+	
+	public String toString() {
+		return "Line " + line +
+				" Column  "+ column +
+				" Circle sieze " + circle;
 	}
 
 }

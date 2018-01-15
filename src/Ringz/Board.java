@@ -1,4 +1,6 @@
 package Ringz;
+import java.awt.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +46,101 @@ public class Board extends Observable {
 		return null;
 	}
 	
+	/**
+	 * crutch function puts togheter the 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public int[] createArray(int x, int y, int z) {
+		int[] cord = new int[3];
+		cord[1] = x;
+		cord[2] = y;
+		cord[0] = z;
+		return cord;
+	}
+	
+	
+	/**
+	 * return an array of posdbile moves a color can take.
+	 * @param c
+	 * @return
+	 */
+	public ArrayList<Move> getPossibleMoves(Color c, int[][] pieces) {
+//		int nrmoves = 0;
+		Move move = null;
+		int cnr = 0;
+		ArrayList<Move> list = new ArrayList<Move>();
+		for (int i = 0; i < DIM; i++) {
+			for (int j = 0; j < DIM; j++) {
+				if (hasFriend(i, j, c)) {
+					if (isCompletlyEmpty(i, j) &&
+							pieces[cnr][0]!= 0) {
+						move = new Move(createArray(i, j, 0), c);
+						//System.out.println(getRing(j, j, 0));
+						//System.out.println(move);
+						list.add(move);
+						//return move;
+					} 
+					if (getRing(i, j, 0) == Color.EMPTY ){
+						for (int k = 1; k < DIFFPIECES; k++) {
+							if (getRing(i, j, k) == Color.EMPTY &&
+									pieces[cnr][k] != 0) {
+							//	System.out.println(getRing(j, j, 0));
+							//	System.out.println(getRing(j, j, k));
+								move = new Move(createArray(i, j, k), c);
+								list.add(move);
+							//	System.out.println(move);
+							//	return move;
+							}
+						}
+					}
+					
+				}
+			}
+		}	
+		
+		return list;
+
+	}
+//		for (int i = 0; i < DIM; i++) {
+//			for (int j = 0; j < DIM; j++) {
+//				if (hasFriend(i, j, c)) {
+//					if (isCompletlyEmpty(i, j)) {
+//						nrmoves++;
+//					}
+//					for (int k = 1; k < DIFFPIECES; k++) {
+//						if (getRing(i, j, k) == Color.EMPTY) {
+//							nrmoves++;
+//						}
+//					}
+//					
+//				}
+//			}
+//		}	
+//		
+//		Move[] moves = new Move[nrmoves];
+//		nrmoves = 0;
+//		for (int i = 0; i < DIM; i++) {
+//			for (int j = 0; j < DIM; j++) {
+//				if (hasFriend(i, j, c)) {
+//					if (isCompletlyEmpty(i, j)) {
+//						moves[nrmoves] = new Move(createArray(i, j, 0), c);
+//						nrmoves++;
+//					}
+//					for (int k = 1; k < DIFFPIECES; k++) {
+//						if (getRing(i, j, k) == Color.EMPTY) {
+//							moves[nrmoves] = new Move(createArray(i, j, k), c);
+//							nrmoves++;
+//						}
+//					}
+//					
+//				}
+//			}
+//		}
+		
+		
 	
 	/**
 	 * return a deep copy of the board
@@ -205,7 +302,7 @@ public class Board extends Observable {
 	}
 	
 	/**
-	 * 
+	 * test if a color on a position is surounded byt at least one piece of the sme color.
 	 */
 	public boolean hasFriend(int x, int y, Color col) {
 		int[] handy = {-1, 0, 1};
@@ -230,30 +327,31 @@ public class Board extends Observable {
 	 * @return true if the move is valid
 	 */
 	public boolean validMove(int x, int y, Color col, int circleSize) {
+		//display();
 		if (getRing(x, y, 0) == Color.EMPTY) {	
 			if (this.hasFriend(x, y, col)) {
 				if (circleSize == 0) {
 					if (this.isCompletlyEmpty(x, y)) {
 						return true;
 					} else {
-					//	System.out.println("There are peices here, cant put base");
+						//System.out.println("There are peices here, cant put base");
 						return false;
 					}
 				}
 				if (this.bord[x][y][circleSize] == Color.EMPTY) {
 					return true;
 				} else {
-					System.out.println("Field not empty");
+				//	System.out.println("Field not empty");
 
 					return false;
 				}
 			} else {
-				//System.out.println("Has no near piece of the same coolor NEAR IT");
+			//	System.out.println("Has no near piece of the same coolor NEAR IT");
 
 				return false;
 			}
 		} else {
-			System.out.println("The space already has a BASE");
+			//System.out.println("The space already has a BASE");
 			return false;
 		}
 		
@@ -354,8 +452,12 @@ public class Board extends Observable {
 	public boolean isFull() {
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
-				for (int k = 0; k < 5; k++) {
-					if (getRing(i, j, k) == Color.EMPTY) {
+				if (isCompletlyEmpty(i, j)) {
+					return false;
+				}
+				for (int k = 1; k < 5; k++) {
+					if (getRing(i, j, k) == Color.EMPTY
+							&& getRing(i, j, 0) == Color.EMPTY) {
 						return false;
 					}
 				}

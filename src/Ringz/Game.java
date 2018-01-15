@@ -54,30 +54,40 @@ public class Game {
 		System.out.println(players[current].getName());
 		board.placeStart(players[current].getStart());
 		this.display();
-		while (this.board.isPayable()) {
+		int[] plays = new int[numberPlayers];
+		while (this.board.isPayable() && allStoped(plays) != true) {
 			if (this.players[current].isOutOfPieces()) {
 				System.out.println(this.players[current].getName() 
 						+ " is out of pieces");
+				plays[current] = 1;
 				current = (current + 1) % this.numberPlayers;
-			}
-			if (!this.board.isStrillAbleToPlace(players[current])) {
+			} else if (!this.board.isStrillAbleToPlace(players[current])) {
 				System.out.println(players[current].getName() + "has nowhere to place pieces");
+				plays[current] = 1;
 				current = (current + 1) % this.numberPlayers;
-				
+			} else {
+				System.out.println(this.players[current].getName() 
+						+ " with the colors " +
+						this.players[current].getStringColor() 
+						+ " please place ");
+				if (this.makeMove(this.players[current])) {
+					current = (current + 1) % this.numberPlayers;
+					display();
+				}
 			}
-			System.out.println(this.players[current].getName() 
-					+ " with the colors " +
-					this.players[current].getStringColor() 
-					+ " please place ");
-			if (this.makeMove(this.players[current])) {
-				current = (current + 1) % this.numberPlayers;
-				this.display();
-			}
-		}
+		}	
 		winner(board.total());
 	}
 	
 	
+	public boolean allStoped(int[] plays) {
+		for (int i = 0; i < plays.length; i++) {
+			if (plays[i] == 0) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	/**
 	 * displays the winnder.
