@@ -44,6 +44,23 @@ public class Board extends Observable {
 		return null;
 	}
 	
+	
+	/**
+	 * return a deep copy of the board
+	 * @return
+	 */
+	public Color[][][] deepCopy() {
+		Color[][][] copy = null;
+		for (int i = 0; i < DIM; i++) {
+			for (int j = 0; j < DIM; j++) {
+				for (int k = 0; k < DIFFPIECES; k++) {
+					copy[i][j][k] = getRing(j, j, k);
+				}
+			}
+		}
+		return copy;	
+	}
+	
 	/**
 	 * this function returns the index of the maxim value in an array.
 	 * it will return -1 if there are multiple indexes with the same maximum value;
@@ -240,6 +257,41 @@ public class Board extends Observable {
 			return false;
 		}
 		
+	}
+	
+	/**
+	 * this functions tests if a given player has options to play.
+	 * it tests by going though all the possible places the player can play with each color, and 
+	 * tests if the player has anymore piece of that kind.
+	 * @param play
+	 * @return true if is still able to play
+	 */
+	public boolean isStrillAbleToPlace(Player play) {
+		Color[] col = play.getColor();
+		int[][] pieces = play.getPieces();
+		for (int i = 0; i < DIM; i++) {
+			for (int j = 0; j < DIM; j++) {
+				for (int k = 0; k < DIFFPIECES; k++) {
+					if (validMove(i, j, col[0], k) &&
+							pieces[0][k] != 0) {
+						return true;
+					}
+				}
+			}
+		}		
+		if (col.length == 2) {
+			for (int i = 0; i < DIM; i++) {
+				for (int j = 0; j < DIM; j++) {
+					for (int k = 0; k < DIFFPIECES; k++) {
+						if (validMove(i, j, col[1], k) &&
+								pieces[1][k] != 0) {
+							return true;
+						}
+					}
+				}
+			}
+		}		
+		return false;
 	}
 	
 	

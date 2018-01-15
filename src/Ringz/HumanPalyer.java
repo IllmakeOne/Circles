@@ -59,6 +59,22 @@ public class HumanPalyer implements Player {
 //		}
 //	}
 	
+	 
+	public boolean isOutOfPieces() {
+		for (int i = 0; i < 5; i++) {
+			if (pieces[0][i] != 0) {
+				return false;
+			}
+		}
+		for (int i = 0; i < 5; i++) {
+			if (pieces[1][i] != 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	
 	
 	/**
 	 * a fcntion that tests if the given parametre, a int arraty, is valid as a move.
@@ -205,7 +221,7 @@ public class HumanPalyer implements Player {
 	}
 
 	@Override
-	public String getColor() {
+	public String getStringColor() {
 		String stringy ="";
 		if (this.color[1] != null) {
 			stringy += this.color[0].toString() + "/" + this.color[1].toString();
@@ -217,6 +233,11 @@ public class HumanPalyer implements Player {
 
 	public int[][] getPieces() {
 		return this.pieces;
+	}
+
+	@Override
+	public Color[] getColor() {
+		return this.color;
 	}
 	
 

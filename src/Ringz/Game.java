@@ -47,16 +47,26 @@ public class Game {
 //	
 	
 	/**
-	 * play game
+	 * play game.
 	 */
 	public void play() {
 		int current = 0;
 		board.placeStart(players[current].getStart());
 		this.display();
 		while (this.board.isPayable()) {
+			if (this.players[current].isOutOfPieces()) {
+				System.out.println(this.players[current].getName() 
+						+ " is out of pieces");
+				current = (current + 1) % this.numberPlayers;
+			}
+			if (!this.board.isStrillAbleToPlace(players[current])) {
+				System.out.println(players[current].getName() + "has nowhere to place pieces");
+				current = (current + 1) % this.numberPlayers;
+				
+			}
 			System.out.println(this.players[current].getName() 
 					+ " with the colors " +
-					this.players[current].getColor() 
+					this.players[current].getStringColor() 
 					+ " please place ");
 			if (this.makeMove(this.players[current])) {
 				current = (current + 1) % this.numberPlayers;
@@ -69,7 +79,7 @@ public class Game {
 	
 	
 	/**
-	 * displays the winnder
+	 * displays the winnder.
 	 * @param indexWin
 	 */
 	public void winner(int[] indexWin) {
@@ -123,6 +133,10 @@ public class Game {
 	 */
 	public void display() {
 		this.board.display();
+	}
+	
+	public int getNrPlayers() {
+		return this.numberPlayers;
 	}
 	
 	public static void main(String[] args) {

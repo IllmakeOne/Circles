@@ -8,9 +8,15 @@ public interface Player {
 
 	public String getName();
 	
-	public String getColor();
+	public String getStringColor();
+	
+	public Color[] getColor();
+	
+	public int[][] getPieces();
 	
 	public Color chooseColor(Color c1, Color c2);
 	
 	public int[] getStart();
+	
+	public boolean isOutOfPieces();
 }
