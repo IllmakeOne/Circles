@@ -35,7 +35,7 @@ public class Board extends Observable {
 	 * @return color of winner field.
 	 */
 	public Color fieldwon(int x, int y) {
-		Color[] pin = getPin(x,y);
+		Color[] pin = getPin(x, y);
 		if (!pin[4].equals(Color.EMPTY)) {
 			//if there is a base this field is instant won.
 			return pin[4];
@@ -236,7 +236,7 @@ public class Board extends Observable {
 					if (this.isCompletlyEmpty(x, y)) {
 						return true;
 					} else {
-						System.out.println("There are peices here, cant put base");
+					//	System.out.println("There are peices here, cant put base");
 						return false;
 					}
 				}
@@ -248,7 +248,7 @@ public class Board extends Observable {
 					return false;
 				}
 			} else {
-				System.out.println("Has no near piece of the same coolor NEAR IT");
+				//System.out.println("Has no near piece of the same coolor NEAR IT");
 
 				return false;
 			}
@@ -314,7 +314,7 @@ public class Board extends Observable {
 			System.out.println("circles aded");
 			return true;
 		} else {
-			System.out.println("circles  not aded");
+			System.out.println("circles  not aded");	
 			return  false;
 		}
 	}

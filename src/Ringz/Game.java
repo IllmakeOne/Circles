@@ -51,6 +51,7 @@ public class Game {
 	 */
 	public void play() {
 		int current = 0;
+		System.out.println(players[current].getName());
 		board.placeStart(players[current].getStart());
 		this.display();
 		while (this.board.isPayable()) {
@@ -125,6 +126,9 @@ public class Game {
 	 * @param c2
 	 */
 	public boolean makeMove(Player play) {
+		if (play instanceof ComputerPlayer) {
+			return this.board.addCircle(play.determineMove(board));
+		}
 		return this.board.addCircle(play.determineMove());
 	}
 	
@@ -139,10 +143,14 @@ public class Game {
 		return this.numberPlayers;
 	}
 	
+	
 	public static void main(String[] args) {
-		Player[] players = new Player[2];
-		players[0] = new HumanPalyer(2, Color.BLUE, Color.PURPLE, "boi");
-		players[1] = new HumanPalyer(2, Color.YELLOW, Color.GREEN, "yaboi");
+		Player[] players = new Player[4];
+		players[0] = new ComputerPlayer(Color.BLUE, "1");
+		players[1] = new ComputerPlayer(Color.PURPLE, "2");
+		players[2] = new ComputerPlayer(Color.YELLOW, "3");
+		players[3] = new ComputerPlayer(Color.GREEN, "4");
+		
 		Game game = new Game(players);
 		game.play();
 		

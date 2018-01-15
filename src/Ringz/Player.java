@@ -19,4 +19,7 @@ public interface Player {
 	public int[] getStart();
 	
 	public boolean isOutOfPieces();
+
+	public Move determineMove(Board bord);
 }
+ 

@@ -239,6 +239,12 @@ public class HumanPalyer implements Player {
 	public Color[] getColor() {
 		return this.color;
 	}
+
+	@Override
+	public Move determineMove(Board bord) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 
