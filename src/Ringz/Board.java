@@ -32,17 +32,17 @@ public class Board extends Observable {
 	}
 	
 	/**
-	 * crutch function puts togheter the 
+	 * crutch function puts togheter the array 
 	 * @param x
 	 * @param y
 	 * @param z
 	 * @return
 	 */
-	public int[] createArray(int x, int y, int z) {
+	public int[] createArray(int x, int y, int circlesize) {
 		int[] cord = new int[3];
 		cord[1] = x;
 		cord[2] = y;
-		cord[0] = z;
+		cord[0] = circlesize;
 		return cord;
 	}
 	

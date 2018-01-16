@@ -8,6 +8,9 @@ import Ringz.Color;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.junit.Assert;
 
 public class BoardTest {
 	
@@ -23,8 +26,14 @@ public class BoardTest {
 	@Test
 	public void initialTest() {
 		for (int x = 0 ; x < Board.DIM;x++) {
-			for (int y = 0; y < Board.DIM;y++) {
-				assertEquals(bord.getRing(x,0,0),Color.EMPTY);	
+			for (int y = 0; y < Board.DIM;y++){
+				for (int pieces = 0; pieces <Board.DIFFPIECES;pieces++) {
+					if(x==2&&y==2) {
+						Assert.assertFalse(bord.getRing(x, y, pieces).equals(Color.EMPTY));
+					}else {
+						assertEquals(bord.getRing(x,y,0),Color.EMPTY);
+					}
+				}
 			}
 		}
 	}
@@ -47,13 +56,13 @@ public class BoardTest {
 	public void isCompletyEmptyTest() {
 		assertTrue(bord.isCompletlyEmpty(0, 0));
 		assertTrue(bord.isCompletlyEmpty(4, 4));
-		assertFalse(bord.isCompletlyEmpty(2, 2));
+		Assert.assertFalse(bord.isCompletlyEmpty(2, 2));
 	}
 	
 	@Test
 	public void testHasFriend() {
 		assertTrue(bord.hasFriend(1, 1, Color.BLUE));
-		assertFalse(bord.hasFriend(0, 0, Color.BLUE));
+		Assert.assertFalse(bord.hasFriend(0, 0, Color.BLUE));
 	}
 	
 	
