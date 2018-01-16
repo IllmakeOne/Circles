@@ -205,18 +205,23 @@ public class TUI implements View {
 				switch (j) {
 					case 0: {
 						System.out.println(pieces[i][j] + " bases");
+						break;
 					} 
 					case 1: {
 						System.out.println(pieces[i][j] + " dots");
+						break;
 					} 
 					case 2: {
 						System.out.println(pieces[i][j] + " small rings");
+						break;
 					} 
 					case 3: {
 						System.out.println(pieces[i][j] + " medium rings");
+						break;
 					} 
 					case 4: {
 						System.out.println(pieces[i][j] + " large rings");
+						break;
 					} 
 				}
 			}

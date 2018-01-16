@@ -1,6 +1,7 @@
 package Ringz;
 
 import Ringz.Color;
+import View.View;
 import Ringz.Board;
 
 public class Game {
