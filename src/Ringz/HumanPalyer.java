@@ -112,49 +112,49 @@ public class HumanPalyer implements Player {
 	 * @param move is the arraty int that remebrts the user's input
 	 * @param colorIndex is the index of the color of the player
 	 */
-	public void readMove(int[] move, int colorIndex) {
-		Scanner in = new Scanner(System.in);
-		int flag = 1;
-		String[] words;
-		while (flag == 1) {
-			System.out.println("Please give move \n"
-					+ "( first number the size of the piece, \n"
-					+ "second number the line and the thirds , the column \n");
-			String line = in.nextLine();
-			words = line.split(" ");
-			if (words.length == 3) {
-				for (int i = 0; i < words.length; i++) {
-					move[i] = Integer.parseInt(words[i]) - 1;
-				}
-				if (this.isValid(move, colorIndex)) {
-					flag = 0;
-				}
-			}
-			in = new Scanner(System.in);
-		}
-	}
+//	public void readMove(int[] move, int colorIndex) {
+//		Scanner in = new Scanner(System.in);
+//		int flag = 1;
+//		String[] words;
+//		while (flag == 1) {
+//			System.out.println("Please give move \n"
+//					+ "( first number the size of the piece, \n"
+//					+ "second number the line and the thirds , the column \n");
+//			String line = in.nextLine();
+//			words = line.split(" ");
+//			if (words.length == 3) {
+//				for (int i = 0; i < words.length; i++) {
+//					move[i] = Integer.parseInt(words[i]) - 1;
+//				}
+//				if (this.isValid(move, colorIndex)) {
+//					flag = 0;
+//				}
+//			}
+//			in = new Scanner(System.in);
+//		}
+//	}
 	
-	/**
-	 * detemines the move of human player form keyboard input. 
-	 */
-	@Override
-	public Move determineMove(Board board) {
-		int[] move = new int[3];
-		int flag = 1;
-		int colorIndex = 0;
-		if (this.color[1] != null) {
-			Color c = this.chooseColor(this.color[0], this.color[1]);
-			if (c == this.color[1]) {
-				colorIndex = 1;
-			}
-			readMove(move, colorIndex);
-		} else {
-			readMove(move, colorIndex);
-		}
-		
-		this.pieces[colorIndex][move[0]] -= 1;
-		return new Move(move, this.color[colorIndex]);
-	}
+//	/**
+//	 * detemines the move of human player form keyboard input. 
+//	 */
+//	@Override
+//	public Move determineMove(Board board) {
+//		int[] move = new int[3];
+//		int flag = 1;
+//		int colorIndex = 0;
+//		if (this.color[1] != null) {
+//			Color c = this.chooseColor(this.color[0], this.color[1]);
+//			if (c == this.color[1]) {
+//				colorIndex = 1;
+//			}
+//			readMove(move, colorIndex);
+//		} else {
+//			readMove(move, colorIndex);
+//		}
+//		
+//		this.pieces[colorIndex][move[0]] -= 1;
+//		return new Move(move, this.color[colorIndex]);
+//	}
 	
 	
 	/**
@@ -187,34 +187,34 @@ public class HumanPalyer implements Player {
 	
 	
 	
-	/**
-	 * determin which color to place.
-	 */
-	public Color chooseColor(Color c1, Color c2) {
-		Color choce = null;
-		int flag = 1;
-		Scanner in = new Scanner(System.in);
-		String[] words;
-		while (flag == 1) {
-			System.out.println("Please choose ofne hte fhtse colros "
-					+ c1 + " and " + c2);
-			String line = in.nextLine();
-			if (line.equals(c1.toString())) {
-				choce = c1;
-				flag = 0;
-			} else {
-				if (line.equals(c2.toString())) {
-					choce = c2;
-					flag = 0;
-				} else {
-					System.out.println("Invalid color choice");
-				}
-			}
-			
-			in = new Scanner(System.in);
-		}
-		return choce;
-	}
+//	/**
+//	 * determin which color to place.
+//	 */
+//	public Color chooseColor(Color c1, Color c2) {
+//		Color choce = null;
+//		int flag = 1;
+//		Scanner in = new Scanner(System.in);
+//		String[] words;
+//		while (flag == 1) {
+//			System.out.println("Please choose ofne hte fhtse colros "
+//					+ c1 + " and " + c2);
+//			String line = in.nextLine();
+//			if (line.equals(c1.toString())) {
+//				choce = c1;
+//				flag = 0;
+//			} else {
+//				if (line.equals(c2.toString())) {
+//					choce = c2;
+//					flag = 0;
+//				} else {
+//					System.out.println("Invalid color choice");
+//				}
+//			}
+//			
+//			in = new Scanner(System.in);
+//		}
+//		return choce;
+//	}
 	
 
 	@Override

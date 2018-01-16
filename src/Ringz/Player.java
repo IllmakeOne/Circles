@@ -10,12 +10,12 @@ public interface Player {
 	
 	public int[][] getPieces();
 	
-	public Color chooseColor(Color c1, Color c2);
+//	public Color chooseColor(Color c1, Color c2);
 	
 	public int[] getStart();
 	
 	public boolean isOutOfPieces();
 
-	public Move determineMove(Board bord);
+//	public Move determineMove(Board bord);
 }
  
