@@ -1,9 +1,11 @@
 package View;
- import java.util.Scanner;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Scanner;
 
 import Ringz.*;
  
-public class TUI implements View {
+public class TUI implements Observer, View {
 	
 	private static final String SHOW = "show";
 	private static final String PIECES = "pieces";
@@ -242,6 +244,24 @@ public class TUI implements View {
 	@Override
 	public void notAbletoPlay(String name) {
 		System.out.println(name + ",you are not able to place any pieces");
+	}
+
+
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		if (arg1.equals("notCompEmpty")) {
+			System.out.println("Cant put base, it is not completly empty");
+		} else if (arg1.equals("notEmpty")) {
+			System.out.println("Cant put piece there, field not empty");
+		} else if (arg1.equals("noFriend")) {
+			System.out.println("Cant put piece there, it has no friends around it");
+		} else if (arg1.equals("hasBase")) {
+			System.out.println("cant put piece there, Pin has a base");
+		} else if (arg1.equals("added")) {
+			System.out.println("Valid move, piece added");
+		}
+		
 	}
 
 

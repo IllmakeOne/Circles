@@ -61,14 +61,14 @@ public class Board extends Observable {
 			for (int j = 0; j < DIM; j++) {
 				if (hasFriend(i, j, c)) {
 					if (isCompletlyEmpty(i, j) &&
-							pieces[cnr][0]!= 0) {
+							pieces[cnr][0] != 0) {
 						move = new Move(createArray(i, j, 0), c);
 						//System.out.println(getRing(j, j, 0));
 						//System.out.println(move);
 						list.add(move);
 						//return move;
 					} 
-					if (getRing(i, j, 0) == Color.EMPTY ){
+					if (getRing(i, j, 0) == Color.EMPTY) {
 						for (int k = 1; k < DIFFPIECES; k++) {
 							if (getRing(i, j, k) == Color.EMPTY &&
 									pieces[cnr][k] != 0) {
@@ -314,13 +314,16 @@ public class Board extends Observable {
 	 */
 	public boolean validMove(int x, int y, Color col, int circleSize) {
 		//display();
+		this.setChanged();
 		if (getRing(x, y, 0) == Color.EMPTY) {	
 			if (this.hasFriend(x, y, col)) {
 				if (circleSize == 0) {
 					if (this.isCompletlyEmpty(x, y)) {
+						notifyObservers("added");
 						return true;
 					} else {
 						//System.out.println("There are peices here, cant put base");
+						notifyObservers("notCompEmpty");
 						return false;
 					}
 				}
@@ -328,16 +331,17 @@ public class Board extends Observable {
 					return true;
 				} else {
 				//	System.out.println("Field not empty");
-
+					notifyObservers("notEmpty");
 					return false;
 				}
 			} else {
 			//	System.out.println("Has no near piece of the same coolor NEAR IT");
-
+				notifyObservers("noFriend");
 				return false;
 			}
 		} else {
 			//System.out.println("The space already has a BASE");
+			notifyObservers("hasBase");
 			return false;
 		}
 		
@@ -395,12 +399,9 @@ public class Board extends Observable {
 		col = move.getColor();
 		if (validMove(x, y, col, circleSeize)) {
 			this.bord[x][y][circleSeize] = col;
-			System.out.println("circles aded");
-			//notifyObservers("added");
+			//System.out.println("circles aded");
 			return true;
 		} else {
-			System.out.println("circles  not aded");
-			//notifyObservers("notadded");
 			return  false;
 		}
 	}
@@ -516,6 +517,35 @@ public class Board extends Observable {
 				croth += stringy + "    ";
 			}
 			System.out.println(croth);
+		}
+		
+	}
+	
+	public boolean validMoveWithoutObservers(int x, int y, Color col, int circleSize) {
+		//display();
+		if (getRing(x, y, 0) == Color.EMPTY) {	
+			if (this.hasFriend(x, y, col)) {
+				if (circleSize == 0) {
+					if (this.isCompletlyEmpty(x, y)) {
+						return true;
+					} else {
+						//System.out.println("There are peices here, cant put base");
+						return false;
+					}
+				}
+				if (this.bord[x][y][circleSize] == Color.EMPTY) {
+					return true;
+				} else {
+				//	System.out.println("Field not empty");
+					return false;
+				}
+			} else {
+			//	System.out.println("Has no near piece of the same coolor NEAR IT");
+				return false;
+			}
+		} else {
+			//System.out.println("The space already has a BASE");
+			return false;
 		}
 		
 	}
