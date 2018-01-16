@@ -30,21 +30,6 @@ public class Board extends Observable {
 		}
 		
 	}
-	/**
-	 * 
-	 * @param x x and y coordinate to be checked for a winner.
-	 * @param y
-	 * @return color of winner field.
-	 */
-	public Color fieldwon(int x, int y) {
-		Color[] pin = getPin(x, y);
-		if (!pin[4].equals(Color.EMPTY)) {
-			//if there is a base this field is instant won.
-			return pin[4];
-		} else {
-		}
-		return null;
-	}
 	
 	/**
 	 * crutch function puts togheter the 
@@ -159,6 +144,7 @@ public class Board extends Observable {
 	}
 	
 	/**
+	 * crutch function
 	 * this function returns the index of the maxim value in an array.
 	 * it will return -1 if there are multiple indexes with the same maximum value;
 	 * @param array input array(pin on board) to be checked 

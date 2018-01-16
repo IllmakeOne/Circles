@@ -3,8 +3,6 @@ package Ringz;
 import Ringz.Color;
 
 public interface Player {
-	
-	public Move determineMove();
 
 	public String getName();
 	
