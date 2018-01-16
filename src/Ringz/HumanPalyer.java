@@ -138,7 +138,7 @@ public class HumanPalyer implements Player {
 	 * detemines the move of human player form keyboard input. 
 	 */
 	@Override
-	public Move determineMove() {
+	public Move determineMove(Board board) {
 		int[] move = new int[3];
 		int flag = 1;
 		int colorIndex = 0;
@@ -242,12 +242,6 @@ public class HumanPalyer implements Player {
 		return this.color;
 	}
 
-	@Override
-	public Move determineMove(Board bord) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 
 
 
