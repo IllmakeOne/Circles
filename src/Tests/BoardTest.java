@@ -29,7 +29,7 @@ public class BoardTest {
 		for (int x = 0 ; x < Board.DIM;x++) {
 			for (int y = 0; y < Board.DIM;y++){
 				for (int pieces = 0; pieces <Board.DIFFPIECES;pieces++) {
-					if(x==3&&y==3) {
+					if(x==1&&y==1) {
 						System.out.println(bord.getRing(x, y, pieces));
 						Assert.assertFalse(bord.getRing(x, y, pieces).equals(Color.EMPTY));
 					}else {
