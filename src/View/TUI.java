@@ -98,7 +98,20 @@ public class TUI implements View {
 
 	@Override
 	public void showPieces(Player play) {
-	 
+		int[][] pieces = play.getPieces();
+		Color[] color= play.getColor();
+		for( int i=0;i<color.length;i++) {
+		//	color[0] will result in YEllOW
+			System.out.println("you have the following "+color[i]+" pieces:");
+			for (int j=0;i<Board.DIFFPIECES;j++) {
+				switch (j) {
+				case 0:{
+					System.out.println(pieces[i][j]+" bases");
+				}
+				}
+				System.out.println(pieces[i][j]);
+			}
+		}
 	}
 
 	@Override
