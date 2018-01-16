@@ -360,7 +360,7 @@ public class Board extends Observable {
 		for (int i = 0; i < DIM; i++) {
 			for (int j = 0; j < DIM; j++) {
 				for (int k = 0; k < DIFFPIECES; k++) {
-					if (validMove(i, j, col[0], k) &&
+					if (validMoveWithoutObservers(i, j, col[0], k) &&
 							pieces[0][k] != 0) {
 						return true;
 					}
@@ -371,7 +371,7 @@ public class Board extends Observable {
 			for (int i = 0; i < DIM; i++) {
 				for (int j = 0; j < DIM; j++) {
 					for (int k = 0; k < DIFFPIECES; k++) {
-						if (validMove(i, j, col[1], k) &&
+						if (validMoveWithoutObservers(i, j, col[1], k) &&
 								pieces[1][k] != 0) {
 							return true;
 						}

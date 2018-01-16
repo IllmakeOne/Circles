@@ -110,13 +110,81 @@ public class TUI implements Observer, View {
 	}
 	
 	
-	//------------------Stuff to help with the reading of a mvoe ----------------
 	
-	/**
-	 * reads form user three numbers, cirlce zize, lien and column.
-	 * @param move is the arraty int that remebrts the user's input
-	 * @param colorIndex is the index of the color of the player
-	 */
+	@Override
+	public void outOfPieces(String name) {
+		System.out.println(name + " ,you are out of pieces");
+		
+	}
+
+
+	@Override
+	public void showPieces(Player play) {
+		int[][] pieces = play.getPieces();
+		Color[] color = play.getColor();
+		int colorcount = 2;
+		if (color[1] == null){
+			colorcount = 1;
+		}
+		for (int i = 0; i < colorcount; i++) {
+			System.out.println("you have the following " + color[i] + " pieces:");
+			for (int j = 0; j < Board.DIFFPIECES; j++) {
+				switch (j) {
+					case 0: {
+						System.out.println(pieces[i][j] + " bases");
+						break;
+					} 
+					case 1: {
+						System.out.println(pieces[i][j] + " dots");
+						break;
+					} 
+					case 2: {
+						System.out.println(pieces[i][j] + " small rings");
+						break;
+					} 
+					case 3: {
+						System.out.println(pieces[i][j] + " medium rings");
+						break;
+					} 
+					case 4: {
+						System.out.println(pieces[i][j] + " large rings");
+						break;
+					} 
+				}
+			}
+		}
+	}
+
+	@Override
+	public void notAbletoPlay(String name) {
+		System.out.println(name + ",you are not able to place any pieces");
+	}
+
+
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		if (arg1.equals("notCompEmpty")) {
+			System.out.println("Cant put base, it is not completly empty");
+		} else if (arg1.equals("notEmpty")) {
+			System.out.println("Cant put piece there, field not empty");
+		} else if (arg1.equals("noFriend")) {
+			System.out.println("Cant put piece there, it has no friends around it");
+		} else if (arg1.equals("hasBase")) {
+			System.out.println("cant put piece there, Pin has a base");
+		} else if (arg1.equals("added")) {
+			System.out.println("Valid move, piece added");
+		}
+		
+	}
+	
+	//------------------Stuff to help with the reading of a move ----------------
+	
+		/**
+		 * reads form user three numbers, cirlce zize, lien and column.
+		 * @param move is the arraty int that remebrts the user's input
+		 * @param colorIndex is the index of the color of the player
+		 */
 	public void readMove(int[] move, int colorIndex, Player play) {
 		Scanner in = new Scanner(System.in);
 		int flag = 1;
@@ -196,74 +264,6 @@ public class TUI implements Observer, View {
 		return choce;
 	}
 	
-
-	@Override
-	public void outOfPieces(String name) {
-		System.out.println(name + " ,you are out of pieces");
-		
-	}
-
-
-	@Override
-	public void showPieces(Player play) {
-		int[][] pieces = play.getPieces();
-		Color[] color = play.getColor();
-		int colorcount = 2;
-		if (color[1] == null){
-			colorcount = 1;
-		}
-		for (int i = 0; i < colorcount; i++) {
-			System.out.println("you have the following " + color[i] + " pieces:");
-			for (int j = 0; j < Board.DIFFPIECES; j++) {
-				switch (j) {
-					case 0: {
-						System.out.println(pieces[i][j] + " bases");
-						break;
-					} 
-					case 1: {
-						System.out.println(pieces[i][j] + " dots");
-						break;
-					} 
-					case 2: {
-						System.out.println(pieces[i][j] + " small rings");
-						break;
-					} 
-					case 3: {
-						System.out.println(pieces[i][j] + " medium rings");
-						break;
-					} 
-					case 4: {
-						System.out.println(pieces[i][j] + " large rings");
-						break;
-					} 
-				}
-			}
-		}
-	}
-
-	@Override
-	public void notAbletoPlay(String name) {
-		System.out.println(name + ",you are not able to place any pieces");
-	}
-
-
-
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		if (arg1.equals("notCompEmpty")) {
-			System.out.println("Cant put base, it is not completly empty");
-		} else if (arg1.equals("notEmpty")) {
-			System.out.println("Cant put piece there, field not empty");
-		} else if (arg1.equals("noFriend")) {
-			System.out.println("Cant put piece there, it has no friends around it");
-		} else if (arg1.equals("hasBase")) {
-			System.out.println("cant put piece there, Pin has a base");
-		} else if (arg1.equals("added")) {
-			System.out.println("Valid move, piece added");
-		}
-		
-	}
-
 
 
 }
