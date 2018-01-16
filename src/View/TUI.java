@@ -89,11 +89,7 @@ public class TUI implements View {
 		
 	}
 
-	@Override
-	public void outOfPieces() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	/**
 	 * this function returns a string of the colors of the player play.
@@ -109,30 +105,6 @@ public class TUI implements View {
 			stringy += color[0].toString();
 		}
 		return stringy;
-	}
-	
-
-	@Override
-	public void showPieces(Player play) {
-		int[][] pieces = play.getPieces();
-		Color[] color = play.getColor();
-		for (int i = 0; i < color.length; i++) {
-		//	color[0] will result in YEllOW
-			System.out.println("you have the following " + color[i] + " pieces:");
-			for (int j = 0; i < Board.DIFFPIECES; j++) {
-				switch (j) {
-					case 0: {
-						System.out.println(pieces[i][j] + " bases");
-					} 
-				}
-				System.out.println(pieces[i][j]);
-			}
-		}
-	}
-
-	@Override
-	public void notAbletoPlay() {
-		
 	}
 	
 	
@@ -223,7 +195,50 @@ public class TUI implements View {
 	}
 	
 
-	
+	@Override
+	public void outOfPieces() {
+		System.out.println("you are out of pieces");
+		
+	}
+
+
+	@Override
+	public void showPieces(Player play) {
+		int[][] pieces = play.getPieces();
+		Color[] color = play.getColor();
+		for (int i = 0; i < color.length; i++) {
+			System.out.println("you have the following " + color[i] + " pieces:");
+			for (int j = 0; i < Board.DIFFPIECES; j++) {
+				switch (j) {
+					case 0: {
+						System.out.println(pieces[i][j] + " bases");
+						break;
+					} 
+					case 1: {
+						System.out.println(pieces[i][j] + " dots");
+						break;
+					} 
+					case 2: {
+						System.out.println(pieces[i][j] + " small rings");
+						break;
+					} 
+					case 3: {
+						System.out.println(pieces[i][j] + " medium rings");
+						break;
+					} 
+					case 4: {
+						System.out.println(pieces[i][j] + " large rings");
+						break;
+					} 
+				}
+			}
+		}
+	}
+
+	@Override
+	public void notAbletoPlay() {
+		System.out.println("you are not able to place any pieces anymore");
+	}
 
 
 

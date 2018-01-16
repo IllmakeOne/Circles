@@ -1,8 +1,12 @@
 package Ringz;
 
 import Ringz.Color;
+<<<<<<< HEAD
 
 
+=======
+import View.View;
+>>>>>>> branch 'master' of https://git.snt.utwente.nl/s1942727/Circles.git
 import Ringz.Board;
 import View.*;
 
@@ -169,7 +173,7 @@ public class Game {
 		players[2] = new ComputerPlayer(Color.YELLOW, "3");
 		players[3] = new ComputerPlayer(Color.GREEN, "4");
 		
-		Game game = new Game(players, new TUI);
+		Game game = new Game(players, new TUI());
 		game.play();
 		
 	}
