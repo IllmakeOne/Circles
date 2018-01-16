@@ -42,7 +42,7 @@ public class Board extends Observable {
 		int[] cord = new int[3];
 		cord[1] = x;
 		cord[2] = y;
-		cord[0] = circlesize;
+		cord[0] = circlesize; 
 		return cord;
 	}
 	
