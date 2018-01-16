@@ -217,6 +217,10 @@ public class HumanPalyer implements Player {
 //	}
 	
 
+	public void decresePiece(int col, int circleSize) {
+		pieces[col][circleSize]--;
+	}
+	
 	@Override
 	public String getName() {
 		return this.name;

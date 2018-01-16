@@ -44,7 +44,7 @@ public class TUI implements View {
 			readMove(move, colorIndex, play);
 		}
 		
-		play.getPieces()[colorIndex][move[0]] -= 1;
+		((HumanPalyer) play).decresePiece(colorIndex, move[0]);
 		return new Move(move, play.getColor()[colorIndex]);
 	}
 	
@@ -196,8 +196,8 @@ public class TUI implements View {
 	
 
 	@Override
-	public void outOfPieces() {
-		System.out.println("you are out of pieces");
+	public void outOfPieces(String name) {
+		System.out.println(name + " ,you are out of pieces");
 		
 	}
 
@@ -236,8 +236,8 @@ public class TUI implements View {
 	}
 
 	@Override
-	public void notAbletoPlay() {
-		System.out.println("you are not able to place any pieces anymore");
+	public void notAbletoPlay(String name) {
+		System.out.println(name + ",you are not able to place any pieces");
 	}
 
 
