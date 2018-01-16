@@ -78,33 +78,33 @@ public class HumanPalyer implements Player {
 	
 	
 	
-	/**
-	 * a fcntion that tests if the given parametre, a int arraty, is valid as a move.
-	 * this fucntion is only used in determineMove as a cruthch.
-	 * @param x
-	 * @return
-	 */
-	public boolean isValid(int[] x, int colorIndex) {
-		if (x[0] > 4 || x[0] < 0) {
-			System.out.println("No such piece");
-			return false;
-		}
-			
-		if (x[1] > 4 || x[1] < 0) {
-			System.out.println("line too big");
-			return false;
-		}
-		if (x[2] > 4 || x[2] < 0) {
-			System.out.println("Column too big");
-			return false;
-		}
-		if (this.pieces[colorIndex][x[0]] == 0) {
-			System.out.println("Youare aout of these pieces");
-			return false;
-		}
-		
-		return true;
-	}
+//	/**
+//	 * a fcntion that tests if the given parametre, a int arraty, is valid as a move.
+//	 * this fucntion is only used in determineMove as a cruthch.
+//	 * @param x
+//	 * @return
+//	 */
+//	public boolean isValid(int[] x, int colorIndex) {
+//		if (x[0] > 4 || x[0] < 0) {
+//			System.out.println("No such piece");
+//			return false;
+//		}
+//			
+//		if (x[1] > 4 || x[1] < 0) {
+//			System.out.println("line too big");
+//			return false;
+//		}
+//		if (x[2] > 4 || x[2] < 0) {
+//			System.out.println("Column too big");
+//			return false;
+//		}
+//		if (this.pieces[colorIndex][x[0]] == 0) {
+//			System.out.println("Youare aout of these pieces");
+//			return false;
+//		}
+//		
+//		return true;
+//	}
 		
 	
 	/**
