@@ -1,43 +1,74 @@
 package View;
- import Ringz.*;
-public class TUI implements View{
+ import java.util.Scanner;
 
-	private static final int[][][] bord = null;
+import Ringz.*;
+ 
+public class TUI implements View {
+	
+	private static final String SHOW = "show";
+	private static final String PIECES = "pieces";
+	private static final String MOVE = "move";
+	
+	
+	//@Override
+	public Move askMove(Player play, Board board) {
+		Scanner in = new Scanner(System.in);
+		System.out.println("What would you like to do?" + 
+				" \n 'show' to display the board again" +
+				" \n 'pieces' to show your pieces " +
+				" \n 'move' to make a move");
+		int flag = 1;
+		String imput;
+		while (flag != 0) {
+			imput = in.nextLine();
+			if (imput.equals(SHOW)) {
+				updateDisplay(board);
+			} else if (imput.equals(PIECES)) {
+				showPieces(play);
+			} else if (imput.equals(MOVE)) {
+				flag = 0;
+				System.out.println(" You will make a move now " +
+						" \n You have the colors " + getStringColor(play));
+			}
+			
+		}
+		return null;
+	}
 
 	@Override
 	public void updateDisplay(Board board) {
-			for (int i = 0; i < 5; i++) {
-				String croth = "";
-				for (int j = 0; j < 5; j++) {
-					String stringy = "";
-					for (int circlesize = 0; circlesize < 5; circlesize++) {
-						switch (board.getRing(j, i, circlesize)) {
-							case EMPTY: {
-								stringy += "E";
-								break;
-							}
-							case BLUE: {
-								stringy += "B";
-								break;
-							}
-							case YELLOW: {
-								stringy += "Y";
-								break;
-							}
-							case PURPLE: {
-								stringy += "P";
-								break;
-							}
-							case GREEN: {
-								stringy += "G";
-								break;
-							}
+		for (int i = 0; i < board.DIM; i++) {
+			String croth = "";
+			for (int j = 0; j < board.DIM; j++) {
+				String stringy = "";
+				for (int circlesize = 0; circlesize < board.DIFFPIECES; circlesize++) {
+					switch (board.getRing(j, i, circlesize)) {
+						case EMPTY: {
+							stringy += "E";
+							break;
+						}
+						case BLUE: {
+							stringy += "B";
+							break;
+						}
+						case YELLOW: {
+							stringy += "Y";
+							break;
+						}
+						case PURPLE: {
+							stringy += "P";
+							break;
+						}
+						case GREEN: {
+							stringy += "G";
+							break;
 						}
 					}
-					croth += stringy + "    ";
 				}
-				System.out.println(croth);
+				croth += stringy + "    ";
 			}
+			System.out.println(croth);
+		}
 			
 		
 		
@@ -49,14 +80,24 @@ public class TUI implements View{
 		
 	}
 
-	@Override
-	public Move askMove() {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * this function returns a string of the colors of the player play.
+	 * @param play
+	 * @return
+	 */
+	public String getStringColor(Player play) {
+		Color[] color = play.getColor();
+		String stringy ="";
+		if (color[1] != null) {
+			stringy += color[0].toString() + "/" + color[1].toString();
+		} else {
+			stringy += color[0].toString();
+		}
+		return stringy;
 	}
 
 	@Override
-	public void showPieces() {
+	public void showPieces(Player play) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -66,5 +107,9 @@ public class TUI implements View{
 		// TODO Auto-generated method stub
 		
 	}
+
+	
+
+
 
 }

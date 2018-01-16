@@ -5,9 +5,7 @@ import Ringz.Color;
 public interface Player {
 
 	public String getName();
-	
-	public String getStringColor();
-	
+		
 	public Color[] getColor();
 	
 	public int[][] getPieces();

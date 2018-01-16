@@ -167,7 +167,7 @@ public class Game {
 		players[2] = new ComputerPlayer(Color.YELLOW, "3");
 		players[3] = new ComputerPlayer(Color.GREEN, "4");
 		
-		Game game = new Game(players);
+		Game game = new Game(players, new TUI);
 		game.play();
 		
 	}

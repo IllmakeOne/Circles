@@ -222,17 +222,7 @@ public class HumanPalyer implements Player {
 		return this.name;
 	}
 
-	@Override
-	public String getStringColor() {
-		String stringy ="";
-		if (this.color[1] != null) {
-			stringy += this.color[0].toString() + "/" + this.color[1].toString();
-		} else {
-			stringy += this.color[0].toString();
-		}
-		return stringy;
-	}
-
+	
 	public int[][] getPieces() {
 		return this.pieces;
 	}
