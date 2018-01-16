@@ -61,22 +61,9 @@ public class ComputerPlayer implements Player {
 		return this.name;
 	}
 
-	@Override
-	public String getStringColor() {
-		String stringy ="";
-		if (this.color[1] != null) {
-			stringy += this.color[0].toString() + "/" + this.color[1].toString();
-		} else {
-			stringy += this.color[0].toString();
-		}
-		return stringy;
-	}
+	
 
-	@Override
-	public Color chooseColor(Color c1, Color c2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public int[] getStart() {
@@ -112,10 +99,6 @@ public class ComputerPlayer implements Player {
 		return true;
 	}
 
-	@Override
-	public Move determineMove() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }

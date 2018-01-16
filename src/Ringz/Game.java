@@ -157,7 +157,7 @@ public class Game {
 	public static void main(String[] args) {
 		Player[] players = new Player[4];
 		players[0] = new ComputerPlayer(Color.BLUE, "1");
-		players[1] = new HumanPalyer(Color.PURPLE, "2");
+		players[1] = new HumanPalyer(Color.PURPLE, "Tester");
 		players[2] = new ComputerPlayer(Color.YELLOW, "3");
 		players[3] = new ComputerPlayer(Color.GREEN, "4");
 		

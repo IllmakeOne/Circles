@@ -16,6 +16,7 @@ public interface Player {
 	
 	public boolean isOutOfPieces();
 
-//	public Move determineMove(Board bord);
+
+	public Move determineMove(Board bord);
 }
  
