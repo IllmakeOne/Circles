@@ -206,8 +206,11 @@ public class TUI implements View {
 	public void showPieces(Player play) {
 		int[][] pieces = play.getPieces();
 		Color[] color = play.getColor();
-		System.out.println(color.length);
-		for (int i = 0; i < color.length; i++) {
+		int colorcount = 2;
+		if (color[1] == null){
+			colorcount = 1;
+		}
+		for (int i = 0; i < colorcount; i++) {
 			System.out.println("you have the following " + color[i] + " pieces:");
 			for (int j = 0; j < Board.DIFFPIECES; j++) {
 				switch (j) {
