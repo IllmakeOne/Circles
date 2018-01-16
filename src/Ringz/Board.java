@@ -42,7 +42,7 @@ public class Board extends Observable {
 		int[] cord = new int[3];
 		cord[1] = x;
 		cord[2] = y;
-		cord[0] = circlesize; 
+		cord[0] = circlesize;
 		return cord;
 	}
 	
@@ -150,16 +150,16 @@ public class Board extends Observable {
 	 * @param array input array(pin on board) to be checked 
 	 * @return 
 	 */
-	public static int arrayMaximum(int[] array) {
-		int max1 = 0, maxindex1 = 1;
+	public int arrayMaximum(int[] array) {
+		int highestScore = 0, maxindex1 = 1;
 		for (int i = 0; i < array.length; i++) {
-			if (array[i] >= max1) {
-				max1 = array[i];
+			if (array[i] >= highestScore) {
+				highestScore = array[i];
 				maxindex1 = i;
 			}
 		}		
 		for (int i = 0; i < maxindex1; i++) {
-			if (array[i] == max1) {
+			if (array[i] == highestScore) {
 				return -1;
 			}
 		}
@@ -218,8 +218,8 @@ public class Board extends Observable {
 	 */
 	public int[] tallyUp(int x, int y) {
 		int[] tally = new int[4];
-		for (int i = 1; i < 5; i++) {
-			colorIndex(getRing(x, y, i));
+		for (int ringsize = 1; ringsize < 5; ringsize++) {
+			colorIndex(getRing(x, y, ringsize));
 		}
 		return tally;
 	}
@@ -410,7 +410,7 @@ public class Board extends Observable {
 	 * @param x line
 	 * @param y column
 	 * @param circleSeize hight
-	 * @return
+	 * @return 
 	 */
 	public Color getRing(int x, int y, int circleSeize) {
 		return this.bord[x][y][circleSeize];
