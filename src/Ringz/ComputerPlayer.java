@@ -98,7 +98,5 @@ public class ComputerPlayer implements Player {
 		}
 		return true;
 	}
-
-	
-
+ 
 }

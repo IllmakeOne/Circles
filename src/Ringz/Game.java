@@ -3,6 +3,9 @@ package Ringz;
 import Ringz.Color;
 
 import View.View;
+
+import java.util.Observer;
+
 import Ringz.Board;
 import View.*;
 
@@ -24,6 +27,7 @@ public class Game {
 		this.board = new Board();
 		this.view = view;
 		this.players = new Player[4];
+		board.addObserver((Observer) view);
 		for (int i = 0; i < numberPlayers; i++) {
 			this.players[i] = players[i];
 		}		
@@ -71,6 +75,7 @@ public class Game {
 				current = (current + 1) % this.numberPlayers;
 			} else {
 				if (this.makeMove(this.players[current])) {
+					System.out.println("Player " + (current + 1) + " made a move \n");
 					current = (current + 1) % this.numberPlayers;
 					display();
 				}
