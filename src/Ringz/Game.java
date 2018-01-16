@@ -57,7 +57,7 @@ public class Game {
 		board.placeStart(players[current].getStart());
 		this.display();
 		int[] plays = new int[numberPlayers];
-		while (this.board.isPayable() && allStoped(plays) != true) {
+		while (!this.board.isFull() && allStoped(plays) != true) {
 			if (this.players[current].isOutOfPieces()) {
 			//	view.outOfPieces(players[current].getName());
 				System.out.println(this.players[current].getName() 
@@ -70,6 +70,8 @@ public class Game {
 				plays[current] = 1;
 				current = (current + 1) % this.numberPlayers;
 			} else {
+				//if (players[current] instanceof ComputerPlayer){
+				// board.addCircle(players[current].determineMobe(
 			//	while(!board.addCricle(view.askMove(board, players[current]))){
 			//}current = (current + 1) % this.numberPlayers;
 				System.out.println(this.players[current].getName() 
@@ -142,10 +144,8 @@ public class Game {
 	 * @param c2
 	 */
 	public boolean makeMove(Player play) {
-		if (play instanceof ComputerPlayer) {
-			return this.board.addCircle(play.determineMove(board));
-		}
-		return this.board.addCircle(play.determineMove());
+		
+		return this.board.addCircle(play.determineMove(board));
 	}
 	
 	/**
