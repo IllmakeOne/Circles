@@ -153,7 +153,7 @@ public class HumanPalyer implements Player {
 		this.pieces[pi][move[0]] -= 1;
 		return new Move(move, this.color[pi]);
 	}
-	
+	public 
 	
 	/**
 	 * detemine where hte firt multicoloed piece will be palced.
