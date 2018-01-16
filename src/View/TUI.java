@@ -98,9 +98,7 @@ public class TUI implements View {
 
 	@Override
 	public void showPieces(Player play) {
-		// TODO Auto-generated method stub lalalalalalalafkusdhflishdfholsuf
-		//adfsfasdfa
-		
+	
 	}
 
 	@Override
