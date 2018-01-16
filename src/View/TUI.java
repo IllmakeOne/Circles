@@ -206,7 +206,7 @@ public class TUI implements View {
 				switch (j) {
 				case 0:{
 					System.out.println(pieces[i][j]+" bases");
-				}
+				} 
 				}
 				System.out.println(pieces[i][j]);
 			}
