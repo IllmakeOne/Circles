@@ -105,7 +105,6 @@ public class TUI implements View {
 
 	@Override
 	public void notAbletoPlay() {
-		// TODO Auto-generated method stub
 		
 	}
 
