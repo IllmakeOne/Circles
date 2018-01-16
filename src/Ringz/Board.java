@@ -410,9 +410,11 @@ public class Board extends Observable {
 		if (validMove(x, y, col, circleSeize)) {
 			this.bord[x][y][circleSeize] = col;
 			System.out.println("circles aded");
+			//notifyObservers("added");
 			return true;
 		} else {
-			System.out.println("circles  not aded");	
+			System.out.println("circles  not aded");
+			//notifyObservers("notadded");
 			return  false;
 		}
 	}

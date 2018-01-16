@@ -59,7 +59,9 @@ public class HumanPalyer implements Player {
 //		}
 //	}
 	
-	 
+	 /**
+	  * function that testes if the player is out of pieces.
+	  */
 	public boolean isOutOfPieces() {
 		for (int i = 0; i < 5; i++) {
 			if (pieces[0][i] != 0) {

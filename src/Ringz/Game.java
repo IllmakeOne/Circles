@@ -8,6 +8,7 @@ public class Game {
 	private Board board;
 	private Player[] players;
 	private int numberPlayers;
+	private View view;
 	
 	
 	//----------------Constructors---------
@@ -15,9 +16,10 @@ public class Game {
 	/**
 	 * consturctor
 	 */
-	public Game(Player[] players) {
+	public Game(Player[] players, View view) {
 		this.numberPlayers = players.length;
 		this.board = new Board();
+		this.view = view;
 		this.players = new Player[4];
 		for (int i = 0; i < numberPlayers; i++) {
 			this.players[i] = players[i];
@@ -57,15 +59,19 @@ public class Game {
 		int[] plays = new int[numberPlayers];
 		while (this.board.isPayable() && allStoped(plays) != true) {
 			if (this.players[current].isOutOfPieces()) {
+			//	view.outOfPieces(players[current].getName());
 				System.out.println(this.players[current].getName() 
 						+ " is out of pieces");
 				plays[current] = 1;
 				current = (current + 1) % this.numberPlayers;
 			} else if (!this.board.isStrillAbleToPlace(players[current])) {
+			//	view.notAbletoPlace(players[current].getName());
 				System.out.println(players[current].getName() + "has nowhere to place pieces");
 				plays[current] = 1;
 				current = (current + 1) % this.numberPlayers;
 			} else {
+			//	while(!board.addCricle(view.askMove(board, players[current]))){
+			//}current = (current + 1) % this.numberPlayers;
 				System.out.println(this.players[current].getName() 
 						+ " with the colors " +
 						this.players[current].getStringColor() 
@@ -157,7 +163,7 @@ public class Game {
 	public static void main(String[] args) {
 		Player[] players = new Player[4];
 		players[0] = new ComputerPlayer(Color.BLUE, "1");
-		players[1] = new ComputerPlayer(Color.PURPLE, "2");
+		players[1] = new HumanPalyer(Color.PURPLE, "2");
 		players[2] = new ComputerPlayer(Color.YELLOW, "3");
 		players[3] = new ComputerPlayer(Color.GREEN, "4");
 		
