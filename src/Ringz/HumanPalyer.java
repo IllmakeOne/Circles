@@ -82,7 +82,7 @@ public class HumanPalyer implements Player {
 	 * @param x
 	 * @return
 	 */
-	public boolean isValid(int[] x, int y) {
+	public boolean isValid(int[] x, int colorIndex) {
 		if (x[0] > 4 || x[0] < 0) {
 			System.out.println("No such piece");
 			return false;
@@ -96,7 +96,7 @@ public class HumanPalyer implements Player {
 			System.out.println("Column too big");
 			return false;
 		}
-		if (this.pieces[y][x[0]] == 0) {
+		if (this.pieces[colorIndex][x[0]] == 0) {
 			System.out.println("Youare aout of these pieces");
 			return false;
 		}
@@ -108,9 +108,9 @@ public class HumanPalyer implements Player {
 	/**
 	 * reads form user three numbers, cirlce zize, lien and column.
 	 * @param move is the arraty int that remebrts the user's input
-	 * @param pi is the index of the color of the player
+	 * @param colorIndex is the index of the color of the player
 	 */
-	public void readMove(int[] move, int pi) {
+	public void readMove(int[] move, int colorIndex) {
 		Scanner in = new Scanner(System.in);
 		int flag = 1;
 		String[] words;
@@ -124,7 +124,7 @@ public class HumanPalyer implements Player {
 				for (int i = 0; i < words.length; i++) {
 					move[i] = Integer.parseInt(words[i]) - 1;
 				}
-				if (this.isValid(move, pi)) {
+				if (this.isValid(move, colorIndex)) {
 					flag = 0;
 				}
 			}
@@ -139,19 +139,19 @@ public class HumanPalyer implements Player {
 	public Move determineMove() {
 		int[] move = new int[3];
 		int flag = 1;
-		int pi = 0;
+		int colorIndex = 0;
 		if (this.color[1] != null) {
 			Color c = this.chooseColor(this.color[0], this.color[1]);
 			if (c == this.color[1]) {
-				pi = 1;
+				colorIndex = 1;
 			}
-			readMove(move, pi);
+			readMove(move, colorIndex);
 		} else {
-			readMove(move, pi);
+			readMove(move, colorIndex);
 		}
 		
-		this.pieces[pi][move[0]] -= 1;
-		return new Move(move, this.color[pi]);
+		this.pieces[colorIndex][move[0]] -= 1;
+		return new Move(move, this.color[colorIndex]);
 	}
 	
 	
