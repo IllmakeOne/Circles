@@ -20,6 +20,7 @@ public class BoardTest {
 		bord.placeStart(a);
 		
 	}
+	
 	@Test
 	public void initialTest() {
 		for (int x = 0 ; x < Board.DIM;x++) {
@@ -28,6 +29,7 @@ public class BoardTest {
 			}
 		}
 	}
+	
 	@Test
 	public void arrayMaxumumTest() {
 		int[] array1 = {1, 2, 3, 4};

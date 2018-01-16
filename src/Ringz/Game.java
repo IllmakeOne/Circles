@@ -1,12 +1,8 @@
 package Ringz;
 
 import Ringz.Color;
-<<<<<<< HEAD
 
-
-=======
 import View.View;
->>>>>>> branch 'master' of https://git.snt.utwente.nl/s1942727/Circles.git
 import Ringz.Board;
 import View.*;
 
@@ -66,25 +62,14 @@ public class Game {
 		int[] plays = new int[numberPlayers];
 		while (!this.board.isFull() && allStoped(plays) != true) {
 			if (this.players[current].isOutOfPieces()) {
-			//	view.outOfPieces(players[current].getName());
-				System.out.println(this.players[current].getName() 
-						+ " is out of pieces");
+				view.outOfPieces(players[current].getName());
 				plays[current] = 1;
 				current = (current + 1) % this.numberPlayers;
 			} else if (!this.board.isStrillAbleToPlace(players[current])) {
-			//	view.notAbletoPlace(players[current].getName());
-				System.out.println(players[current].getName() + "has nowhere to place pieces");
+				view.notAbletoPlay(players[current].getName());
 				plays[current] = 1;
 				current = (current + 1) % this.numberPlayers;
 			} else {
-				//if (players[current] instanceof ComputerPlayer){
-				// board.addCircle(players[current].determineMobe(
-			//	while(!board.addCricle(view.askMove(board, players[current]))){
-			//}current = (current + 1) % this.numberPlayers;
-				System.out.println(this.players[current].getName() 
-						+ " with the colors " +
-						this.players[current].getStringColor() 
-						+ " please place ");
 				if (this.makeMove(this.players[current])) {
 					current = (current + 1) % this.numberPlayers;
 					display();
@@ -151,6 +136,9 @@ public class Game {
 	 * @param c2
 	 */
 	public boolean makeMove(Player play) {
+		if (play instanceof ComputerPlayer) {
+			return this.board.addCircle(((ComputerPlayer) play).determineMove(board));
+		}
 		return this.board.addCircle(view.askMove(play, board));
 	}
 	
