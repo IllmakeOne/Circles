@@ -175,7 +175,7 @@ public class TUI implements View {
 
 	@Override
 	public void outOfPieces() {
-		// TODO Auto-generated method stub
+		System.out.println("you are out of pieces");
 		
 	}
 
@@ -200,22 +200,32 @@ public class TUI implements View {
 		int[][] pieces = play.getPieces();
 		Color[] color = play.getColor();
 		for (int i = 0; i < color.length; i++) {
-		//	color[0] will result in YEllOW
 			System.out.println("you have the following " + color[i] + " pieces:");
 			for (int j = 0; i < Board.DIFFPIECES; j++) {
 				switch (j) {
 					case 0: {
 						System.out.println(pieces[i][j] + " bases");
 					} 
+					case 1: {
+						System.out.println(pieces[i][j] + " dots");
+					} 
+					case 2: {
+						System.out.println(pieces[i][j] + " small rings");
+					} 
+					case 3: {
+						System.out.println(pieces[i][j] + " medium rings");
+					} 
+					case 4: {
+						System.out.println(pieces[i][j] + " large rings");
+					} 
 				}
-				System.out.println(pieces[i][j]);
 			}
 		}
 	}
 
 	@Override
 	public void notAbletoPlay() {
-		
+		System.out.println("you are not able to place any pieces anymore");
 	}
 
 	
