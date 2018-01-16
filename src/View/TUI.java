@@ -49,6 +49,95 @@ public class TUI implements View {
 	}
 	
 	
+
+	@Override
+	public void updateDisplay(Board board) {
+		for (int i = 0; i < board.DIM; i++) {
+			String croth = "";
+			for (int j = 0; j < board.DIM; j++) {
+				String stringy = "";
+				for (int circlesize = 0; circlesize < board.DIFFPIECES; circlesize++) {
+					switch (board.getRing(j, i, circlesize)) {
+						case EMPTY: {
+							stringy += "E";
+							break;
+						}
+						case BLUE: {
+							stringy += "B";
+							break;
+						}
+						case YELLOW: {
+							stringy += "Y";
+							break;
+						}
+						case PURPLE: {
+							stringy += "P";
+							break;
+						}
+						case GREEN: {
+							stringy += "G";
+							break;
+						}
+					}
+				}
+				croth += stringy + "    ";
+			}
+			System.out.println(croth);
+		}
+			
+		
+		
+	}
+
+	@Override
+	public void outOfPieces() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * this function returns a string of the colors of the player play.
+	 * @param play
+	 * @return
+	 */
+	public String getStringColor(Player play) {
+		Color[] color = play.getColor();
+		String stringy = "";
+		if (color[1] != null) {
+			stringy += color[0].toString() + "/" + color[1].toString();
+		} else {
+			stringy += color[0].toString();
+		}
+		return stringy;
+	}
+	
+
+	@Override
+	public void showPieces(Player play) {
+		int[][] pieces = play.getPieces();
+		Color[] color = play.getColor();
+		for (int i = 0; i < color.length; i++) {
+		//	color[0] will result in YEllOW
+			System.out.println("you have the following " + color[i] + " pieces:");
+			for (int j = 0; i < Board.DIFFPIECES; j++) {
+				switch (j) {
+					case 0: {
+						System.out.println(pieces[i][j] + " bases");
+					} 
+				}
+				System.out.println(pieces[i][j]);
+			}
+		}
+	}
+
+	@Override
+	public void notAbletoPlay() {
+		
+	}
+	
+	
+	//------------------Stuff to help with the reading of a mvoe ----------------
+	
 	/**
 	 * reads form user three numbers, cirlce zize, lien and column.
 	 * @param move is the arraty int that remebrts the user's input
@@ -133,90 +222,6 @@ public class TUI implements View {
 		return choce;
 	}
 	
-
-	@Override
-	public void updateDisplay(Board board) {
-		for (int i = 0; i < board.DIM; i++) {
-			String croth = "";
-			for (int j = 0; j < board.DIM; j++) {
-				String stringy = "";
-				for (int circlesize = 0; circlesize < board.DIFFPIECES; circlesize++) {
-					switch (board.getRing(j, i, circlesize)) {
-						case EMPTY: {
-							stringy += "E";
-							break;
-						}
-						case BLUE: {
-							stringy += "B";
-							break;
-						}
-						case YELLOW: {
-							stringy += "Y";
-							break;
-						}
-						case PURPLE: {
-							stringy += "P";
-							break;
-						}
-						case GREEN: {
-							stringy += "G";
-							break;
-						}
-					}
-				}
-				croth += stringy + "    ";
-			}
-			System.out.println(croth);
-		}
-			
-		
-		
-	}
-
-	@Override
-	public void outOfPieces() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/**
-	 * this function returns a string of the colors of the player play.
-	 * @param play
-	 * @return
-	 */
-	public String getStringColor(Player play) {
-		Color[] color = play.getColor();
-		String stringy ="";
-		if (color[1] != null) {
-			stringy += color[0].toString() + "/" + color[1].toString();
-		} else {
-			stringy += color[0].toString();
-		}
-		return stringy;
-	}
-
-	@Override
-	public void showPieces(Player play) {
-		int[][] pieces = play.getPieces();
-		Color[] color = play.getColor();
-		for (int i = 0; i < color.length; i++) {
-		//	color[0] will result in YEllOW
-			System.out.println("you have the following " + color[i] + " pieces:");
-			for (int j = 0; i < Board.DIFFPIECES; j++) {
-				switch (j) {
-					case 0: {
-						System.out.println(pieces[i][j] + " bases");
-					} 
-				}
-				System.out.println(pieces[i][j]);
-			}
-		}
-	}
-
-	@Override
-	public void notAbletoPlay() {
-		
-	}
 
 	
 

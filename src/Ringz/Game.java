@@ -1,7 +1,10 @@
 package Ringz;
 
 import Ringz.Color;
+
+
 import Ringz.Board;
+import View.*;
 
 public class Game {
 	
@@ -144,15 +147,14 @@ public class Game {
 	 * @param c2
 	 */
 	public boolean makeMove(Player play) {
-		
-		return this.board.addCircle(play.determineMove(board));
+		return this.board.addCircle(view.askMove(play, board));
 	}
 	
 	/**
 	 * shitty dsiplay board.
 	 */
 	public void display() {
-		this.board.display();
+		 view.updateDisplay(this.board);
 	}
 	
 	public int getNrPlayers() {
