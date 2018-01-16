@@ -15,7 +15,7 @@ public class Board extends Observable {
 	//different amount of pieces(12 rings in 4 sizes, 3 bases)
 //	public enum Color { BLUE, PURPLE, YELLOW, GREEN, EMPTY };
 	
-	
+	//commnet
 	/**
 	 * initialize the  board with empty fields.
 	 */
