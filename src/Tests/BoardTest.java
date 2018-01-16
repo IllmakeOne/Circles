@@ -62,7 +62,7 @@ public class BoardTest {
 		assertEquals(1, bord.total()[1]); 
 		assertEquals(1, bord.total()[2]); 
 		assertEquals(1, bord.total()[3]); 
-		
+		 
 	}
 	
 	@Test
