@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Scanner;
 
+import javax.swing.colorchooser.DefaultColorSelectionModel;
 import javax.swing.text.View;
 
 import Ringz.Board;
@@ -90,6 +91,7 @@ public class Peer extends Observable implements Runnable{
     private TUI view;
     private HashMap<String, Color> playerColors;
     private String nature;
+    private int numberPlayers;
 
 
     /*@
@@ -224,16 +226,36 @@ public class Peer extends Observable implements Runnable{
 			sendPackage(askFirst());
 		} else {
 			if (this.nature.equals(HUMAN_PLAYER)) {
-				view.askMove(clientPlayer, board);	
+				sendPackage(MOVE + moveTostring(view.askMove(clientPlayer, board)));	
 			} else {
-				
+				sendPackage(MOVE + moveTostring(clientPlayer.determineMove(board)));
 			}
 		}
     }
     
+    /**
+     * this function converts a move into a Protocol correct string.
+     * @param move
+     * @return
+     */
     public String moveTostring(Move move) {
     	String stringy = "";
+    	stringy += move.getLine() + DELIMITER 
+    				+ move.getColumn() + DELIMITER 
+    				+ (move.getCircle() + 1);
+    	if (numberPlayers != 4) {
+    		if (move.getColor() == clientPlayer.getColor()[0]) {
+    			stringy += DELIMITER + PRIMARY;
+    		} else {
+    			stringy += DELIMITER + SECONDARY;
+    		}
+    	}
     	return stringy;
+    }
+    
+    public Move stringTomove(String[] words) {
+    	int line, column, circlesize;
+    	Color color;
     }
     
     /**
@@ -261,24 +283,27 @@ public class Peer extends Observable implements Runnable{
     public void createBoard(String[] words) {
     	this.board = new Board();
     	if (words.length == 3) {
+    		numberPlayers = 2;
 			//Creates Hashmap with name of the player + SECONDARY/PRIMARY color
 			playerColors.put(words[1] + PRIMARY, Color.BLUE);
 			playerColors.put(words[1] + SECONDARY, Color.PURPLE);
 			playerColors.put(words[2] + PRIMARY, Color.YELLOW);
 			playerColors.put(words[2] + SECONDARY, Color.GREEN);
+			
 			//Also creates local player so we can keep track of the pieces and show them
-			if (this.nature.equals("H")) {
-				this.clientPlayer = new HumanPalyer(2, 
+			if (this.nature.equals(HUMAN_PLAYER)) {
+				this.clientPlayer = new HumanPalyer(numberPlayers, 
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
 						this.name);
 			} else {
-				this.clientPlayer = new ComputerPlayer(2,
+				this.clientPlayer = new ComputerPlayer(numberPlayers,
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
 						this.name);
 			}
 		} else if (words.length == 4) {
+			numberPlayers = 3;
 			//Creates Hashmap with the first three color being unique to a player
 			// then puts the same SECONDARY color to all the players
 			playerColors.put(words[1] + PRIMARY, Color.BLUE);
@@ -288,26 +313,27 @@ public class Peer extends Observable implements Runnable{
 			playerColors.put(words[2] + SECONDARY, Color.PURPLE);
 			playerColors.put(words[3] + SECONDARY, Color.YELLOW);
 			//Also creates local player so we can keep track of the pieces and show them
-			if (this.nature.equals("H")) {
-				this.clientPlayer = new HumanPalyer(3, 
+			if (this.nature.equals(HUMAN_PLAYER)) {
+				this.clientPlayer = new HumanPalyer(numberPlayers, 
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
 						this.name);
 			} else {
-				this.clientPlayer = new ComputerPlayer(3,
+				this.clientPlayer = new ComputerPlayer(numberPlayers,
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
 						this.name);
 			}
 				
 		} else if (words.length == 5) {
+			numberPlayers = 4;
 			//this just gives a color to everyone
 			playerColors.put(words[1], Color.BLUE);
 			playerColors.put(words[2], Color.PURPLE);
 			playerColors.put(words[3], Color.YELLOW);
 			playerColors.put(words[4], Color.GREEN);
 			//Also creates local player so we can keep track of the pieces and show them
-			if (this.nature.equals("H")) {
+			if (this.nature.equals(HUMAN_PLAYER)) {
 				this.clientPlayer = new HumanPalyer(playerColors.get(name + PRIMARY), name);
 			} else {
 				this.clientPlayer = new ComputerPlayer(playerColors.get(name + PRIMARY), name);
