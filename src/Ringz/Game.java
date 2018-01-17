@@ -6,6 +6,9 @@ import View.View;
 
 import java.util.Observer;
 
+import Players.ComputerPlayer;
+import Players.HumanPalyer;
+import Players.Player;
 import Ringz.Board;
 import View.*;
 

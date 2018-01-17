@@ -1,7 +1,10 @@
-package Ringz;
+package Players;
 
 import java.util.Random;
 
+import Ringz.Board;
+import Ringz.Color;
+import Ringz.Move;
 import Strategies.FourPlayerStrategy;
 import Strategies.Strategy;
 import Strategies.TwoPlayerStragegy;

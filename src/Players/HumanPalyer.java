@@ -1,8 +1,10 @@
-package Ringz;
+package Players;
 
 import java.util.Scanner;
 
+import Ringz.Board;
 import Ringz.Color;
+import Ringz.Move;
 
 public class HumanPalyer implements Player {
 	 
@@ -99,6 +101,12 @@ public class HumanPalyer implements Player {
 
 	@Override
 	public Move determineMove(Board bord) {
+		return null;
+	}
+
+	@Override
+	public int[] getStart() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

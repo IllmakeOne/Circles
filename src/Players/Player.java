@@ -1,6 +1,8 @@
-package Ringz;
+package Players;
 
+import Ringz.Board;
 import Ringz.Color;
+import Ringz.Move;
 
 public interface Player {
 

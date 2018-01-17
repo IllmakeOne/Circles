@@ -1,5 +1,6 @@
 package View;
 
+import Players.Player;
 import Ringz.*;
 
 public interface View {
@@ -17,4 +18,6 @@ public interface View {
 	public void notAbletoPlay(String name);
 	
 	public String acceptGame(String[] message);
+	
+	public void displayEnd(String[] words);
 }

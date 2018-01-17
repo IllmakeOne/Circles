@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
+import Players.Player;
+
 
 public class Board extends Observable {
 	

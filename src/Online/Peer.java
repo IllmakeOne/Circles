@@ -14,12 +14,12 @@ import java.util.Scanner;
 import javax.swing.colorchooser.DefaultColorSelectionModel;
 import javax.swing.text.View;
 
+import Players.ComputerPlayer;
+import Players.HumanPalyer;
+import Players.Player;
 import Ringz.Board;
-import Ringz.ComputerPlayer;
 import Ringz.Game;
-import Ringz.HumanPalyer;
 import Ringz.Move;
-import Ringz.Player;
 import View.TUI;
 import View.*;
 import Ringz.Color;
@@ -135,30 +135,30 @@ public class Peer extends Observable implements Runnable{
     }
 
 
-    /**
-     * Reads a string from the console and sends this string over
-     * the socket-connection to the Peer process.
-     * On Peer.EXIT the method ends
-     */
-    public void handleTerminalInput() {
-    	String scan = readString("> ");
-    	while (!scan.equals(EXIT) && scan != null) {
-    		try {
-				out.write(scan);
-	    		out.newLine();
-	    		out.flush();
-    			scan = readString("> "); 
-			} catch (IOException e) {
-				System.out.println("sth swrong in haldeterminal");
-		    	shutDown();
-				e.printStackTrace();
-			}
-    		//while (!ready) {
-    			//ready = false;
-    			//scan = readString("> ");     			
-    		//}
-    	}
-    }
+//    /**
+//     * Reads a string from the console and sends this string over
+//     * the socket-connection to the Peer process.
+//     * On Peer.EXIT the method ends
+//     */
+//    public void handleTerminalInput() {
+//    	String scan = readString("> ");
+//    	while (!scan.equals(EXIT) && scan != null) {
+//    		try {
+//				out.write(scan);
+//	    		out.newLine();
+//	    		out.flush();
+//    			scan = readString("> "); 
+//			} catch (IOException e) {
+//				System.out.println("sth swrong in haldeterminal");
+//		    	shutDown();
+//				e.printStackTrace();
+//			}
+//    		//while (!ready) {
+//    			//ready = false;
+//    			//scan = readString("> ");     			
+//    		//}
+//    	}
+//    }
     
     public void sendPackage(String sendPackage) {
     	try {
@@ -178,16 +178,13 @@ public class Peer extends Observable implements Runnable{
     	switch (words[0]) {
     		case JOINED_LOBBY: {
     			this.notifyObservers("lobby");
-    			System.out.println("You are in the lobby waiting");
     			break;
     		}
     		case CONNECT: {
     			if (words[1].equals(ACCEPT)) {
         			this.notifyObservers("accepted");
-    				System.out.println("You have veen accepted, you ahve been connected");
     			} else {
         			this.notifyObservers("denied");
-    				System.out.println("Thee not worthy");
     			}
     			break;
     		}
@@ -211,8 +208,16 @@ public class Peer extends Observable implements Runnable{
     		}
     		case MAKE_MOVE: {
     			makeMove();
+    			break;
     		}
-    		
+    		case MOVE: {
+    			board.addCircle(stringTomove(words));
+    			break;
+    		}
+    		case GAME_ENDED: {
+    			view.displayEnd(words);
+    			break;
+    		}
     	}
     }
 
@@ -253,9 +258,24 @@ public class Peer extends Observable implements Runnable{
     	return stringy;
     }
     
+    /**
+     * this function converts a Protocol string into a move.
+     * @param words
+     * @return
+     */
     public Move stringTomove(String[] words) {
     	int line, column, circlesize;
     	Color color;
+    	line = Integer.valueOf(words[1]);
+    	column = Integer.valueOf(words[2]);
+    	circlesize = Integer.valueOf(words[4]) - 1;
+    	color = playerColors.get(words[3] + PRIMARY);
+    	if (words.length == 6) {
+    		color = playerColors.get(words[3] + words[5]);
+    	}
+    	int[] coordinates = {circlesize, line, column};
+    	
+    	return new Move(coordinates, color);    	
     }
     
     /**

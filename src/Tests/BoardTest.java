@@ -62,7 +62,6 @@ public class BoardTest {
 		assertEquals(1, bord.total()[1]); 
 		assertEquals(1, bord.total()[2]); 
 		assertEquals(1, bord.total()[3]); 
-		 
 	}
 	
 	@Test
@@ -78,6 +77,12 @@ public class BoardTest {
 		Assert.assertFalse(bord.hasFriend(0, 0, Color.BLUE));
 	}
 	
+	@Test
+	public void testEmptyBoard() {
+		Board board = new Board();
+		assertTrue(board.emptyBoard());
+		assertTrue(!bord.emptyBoard());
+	}
 	
 
 }

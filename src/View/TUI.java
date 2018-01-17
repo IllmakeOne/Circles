@@ -6,6 +6,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
+import Players.HumanPalyer;
+import Players.Player;
 import Ringz.*;
  
 public class TUI implements Observer, View {
@@ -188,25 +190,53 @@ public class TUI implements Observer, View {
 		}
 	}
 
+	
 	@Override
-	public void notAbletoPlay(String name) {
-		System.out.println(name + ",you are not able to place any pieces");
+	public void notAbletoPlay(String namee) {
+		System.out.println(namee + ",you are not able to place any pieces");
 	}
 
-
+	/**
+	 * this function displays the end score.
+	 */
+	public void displayEnd(String[] words) {
+		for (int i = 1; i < words.length; i += 2) {
+			System.out.println("Player " + words[i] + " has " 
+						+ words[i + 1] + " points");
+		}
+	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1.equals("notCompEmpty")) {
 			System.out.println("Cant put base, it is not completly empty \n");
+			
 		} else if (arg1.equals("notEmpty")) {
 			System.out.println("Cant put piece there, field not empty \n");
+			
 		} else if (arg1.equals("noFriend")) {
 			System.out.println("Cant put piece there, it has no friends around it \n");
+		
 		} else if (arg1.equals("hasBase")) {
 			System.out.println("cant put piece there, Pin has a base \n");
+		
 		} else if (arg1.equals("added")) {
 			System.out.println("Valid move, piece added \n");
+		
+		} else if (arg1.equals("lobby")) {
+			System.out.println("You are in the lobby waiting");
+		
+		} else if (arg1.equals("accepted")) {
+			System.out.println("You have veen accepted, you ahve been connected");
+		
+		} else if (arg1.equals("denied")) {
+			System.out.println("Thee not worthy");
+		
+		} else if (arg1.equals("gameacc")) {
+			System.out.println("You have accepted the game");
+		
+		} else if (arg1.equals("gamestart")) {
+			System.out.println("The game has started");
 		}
 		
 	}
@@ -299,18 +329,17 @@ public class TUI implements Observer, View {
 	}
 	
     /** 
-     * reads a string form the console
+     * reads a string from the console.
      * @param prompt
      * @return
      */
     static public String readString(String prompt) {
     	
         System.out.print(prompt);
-        
+        BufferedReader in = new BufferedReader(new InputStreamReader(
+                System.in));
         String input = null;
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    System.in));
             input = in.readLine();
         } catch (IOException e) {
         }
