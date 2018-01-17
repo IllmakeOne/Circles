@@ -27,7 +27,22 @@ public class Board extends Observable {
 				}
 			}
 		}
-		
+	}
+	
+	/**
+	 * this function tests if the board is completely and utterly empty
+	 */
+	public boolean emptyBoard() {
+		for (int i = 0; i < DIM; i++) {
+			for (int j = 0; j < DIM; j++) {
+				for (int k = 0; k < DIFFPIECES; k++) {
+					if (getRing(i, j, k) != Color.EMPTY) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 	
 	/**

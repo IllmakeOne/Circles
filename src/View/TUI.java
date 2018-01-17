@@ -1,4 +1,7 @@
 package View;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
@@ -11,8 +14,38 @@ public class TUI implements Observer, View {
 	private static final String PIECES = "pieces";
 	private static final String MOVE = "move";
 	
+	private String name;
 	
-	//@Override
+	
+	public TUI(String playername) {
+		this.name = playername;
+	}
+	
+	
+    public String acceptGame(String[] message) {
+    	System.out.println("A game has been found");
+    	System.out.println("You would play against:");
+    	for (int i = 0; i < message.length; i++) {
+    		if (!message[i].equals(this.name)) {
+    			System.out.println(i + ".  " + message[i]);
+    		}
+    	}
+    	System.out.println("Do you wish to accept Accept or Decline");
+    	String scan = readString("][< ");
+    	while (!scan.equals("Accept") || !scan.equals("Decline")) {
+    		System.out.println("Please give valid resonse");
+    		scan = readString("][< ");
+    	}
+    	
+    	if (scan.equals("Accept")) {
+    		return "0";
+    	} else {
+    		return "1";
+    	}
+    	
+    }
+	
+	@Override
 	public Move askMove(Player play, Board board) {
 		Scanner in = new Scanner(System.in);
 		System.out.println("What would you like to do?" + 
@@ -265,6 +298,55 @@ public class TUI implements Observer, View {
 		return choce;
 	}
 	
+    /** 
+     * reads a string form the console
+     * @param prompt
+     * @return
+     */
+    static public String readString(String prompt) {
+    	
+        System.out.print(prompt);
+        
+        String input = null;
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    System.in));
+            input = in.readLine();
+        } catch (IOException e) {
+        }
+
+        return (input == null) ? "" : input;
+    }
 
 
+/**
+ * determine where the first multicolored piece will be placed.
+ */
+    public int[] getStart() {
+    	int[] move = new int[2];
+    	Scanner in = new Scanner(System.in);
+    	String[] words;
+    	int flag = 1;
+    	while (flag == 1) {
+    		System.out.println("Please the coordinate of the first piece \n"
+    				+ "( must be in the inneer circle \n"
+    				+ " first lien then column, both msu tbe betwen 1 and 3 \n");
+    		String line = in.nextLine();
+    		words = line.split(" ");
+    		if (words.length == 2) {
+    			for (int i = 0; i < words.length; i++) {
+    				move[i] = Integer.parseInt(words[i]);
+    			}
+    			if (move[0] < 4 && move[0] > 0 && move[1] > 0 && move[1] < 4) {
+    				flag = 0;
+    			} else {
+    				System.out.println("Must be between 1 and 3");
+    			}
+    		}
+    		in = new Scanner(System.in);
+    	}
+    	return move;
+    }
 }
+
+

@@ -77,34 +77,6 @@ public class HumanPalyer implements Player {
 	}
 		
 	
-	/**
-	 * detemine where hte firt multicoloed piece will be palced.
-	 */
-	public int[] getStart() {
-		int[] move = new int[2];
-		Scanner in = new Scanner(System.in);
-		String[] words;
-		int flag = 1;
-		while (flag == 1) {
-			System.out.println("Please the coordinate of the first piece \n"
-					+ "( must be in the inneer circle \n"
-					+ " first lien then column, both msu tbe betwen 2 and 4 \n");
-			String line = in.nextLine();
-			words = line.split(" ");
-			if (words.length == 2) {
-				for (int i = 0; i < words.length; i++) {
-					move[i] = Integer.parseInt(words[i]) - 1;
-				}
-				if (move[0] < 4 && move[0] > 0 && move[1] > 0 && move[1] < 4) {
-					flag = 0;
-				}
-			}
-			in = new Scanner(System.in);
-		}
-		
-		return move;
-	}
-	
 
 	public void decresePiece(int col, int circleSize) {
 		pieces[col][circleSize]--;

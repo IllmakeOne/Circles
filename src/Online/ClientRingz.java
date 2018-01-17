@@ -17,31 +17,32 @@ public class ClientRingz {
 
     /** Starts a Client application. */
     public static void main(String[] args) {
-        if (args.length != 3) {
+        if (args.length != 4) {
             System.out.println(USAGE);
             System.exit(0);
         }
 
-        String name = args[0];
+        String name = args[1];
+        String nature = args[0];
         InetAddress addr = null;
         int port = 0;
         Socket sock = null;
 
         // check args[1] - the IP-adress
         try {
-            addr = InetAddress.getByName(args[1]);
+            addr = InetAddress.getByName(args[2]);
         } catch (UnknownHostException e) {
             System.out.println(USAGE);
-            System.out.println("ERROR: host " + args[1] + " unknown");
+            System.out.println("ERROR: host " + args[2] + " unknown");
             System.exit(0);
         }
 
         // parse args[2] - the port
         try {
-            port = Integer.parseInt(args[2]);
+            port = Integer.parseInt(args[3]);
         } catch (NumberFormatException e) {
             System.out.println(USAGE);
-            System.out.println("ERROR: port " + args[2]
+            System.out.println("ERROR: port " + args[3]
             		           + " is not an integer");
             System.exit(0);
         }
@@ -56,7 +57,7 @@ public class ClientRingz {
 
         // create Peer object and start the two-way communication
         try {
-            Peer client = new Peer(name, sock);
+            Peer client = new Peer(name, nature, sock);
             Thread streamInputHandler = new Thread(client);
             streamInputHandler.start();
             client.handleTerminalInput();
