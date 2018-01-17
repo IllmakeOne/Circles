@@ -269,7 +269,8 @@ public class Protocols {
 			 * acquires any points.
 			 */
 			public static final String PLAYER_DISCONNECTED = "pc";
-		}
+			
+			pubic void Chating() {}
 			/*
 			 * =========== EXTENSION: CHATTING ===========
 			 */

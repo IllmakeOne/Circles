@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
-//lalalalala comment git
+
 public class Board extends Observable {
 	
 	private Color[][][] bord; //x, y, pin
@@ -15,7 +15,6 @@ public class Board extends Observable {
 	//different amount of pieces(12 rings in 4 sizes, 3 bases)
 //	public enum Color { BLUE, PURPLE, YELLOW, GREEN, EMPTY };
 	
-	//commnet
 	/**
 	 * initialize the  board with empty fields.
 	 */
@@ -32,11 +31,12 @@ public class Board extends Observable {
 	}
 	
 	/**
-	 * crutch function puts togheter the array 
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return
+	 * crutch function.
+	 * puts together the array for making a move with it.
+	 * @param x is the line
+	 * @param y is the column
+	 * @param circlesize is the circlesize
+	 * @return the array
 	 */
 	public int[] createArray(int x, int y, int circlesize) {
 		int[] cord = new int[3];
@@ -48,7 +48,7 @@ public class Board extends Observable {
 	
 	
 	/**
-	 * return an array of posdbile moves a color can take.
+	 * return an array of possible moves a color can take.
 	 * @param c
 	 * @return
 	 */
@@ -168,7 +168,7 @@ public class Board extends Observable {
 	
 	
 	/**
-	 * crutch fucntion .
+	 * crutch function .
 	 * return 0 for blue, 1 for purple , 2 for yelo2 and 3 for green
 	 * @param color
 	 * @return
@@ -211,7 +211,7 @@ public class Board extends Observable {
 	}
 	
 	/**
-	 * this fucntion cacualtes the total on a given place on the map.
+	 * this function calculates the total on a given place on the map.
 	 * it returns an array, index 0 is blue , 1 is purple, 2 is yellow, 3 is green.
 	 * @return
 	 * x is line y is column.
@@ -229,7 +229,7 @@ public class Board extends Observable {
 	 * calculates the total score of the game.
 	 * it returns an int array.
 	 * index 0 blue, index 1 purple, index 2 yellow, index 3 green.
-	 * on each ndex it says how many points each has
+	 * on each index it says how many points each has
 	 */
 	public int[] total() {
 		int[] sum = new int[4];
@@ -265,7 +265,7 @@ public class Board extends Observable {
 	/**
 	 * tests if a field of the board has a certain colored ring .
 	 * @param x is the line
-	 * @param y is the colum
+	 * @param y is the column
 	 * @param col is the color being looked for
 	 * @return true if the field has the color
 	 */
@@ -288,7 +288,7 @@ public class Board extends Observable {
 	}
 	
 	/**
-	 * test if a color on a position is surounded byt at least one piece of the sme color.
+	 * test if a color on a position is has around it at least one other piece of the same color.
 	 */
 	public boolean hasFriend(int x, int y, Color col) {
 		int[] handy = {-1, 0, 1};

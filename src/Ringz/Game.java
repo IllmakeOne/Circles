@@ -95,7 +95,7 @@ public class Game {
 	}
 	
 	/**
-	 * displays the winnder.
+	 * displays the winner.
 	 * @param indexWin
 	 */
 	public void winner(int[] indexWin) {
@@ -135,7 +135,7 @@ public class Game {
 	}
 	
 	/**
-	 * make a move 
+	 * make a move .
 	 * @param play <- the player making the move.
 	 * @param c1
 	 * @param c2
@@ -147,11 +147,9 @@ public class Game {
 		return this.board.addCircle(view.askMove(play, board));
 	}
 	
-	/**
-	 * shitty dsiplay board.
-	 */
+
 	public void display() {
-		 view.updateDisplay(this.board);
+		view.updateDisplay(this.board);
 	}
 	
 	public int getNrPlayers() {
