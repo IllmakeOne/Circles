@@ -161,10 +161,12 @@ public class Game {
 	
 	public static void main(String[] args) {
 		Player[] players = new Player[4];
-		players[0] = new ComputerPlayer(Color.BLUE, "1");
-		players[1] = new HumanPalyer(Color.PURPLE, "Tester");
-		players[2] = new ComputerPlayer(Color.YELLOW, "3");
-		players[3] = new ComputerPlayer(Color.GREEN, "4");
+		players[0] = new HumanPalyer(3, Color.BLUE, Color.GREEN, "Tester1");
+		players[1] = new HumanPalyer(3, Color.PURPLE, Color.GREEN, "Tester2");
+		players[2] = new HumanPalyer(3, Color.YELLOW, Color.GREEN, "Tester3");
+		
+//		players[2] = new ComputerPlayer(Color.YELLOW, "3");
+//		players[3] = new ComputerPlayer(Color.GREEN, "4");
 		
 		Game game = new Game(players, new TUI());
 		game.play();

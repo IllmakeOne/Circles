@@ -165,15 +165,15 @@ public class TUI implements Observer, View {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1.equals("notCompEmpty")) {
-			System.out.println("Cant put base, it is not completly empty");
+			System.out.println("Cant put base, it is not completly empty \n");
 		} else if (arg1.equals("notEmpty")) {
-			System.out.println("Cant put piece there, field not empty");
+			System.out.println("Cant put piece there, field not empty \n");
 		} else if (arg1.equals("noFriend")) {
-			System.out.println("Cant put piece there, it has no friends around it");
+			System.out.println("Cant put piece there, it has no friends around it \n");
 		} else if (arg1.equals("hasBase")) {
-			System.out.println("cant put piece there, Pin has a base");
+			System.out.println("cant put piece there, Pin has a base \n");
 		} else if (arg1.equals("added")) {
-			System.out.println("Valid move, piece added");
+			System.out.println("Valid move, piece added \n");
 		}
 		
 	}
@@ -191,8 +191,8 @@ public class TUI implements Observer, View {
 		String[] words;
 		while (flag == 1) {
 			System.out.println("Please give move \n"
-					+ "( first number the size of the piece, \n"
-					+ "second number the line and the thirds , the column \n");
+					+ "The first number is the size of the piece, \n"
+					+ "The second number the line and the thirds , the column \n");
 			String line = in.nextLine();
 			words = line.split(" ");
 			if (words.length == 3) {
@@ -244,7 +244,7 @@ public class TUI implements Observer, View {
 		Scanner in = new Scanner(System.in);
 		String[] words;
 		while (flag == 1) {
-			System.out.println("Please choose ofne hte fhtse colros "
+			System.out.println("Please choose one of these colors "
 					+ c1 + " and " + c2);
 			String line = in.nextLine();
 			if (line.equals(c1.toString())) {
@@ -261,6 +261,7 @@ public class TUI implements Observer, View {
 			
 			in = new Scanner(System.in);
 		}
+		in.close();
 		return choce;
 	}
 	
