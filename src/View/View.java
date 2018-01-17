@@ -20,4 +20,8 @@ public interface View {
 	public String acceptGame(String[] message);
 	
 	public void displayEnd(String[] words);
+	
+	public void disconnected(String disconee);
+	
+	public String whattoDo(String nature);
 }

@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
+import Online.Peer;
 import Players.HumanPalyer;
 import Players.Player;
 import Ringz.*;
@@ -196,6 +197,10 @@ public class TUI implements Observer, View {
 		System.out.println(namee + ",you are not able to place any pieces");
 	}
 
+	public void disconnected(String disconee) {
+		System.out.println(disconee + " has disconnected, game canceled");
+	}
+	
 	/**
 	 * this function displays the end score.
 	 */
@@ -237,8 +242,60 @@ public class TUI implements Observer, View {
 		
 		} else if (arg1.equals("gamestart")) {
 			System.out.println("The game has started");
+			
+		} else if (arg1.equals("joined")) {
+			System.out.println("Hello, what would you like to do?");
+		}
+	}
+	
+	
+	public String whattoDo(String nature) {
+		String[] end = new String[2];
+		String stringy = "";
+		System.out.println("For now just lookf for a game , type Request game\n");
+		String input = readString("[]>");
+		if (input.equals(" Request game")) {
+			stringy += Peer.GAME_REQUEST + Peer.DELIMITER + end[0] + Peer.DELIMITER + nature;
+			if (end[1] != null) {
+				stringy += Peer.DELIMITER + end[1];
+			}
+		} else if (input.equals("exit")) {
+			stringy = input;
 		}
 		
+		
+		return stringy;
+	}
+	
+	public String[] requestGame() {
+		
+		String[] end = new String[2];
+		String input = readString("[]>");
+		while (!input.equals("2") || !input.equals("3") || !input.equals("4")) {
+			System.out.println("Please give valid number of players");
+			input = readString("[]>");
+		}
+		
+		System.out.println("So you want to play a game of " + input);
+		end[0] = input;
+		
+		System.out.println("Do you want to play against anything specific? (yes/no)");
+		input = readString("[]>");
+		while (!input.equals("yes") || !input.equals("no")) {
+			System.out.println("yes or no please");
+			input = readString("[]>");
+		}
+		
+		if (input.equals("yes")) {
+			System.out.println("Agains human(0) or computer(1)");
+			input = readString("[]>");
+			while (!input.equals("0") || !input.equals("1")) {
+				System.out.println("0 or 1 please");
+				input = readString("[]>");
+			}
+			end[1] = input;
+		}
+		return end;
 	}
 	
 	//------------------Stuff to help with the reading of a move ----------------
@@ -348,6 +405,7 @@ public class TUI implements Observer, View {
     }
 
 
+    
 /**
  * determine where the first multicolored piece will be placed.
  */

@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
  */
 public class ClientRingz {
     private static final String USAGE
-        = "usage: java week7.cmdline.Client <name> <address> <port>";
+        = "usage: java week7.cmdline.Client <player type> <name> <address> <port>";
 
     /** Starts a Client application. */
     public static void main(String[] args) {
@@ -60,7 +60,7 @@ public class ClientRingz {
             Peer client = new Peer(name, nature, sock);
             Thread streamInputHandler = new Thread(client);
             streamInputHandler.start();
-            client.handleTerminalInput();
+            client.lobby();
             client.shutDown();
         } catch (IOException e) {
             e.printStackTrace();

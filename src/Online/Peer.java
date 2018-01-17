@@ -116,17 +116,13 @@ public class Peer extends Observable implements Runnable{
      * Reads strings of the stream of the socket-connection and
      * writes the characters to the default output.
      */
-    public void run() {
+    public synchronized void  run() {
     	try {
     		String message = in.readLine();
-    		while (message != null && !message.equals(EXIT)) {
-    			System.out.println(message);
-    			//System.out.flush();
-    			message = in.readLine();
-    			//ready = true;	
+    		while (message != null) {
+    			dealWithMessage(message);    
     		}
     		shutDown();
-    		System.out.println("other exited");
 		} catch (IOException e) {
 			System.out.println("sth wrong in run");
 			shutDown();
@@ -135,30 +131,23 @@ public class Peer extends Observable implements Runnable{
     }
 
 
-//    /**
-//     * Reads a string from the console and sends this string over
-//     * the socket-connection to the Peer process.
-//     * On Peer.EXIT the method ends
-//     */
-//    public void handleTerminalInput() {
-//    	String scan = readString("> ");
-//    	while (!scan.equals(EXIT) && scan != null) {
-//    		try {
-//				out.write(scan);
-//	    		out.newLine();
-//	    		out.flush();
-//    			scan = readString("> "); 
-//			} catch (IOException e) {
-//				System.out.println("sth swrong in haldeterminal");
-//		    	shutDown();
-//				e.printStackTrace();
-//			}
-//    		//while (!ready) {
-//    			//ready = false;
-//    			//scan = readString("> ");     			
-//    		//}
-//    	}
-//    }
+    /**
+     * Reads a string from the console and sends this string over
+     * the socket-connection to the Peer process.
+     * On Peer.EXIT the method ends
+     */
+    public synchronized void lobby() {
+    	this.setChanged();
+    	this.notifyObservers("joined");
+    	String todo = view.whattoDo(this.nature);
+    	while (todo != "exit") {
+    		sendPackage(todo);
+    		todo = view.whattoDo(this.nature);
+    	}
+    	shutDown();
+    	System.exit(0);
+    	
+    }
     
     public void sendPackage(String sendPackage) {
     	try {
@@ -166,7 +155,7 @@ public class Peer extends Observable implements Runnable{
     		out.newLine();
     		out.flush();
     	} catch (IOException e) {
-    		System.out.println("Something wrong in sneding Package");
+    		System.out.println("Something wrong in sending Package");
     		shutDown();
     	}
     }
@@ -216,6 +205,11 @@ public class Peer extends Observable implements Runnable{
     		}
     		case GAME_ENDED: {
     			view.displayEnd(words);
+    			break;
+    		}
+    		case PLAYER_DISCONNECTED: {
+    			view.disconnected(words[1]);
+    			this.notifyObservers("lobby");
     			break;
     		}
     	}

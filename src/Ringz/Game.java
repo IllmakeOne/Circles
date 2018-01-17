@@ -23,7 +23,7 @@ public class Game {
 	//----------------Constructors---------
 	
 	/**
-	 * consturctor
+	 * constructor.
 	 */
 	public Game(Player[] players, View view) {
 		this.numberPlayers = players.length;
@@ -36,28 +36,7 @@ public class Game {
 		}		
 	}
 	
-//	public Game(Player name1, Player name2, Player name3) {
-//		this.numberPlayers = 3;
-//		this.board = new Board();
-//		this.players = new Player[4];
-//		this.players[0] = name1;
-//		this.players[1] = name2;
-//		this.players[2] = name3;
-//		
-//	}
-//	
-//	public Game(Player name1, Player name2, Player name3, Player name4) {
-//		this.numberPlayers = 4;
-//		this.board = new Board();
-//		this.players = new Player[4];
-//		this.players[0] = name1;
-//		this.players[1] = name2;
-//		this.players[2] = name3;
-//		this.players[3] = name4;
-//		
-//	}
-//	
-	
+
 	/**
 	 * play game.
 	 */

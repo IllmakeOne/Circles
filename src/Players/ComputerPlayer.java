@@ -44,7 +44,7 @@ public class ComputerPlayer implements Player {
 			} 
 			
 		} else {
-			this.strateg = new ThreePlayerStrategy(b);
+			this.strateg = new ThreePlayerStrategy(b, color);
 			for (int i = 0; i < 5; i++) {
 				this.pieces[1][i] = 1;
 			}
