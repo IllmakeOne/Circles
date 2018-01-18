@@ -1,7 +1,5 @@
 package Players;
 
-import java.util.Scanner;
-
 import Ringz.Board;
 import Ringz.Color;
 import Ringz.Move;
