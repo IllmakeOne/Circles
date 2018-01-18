@@ -1,11 +1,7 @@
 package Ringz;
-import java.awt.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Observable;
 
+import java.util.ArrayList;
+import java.util.Observable;
 import Players.Player;
 
 
@@ -20,12 +16,15 @@ public class Board extends Observable {
 	/**
 	 * initialize the  board with empty fields.
 	 */
-	public Board() {
+	/*@ ensures (\forAll int x, int y, int pieces; 0 <= x && x <= DIM
+	* && 0 <= y && y <= DIM && 0 <= pieces && pieces <= DIFFPIECES; Color.EMPTY);
+	*/
+	public /*@ pure */Board() {
 		this.bord = new Color[DIM][DIM][DIFFPIECES];
-		for (int i = 0; i < DIM; i++) {
-			for (int j = 0; j < DIM; j++) {
-				for (int k = 0; k < DIFFPIECES; k++) {
-					bord[i][j][k] = Color.EMPTY;
+		for (int x = 0; x < DIM; x++) {
+			for (int y = 0; y < DIM; y++) {
+				for (int pieces = 0; pieces < DIFFPIECES; pieces++) {
+					bord[x][y][pieces] = Color.EMPTY;
 				}
 			}
 		}
@@ -33,7 +32,11 @@ public class Board extends Observable {
 	
 	/**
 	 * this function tests if the board is completely and utterly empty
+	 * @return false when not empty, @return true when empty
 	 */
+	/*@ ensures \result == (\forAll int x, int y, int pieces; 0 <= x && x <= DIM
+	* 	&& 0 <= y && y <= DIM && 0 <= pieces && pieces <= DIFFPIECES; Color.EMPTY);
+	@*/
 	public boolean emptyBoard() {
 		for (int i = 0; i < DIM; i++) {
 			for (int j = 0; j < DIM; j++) {
@@ -55,31 +58,37 @@ public class Board extends Observable {
 	 * @param circlesize is the circlesize
 	 * @return the array
 	 */
+	/*@ requires 0 <= x && x <= 4;
+	 *	requires 0 <= y && y <= 4;
+	 * 	requires 0 <= circlesize && circlesize <= 4;
+	 *	ensures (\result[0] == circlesize && \result[1] == x && \result[2] == y);
+	 @*/
 	public int[] createArray(int x, int y, int circlesize) {
 		int[] cord = new int[3];
+		cord[0] = circlesize;
 		cord[1] = x;
 		cord[2] = y;
-		cord[0] = circlesize;
 		return cord;
 	}
 	
 	
 	/**
 	 * return an array of possible moves a color can take.
-	 * @param c
-	 * @return
+	 * @param color the colour of player's possible moves 
+	 * @return Arraylist<Move> list with all the possible moves
 	 */
-	public ArrayList<Move> getPossibleMoves(Color c, int[][] pieces) {
+	
+	public ArrayList<Move> getPossibleMoves(Color color, int[][] pieces) {
 //		int nrmoves = 0;
 		Move move = null;
 		int cnr = 0;
 		ArrayList<Move> list = new ArrayList<Move>();
 		for (int i = 0; i < DIM; i++) {
 			for (int j = 0; j < DIM; j++) {
-				if (hasFriend(i, j, c)) {
+				if (hasFriend(i, j, color)) {
 					if (isCompletlyEmpty(i, j) &&
 							pieces[cnr][0] != 0) {
-						move = new Move(createArray(i, j, 0), c);
+						move = new Move(createArray(i, j, 0), color);
 						//System.out.println(getRing(j, j, 0));
 						//System.out.println(move);
 						list.add(move);
@@ -91,7 +100,7 @@ public class Board extends Observable {
 									pieces[cnr][k] != 0) {
 							//	System.out.println(getRing(j, j, 0));
 							//	System.out.println(getRing(j, j, k));
-								move = new Move(createArray(i, j, k), c);
+								move = new Move(createArray(i, j, k), color);
 								list.add(move);
 							//	System.out.println(move);
 							//	return move;
@@ -146,7 +155,7 @@ public class Board extends Observable {
 	
 	/**
 	 * return a deep copy of the board.
-	 * @return
+	 * @return copy of the board
 	 */
 	public Color[][][] deepCopy() {
 		Color[][][] copy = null;
@@ -162,10 +171,14 @@ public class Board extends Observable {
 	
 	/**
 	 * crutch function
-	 * this function returns the index of the maxim value in an array.
+	 * this function calculates the index of the maximum value in an array.
 	 * it will return -1 if there are multiple indexes with the same maximum value;
 	 * @param array input array(pin on board) to be checked 
-	 * @return 
+	 * @return this function returns the index of the maximum value in an array.
+	 * it will return -1 if there are multiple indexes with the same maximum value;
+	 */
+	/*@ ensures (/result >= -1 && /result <= array.length());
+	 * 	
 	 */
 	public int arrayMaximum(int[] array) {
 		int highestScore = 0, maxindex1 = 1;
@@ -187,8 +200,11 @@ public class Board extends Observable {
 	/**
 	 * crutch function .
 	 * return 0 for blue, 1 for purple , 2 for yelo2 and 3 for green
-	 * @param color
-	 * @return
+	 * @param color, the colour which needs to be converted
+	 * @return integer correlated with the colour.
+	 */
+	/*@
+	 * ensures \result >= -1 && \result <= 3
 	 */
 	public int colorIndex(Color color) {
 		switch (color) {
@@ -208,6 +224,16 @@ public class Board extends Observable {
 				return -1;
 		}
 	}
+	/**
+	 * crutch function. inverse of colorIndex
+	 * return blue for 0, purple for 1 , yellow for 2 and green for 3.
+	 * @param i, integer which needs to be converted.
+	 * @return color, the colour correlated with this integer.
+	 */
+	/*@
+	 * ensures \result >= -1 && \result <= 3
+	 * ensures \result.instanceof(Color);
+	 */
 	public Color intIndex(int i) {
 		switch (i){
 			case 0: {
@@ -228,10 +254,15 @@ public class Board extends Observable {
 	}
 	
 	/**
-	 * this function calculates the total on a given place on the map.
-	 * it returns an array, index 0 is blue , 1 is purple, 2 is yellow, 3 is green.
-	 * @return
-	 * x is line y is column.
+	 * this function calculates the total amount of rings on a given place on the map.
+	 * stored in an array, value 0 if none rings of this colour present.
+	 * @return  it returns an array, index 0 is blue , 1 is purple, 2 is yellow, 3 is green.
+	 * @param x is line
+	 * @param y is column.
+	 */
+	/*@ requires x >= 0 && x <= 4;
+	 * 	requires x >= 0 && x <= 4;
+	 * 	
 	 */
 	public int[] tallyUp(int x, int y) {
 		int[] tally = new int[4];

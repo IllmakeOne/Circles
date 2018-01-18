@@ -234,7 +234,7 @@ public class BoardTest {
 		assertNotEquals(bord.getBoard(), copy);
 		for (int x = 0; x< Board.DIM;x++) {
 			for (int y = 0; y< Board.DIM;y++) {
-				for (int piece = 0; y<Board.DIFFPIECES;piece++) {
+				for (int piece = 0; piece<Board.DIFFPIECES;piece++) {
 					assertEquals(bord.getRing(x, y, piece),copy[x][y][piece]);
 				}	
 			}
