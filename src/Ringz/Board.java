@@ -128,7 +128,7 @@ public class Board extends Observable {
 		
 	
 	/**
-	 * return a deep copy of the board
+	 * return a deep copy of the board.
 	 * @return
 	 */
 	public Color[][][] deepCopy() {
@@ -265,12 +265,12 @@ public class Board extends Observable {
 	/**
 	 * tests if a field of the board has a certain colored ring .
 	 * @param x is the line
-	 * @param y is the colum
+	 * @param y is the column
 	 * @param col is the color being looked for
 	 * @return true if the field has the color
 	 */
 	public boolean fieldHas(int x, int y, Color col) {
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < DIFFPIECES; i++) {
 			if (this.bord[x][y][i] == col) {
 				return true;
 			}
@@ -279,7 +279,7 @@ public class Board extends Observable {
 	}
 	
 	public boolean isCompletlyEmpty(int x, int y) {
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < DIFFPIECES; i++) {
 			if (this.bord[x][y][i] != Color.EMPTY) {
 				return false;
 			}
@@ -322,7 +322,7 @@ public class Board extends Observable {
 						notifyObservers("added");
 						return true;
 					} else {
-						//System.out.println("There are peices here, cant put base");
+						System.out.println("There are peices here, cant put base");
 						notifyObservers("notCompEmpty");
 						return false;
 					}
@@ -330,17 +330,17 @@ public class Board extends Observable {
 				if (this.bord[x][y][circleSize] == Color.EMPTY) {
 					return true;
 				} else {
-				//	System.out.println("Field not empty");
+				System.out.println("Field not empty");
 					notifyObservers("notEmpty");
 					return false;
 				}
 			} else {
-			//	System.out.println("Has no near piece of the same coolor NEAR IT");
+				System.out.println("Has no near piece of the same coolor NEAR IT");
 				notifyObservers("noFriend");
 				return false;
 			}
 		} else {
-			//System.out.println("The space already has a BASE");
+			System.out.println("The space already has a BASE");
 			notifyObservers("hasBase");
 			return false;
 		}
@@ -442,6 +442,7 @@ public class Board extends Observable {
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (isCompletlyEmpty(i, j)) {
+				//	System.out.println("is one entire free");
 					return false;
 				}
 				for (int k = 1; k < 5; k++) {
