@@ -117,7 +117,7 @@ public class Peer extends Observable implements Runnable{
      * Reads strings of the stream of the socket-connection and
      * writes the characters to the default output.
      */
-    public synchronized void  run() {
+    public void  run() {
     	try {
     		String message = in.readLine();
     		while (message != null) {
@@ -140,7 +140,7 @@ public class Peer extends Observable implements Runnable{
      * the socket-connection to the Peer process.
      * On Peer.EXIT the method ends
      */
-    public synchronized void lobby() {
+    public  void lobby() {
     	this.setChanged();
     	this.notifyObservers("joined");
     	String todo = view.whattoDo(this.nature);

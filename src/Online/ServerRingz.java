@@ -51,13 +51,13 @@ public class ServerRingz {
 		}
      
 		
-		//try {
-            ServerPeer serv = new ServerPeer(sock, lobby);
-//			Thread streamInputHandler = new Thread(serv);
-            serv.start();
-//			serv.handleTerminalInput();
-//			serv.shutDown();
-//		} catch (IOException e) {
+	//	try {
+            ServerPeer server = new ServerPeer(sock, lobby);
+			Thread streamInputHandler = new Thread(server);
+			streamInputHandler.start();
+			server.lobby();
+			server.shutDown();
+		//} catch (IOException e) {
 //			e.printStackTrace();
 		//}
 	}
