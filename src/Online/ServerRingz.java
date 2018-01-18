@@ -5,12 +5,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import Ringz.Board;
+import Ringz.Move;
+
 
 public class ServerRingz {
 
 
-	private ArrayList<Socket> Clients;
-
+	
 	/** Starts a Server-application. */
 	public static void main(String[] args) {
 		if (args.length != 2) {
@@ -22,8 +24,9 @@ public class ServerRingz {
 		int port = 0;
 		ServerSocket ssock = null;
 		Socket sock = null;
+		Lobby lobby = new Lobby(name);
+		int nrClinets = 0;
 		
-		// parse args[1] - the port
 		try {
 			port = Integer.parseInt(args[1]);
 		} catch (NumberFormatException e) {
@@ -32,29 +35,31 @@ public class ServerRingz {
 			System.exit(0);
 		}
 
-     // try to open a Socket to the server
 		try {
 			ssock = new ServerSocket(port);
 		} catch (IOException e) {
 			System.out.println("ERROR: could not create a socket on "  + " and port " + port);
 		}
-
+		
+		System.out.println("Server Started");
 		try {
 			sock = ssock.accept();
+			nrClinets++;
+			System.out.println("Client " +  nrClinets + " connected");
 		} catch (IOException e) {
 			System.out.println("sth wrong in accept");
 		}
      
-     // create Peer object and start the two-way communication
-		try {
-            ServerPeer serv = new ServerPeer(name, sock);
-			Thread streamInputHandler = new Thread(serv);
+		
+	//	try {
+            ServerPeer server = new ServerPeer(sock, lobby);
+			Thread streamInputHandler = new Thread(server);
 			streamInputHandler.start();
-			serv.handleTerminalInput();
-			serv.shutDown();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			server.lobby();
+			server.shutDown();
+		//} catch (IOException e) {
+//			e.printStackTrace();
+		//}
 	}
 	
-}
+} 
