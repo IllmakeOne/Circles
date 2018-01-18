@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.prefs.PreferencesFactory;
 
 import Players.Player;
 import Ringz.Board;
@@ -120,15 +121,20 @@ public class ServerPeer implements Runnable {
     		}
     		case GAME_REQUEST: {
     			sendPackage(LOBBY);
+    			//Preferences is of this format : 
+    			//[0]number_players//[1]player_type//[2]prefered_oponent_type
     			String[] preferences = new String[3];
     			preferences[0] = words[1];
     			preferences[1] = words[2];
     			if (words.length == 4) {
     				preferences[2] = words[3];
+    			} else {
+    				preferences[2] = NEUTRAL;
     			}
     			lobby.addtoWaitingList(sock, preferences);
-    			Socket[] players = lobby.startableGame(words[1]);
-    			if (players !=null) {
+    			Socket[] players = lobby.startableGame(preferences);
+    			if (players != null) {
+    				for ()
     				
     			}
     		}
