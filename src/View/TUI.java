@@ -250,19 +250,26 @@ public class TUI implements Observer, View {
 	
 	
 	public String whattoDo(String nature) {
-		String[] end = new String[2];
 		String stringy = "";
 		System.out.println("For now just lookf for a game , type Request game\n");
 		String input = readString("[]>");
-		if (input.equals(" Request game")) {
-			stringy += Peer.GAME_REQUEST + Peer.DELIMITER + end[0] + Peer.DELIMITER + nature;
-			if (end[1] != null) {
-				stringy += Peer.DELIMITER + end[1];
+		int flag = 0;
+		while (flag == 0) {
+			if (input.equals("Request game")) {
+				flag = 1;
+				String[] end = requestGame();
+				stringy += "gr" + ";" + end[0] + ";" + nature;
+				if (end[1] != null) {
+					stringy += ";" + end[1];
+				}
+			} else if (input.equals("exit")) {
+				flag = 1;
+				stringy = input;
+			} else {
+				System.out.println("Please give valid input");
+				input = readString("[]>");
 			}
-		} else if (input.equals("exit")) {
-			stringy = input;
 		}
-		
 		
 		return stringy;
 	}
@@ -270,10 +277,16 @@ public class TUI implements Observer, View {
 	public String[] requestGame() {
 		
 		String[] end = new String[2];
+		System.out.println("What type of gmae, 2 , 3, 4 players?");
 		String input = readString("[]>");
-		while (!input.equals("2") || !input.equals("3") || !input.equals("4")) {
-			System.out.println("Please give valid number of players");
-			input = readString("[]>");
+		int flag = 0;
+		while (flag == 0) {
+			if (input.equals("2") || input.equals("3") || input.equals("4")) {
+				flag = 1;
+			} else {
+				System.out.println("Please give valid number of players");
+				input = readString("[]>");
+			}
 		}
 		
 		System.out.println("So you want to play a game of " + input);
@@ -281,19 +294,29 @@ public class TUI implements Observer, View {
 		
 		System.out.println("Do you want to play against anything specific? (yes/no)");
 		input = readString("[]>");
-		while (!input.equals("yes") || !input.equals("no")) {
-			System.out.println("yes or no please");
-			input = readString("[]>");
-		}
-		
-		if (input.equals("yes")) {
-			System.out.println("Agains human(0) or computer(1)");
-			input = readString("[]>");
-			while (!input.equals("0") || !input.equals("1")) {
-				System.out.println("0 or 1 please");
+		flag = 0;
+		int flag2 = 0;
+		while (flag == 0) {
+			if (input.equals("yes")) {
+				flag = 1;
+				System.out.println("Agains human(0) or computer(1)");
+				input = readString("[]>");
+				while (flag2 == 0) {
+					if (input.equals("0") || input.equals("1")) {
+						flag2 = 1;
+
+						end[1] = input;
+					} else {
+						System.out.println("0 or 1 please");
+						input = readString("[]>");
+					}
+				}
+			} else if (input.equals("no")) {
+				flag = 1;
+			} else {
+				System.out.println("yes or no please");
 				input = readString("[]>");
 			}
-			end[1] = input;
 		}
 		return end;
 	}

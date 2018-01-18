@@ -84,7 +84,6 @@ public class Peer extends Observable implements Runnable{
     protected BufferedReader in;
     protected BufferedWriter out;
     
-    protected boolean ready = false;
     
     private Board board;
     private Player clientPlayer;
@@ -92,6 +91,7 @@ public class Peer extends Observable implements Runnable{
     private HashMap<String, Color> playerColors;
     private String nature;
     private int numberPlayers;
+    private boolean gameinProgress;
 
 
     /*@
@@ -105,11 +105,12 @@ public class Peer extends Observable implements Runnable{
     public Peer(String playerName, String playerType, Socket sockArg) throws IOException {
     	this.nature = playerType;
     	this.sock = sockArg;
+    	this.gameinProgress = false;
     	this.name = playerName;
     	this.view = new TUI(name);
     	in = new BufferedReader(new InputStreamReader(sockArg.getInputStream()));
     	out = new BufferedWriter(new OutputStreamWriter(sockArg.getOutputStream()));
-    	
+    	sendfirstPack();
     }
 
     /**
@@ -130,6 +131,9 @@ public class Peer extends Observable implements Runnable{
 		}
     }
 
+    public void sendfirstPack() {
+    	sendPackage(CONNECT + DELIMITER + this.name);
+    }
 
     /**
      * Reads a string from the console and sends this string over
@@ -140,7 +144,7 @@ public class Peer extends Observable implements Runnable{
     	this.setChanged();
     	this.notifyObservers("joined");
     	String todo = view.whattoDo(this.nature);
-    	while (todo != "exit") {
+    	while (!todo.equals("exit") && gameinProgress == false) {
     		sendPackage(todo);
     		todo = view.whattoDo(this.nature);
     	}
@@ -167,6 +171,7 @@ public class Peer extends Observable implements Runnable{
     	switch (words[0]) {
     		case JOINED_LOBBY: {
     			this.notifyObservers("lobby");
+    			this.gameinProgress = true;
     			break;
     		}
     		case CONNECT: {
@@ -382,6 +387,7 @@ public class Peer extends Observable implements Runnable{
     public void shutDown() {
     	try {
 			sock.close();
+	    	System.exit(0);
 		} catch (IOException e) {
 			System.err.println("sth wrong in shutdow");
 			e.printStackTrace();

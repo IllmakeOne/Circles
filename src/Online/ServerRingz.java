@@ -3,11 +3,13 @@ package Online;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 
 public class ServerRingz {
 
-	
+
+	private ArrayList<Socket> Clients;
 
 	/** Starts a Server-application. */
 	public static void main(String[] args) {
@@ -45,7 +47,7 @@ public class ServerRingz {
      
      // create Peer object and start the two-way communication
 		try {
-            Peer serv = new Peer(name, sock);
+            ServerPeer serv = new ServerPeer(name, sock);
 			Thread streamInputHandler = new Thread(serv);
 			streamInputHandler.start();
 			serv.handleTerminalInput();
