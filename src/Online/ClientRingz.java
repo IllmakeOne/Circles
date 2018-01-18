@@ -6,11 +6,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-/**
- * Client class for a simple client-server application
- * @author  Theo Ruys
- * @version 2005.02.21
- */
 public class ClientRingz {
     private static final String USAGE
         = "usage: java week7.cmdline.Client <player type> <name> <address> <port>";

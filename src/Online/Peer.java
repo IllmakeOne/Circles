@@ -159,14 +159,14 @@ public class Peer extends Observable implements Runnable{
     		out.newLine();
     		out.flush();
     	} catch (IOException e) {
-    		System.out.println("Something wrong in sending Package");
+    		System.out.println("Something wrong in sending Package in Peer");
     		shutDown();
     	}
     }
 
     
     public void dealWithMessage(String message) {
-    	String[] words = message.split(";");
+    	String[] words = message.split(DELIMITER);
     	this.hasChanged();
     	switch (words[0]) {
     		case JOINED_LOBBY: {
@@ -382,7 +382,7 @@ public class Peer extends Observable implements Runnable{
     
     
     /**
-     * Closes the connection, the sockets will be terminated
+     * Closes the connection, the sockets will be terminated.
      */
     public void shutDown() {
     	try {
