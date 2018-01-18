@@ -83,7 +83,7 @@ class HumanPlayerTest {
 				playervs1.decresePiece(0, i);
 				playervs1.decresePiece(1, i);
 			}
-		}
+		} 
 		assertTrue(playervs1.isOutOfPieces());
 	}
 	@Test
