@@ -20,5 +20,7 @@ public interface Player {
 
 
 	public Move determineMove(Board bord);
+
+	void decresePiece(int col, int circleSize);
 }
  

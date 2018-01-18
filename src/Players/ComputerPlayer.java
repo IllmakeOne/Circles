@@ -101,5 +101,10 @@ public class ComputerPlayer implements Player {
 		}
 		return true;
 	}
+
+	@Override
+	public void decresePiece(int col, int circleSize) {
+		pieces[col][circleSize]--;		
+	}
  
 }

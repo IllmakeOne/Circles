@@ -23,10 +23,13 @@ public class HumanPalyer implements Player {
 		this.color[0] = c;
 		this.name = name;
 		this.pieces = new int[2][5];
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < Board.DIFFPIECES; i++) {
 			this.pieces[0][i] = 3;
 		}
 	}
+
+	
+
 	
 	public HumanPalyer(int nrplayers, Color c1, Color c2, String name) {
 		this.color = new Color[2];
@@ -61,7 +64,7 @@ public class HumanPalyer implements Player {
 //		}
 //	}
 	
-	 /**
+	/**
 	  * function that testes if the player is out of pieces.
 	  */
 	public boolean isOutOfPieces() {
@@ -79,7 +82,7 @@ public class HumanPalyer implements Player {
 	}
 		
 	
-
+	@Override
 	public void decresePiece(int col, int circleSize) {
 		pieces[col][circleSize]--;
 	}
