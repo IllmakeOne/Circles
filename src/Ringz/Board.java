@@ -262,7 +262,7 @@ public class Board extends Observable {
 	 */
 	/*@ requires x >= 0 && x <= 4;
 	 * 	requires x >= 0 && x <= 4;
-	 * 	
+	 * 	 
 	 */
 	public int[] tallyUp(int x, int y) {
 		int[] tally = new int[4];
