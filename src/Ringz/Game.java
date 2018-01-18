@@ -6,6 +6,9 @@ import View.View;
 
 import java.util.Observer;
 
+import Players.ComputerPlayer;
+import Players.HumanPalyer;
+import Players.Player;
 import Ringz.Board;
 import View.*;
 
@@ -20,7 +23,7 @@ public class Game {
 	//----------------Constructors---------
 	
 	/**
-	 * consturctor
+	 * constructor.
 	 */
 	public Game(Player[] players, View view) {
 		this.numberPlayers = players.length;
@@ -33,28 +36,7 @@ public class Game {
 		}		
 	}
 	
-//	public Game(Player name1, Player name2, Player name3) {
-//		this.numberPlayers = 3;
-//		this.board = new Board();
-//		this.players = new Player[4];
-//		this.players[0] = name1;
-//		this.players[1] = name2;
-//		this.players[2] = name3;
-//		
-//	}
-//	
-//	public Game(Player name1, Player name2, Player name3, Player name4) {
-//		this.numberPlayers = 4;
-//		this.board = new Board();
-//		this.players = new Player[4];
-//		this.players[0] = name1;
-//		this.players[1] = name2;
-//		this.players[2] = name3;
-//		this.players[3] = name4;
-//		
-//	}
-//	
-	
+
 	/**
 	 * play game.
 	 */
@@ -95,7 +77,7 @@ public class Game {
 	}
 	
 	/**
-	 * displays the winnder.
+	 * displays the winner.
 	 * @param indexWin
 	 */
 	public void winner(int[] indexWin) {
@@ -135,7 +117,7 @@ public class Game {
 	}
 	
 	/**
-	 * make a move 
+	 * make a move .
 	 * @param play <- the player making the move.
 	 * @param c1
 	 * @param c2
@@ -147,11 +129,9 @@ public class Game {
 		return this.board.addCircle(view.askMove(play, board));
 	}
 	
-	/**
-	 * shitty dsiplay board.
-	 */
+
 	public void display() {
-		 view.updateDisplay(this.board);
+		view.updateDisplay(this.board);
 	}
 	
 	public int getNrPlayers() {
@@ -161,10 +141,12 @@ public class Game {
 	
 	public static void main(String[] args) {
 		Player[] players = new Player[4];
-		players[0] = new ComputerPlayer(Color.BLUE, "1");
-		players[1] = new HumanPalyer(Color.PURPLE, "Tester");
-		players[2] = new ComputerPlayer(Color.YELLOW, "3");
-		players[3] = new ComputerPlayer(Color.GREEN, "4");
+		players[0] = new HumanPalyer(3, Color.BLUE, Color.GREEN, "Tester1");
+		players[1] = new HumanPalyer(3, Color.PURPLE, Color.GREEN, "Tester2");
+		players[2] = new HumanPalyer(3, Color.YELLOW, Color.GREEN, "Tester3");
+		
+//		players[2] = new ComputerPlayer(Color.YELLOW, "3");
+//		players[3] = new ComputerPlayer(Color.GREEN, "4");
 		
 		Game game = new Game(players, new TUI());
 		game.play();

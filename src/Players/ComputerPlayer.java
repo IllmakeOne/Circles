@@ -1,7 +1,10 @@
-package Ringz;
+package Players;
 
 import java.util.Random;
 
+import Ringz.Board;
+import Ringz.Color;
+import Ringz.Move;
 import Strategies.FourPlayerStrategy;
 import Strategies.Strategy;
 import Strategies.TwoPlayerStragegy;
@@ -14,7 +17,7 @@ public class ComputerPlayer implements Player {
 	private Strategy strateg;
 	
 	
-	public ComputerPlayer(Color c,String name) {
+	public ComputerPlayer(Color c, String name) {
 		this.color = new Color[2];
 		this.color[0] = c;
 		this.strateg = new FourPlayerStrategy(color);
@@ -25,29 +28,29 @@ public class ComputerPlayer implements Player {
 		}
 	}
 	
-//	public ComputerPlayer(int nrplayers, Color c1, Color c2, Board b) {
-//		this.color = new Color[2];
-//		this.color[0] = c1;
-//		this.color[1] = c2;
-//		this.name = "computer";
-//		this.pieces = new int[5][5];
-//		for (int i = 0; i < 5; i++) {
-//			this.pieces[0][i] = 3;
-//		}
-//		if (nrplayers == 2) {
-//			this.strateg = new TwoPlayerStragegy(b, color);
-//			for (int i = 0; i < 5; i++) {
-//				this.pieces[1][i] = 3;
-//			} 
-//			
-//		} else {
-//			this.strateg = new ThreePlayerStragegy(b);
-//			for (int i = 0; i < 5; i++) {
-//				this.pieces[1][i] = 1;
-//			}
-//		}
-//	}
-	
+	public ComputerPlayer(int nrplayers, Color c1, Color c2, String nam) {
+		this.color = new Color[2];
+		this.color[0] = c1;
+		this.color[1] = c2;
+		this.name = "computer";
+		this.pieces = new int[5][5];
+		for (int i = 0; i < 5; i++) {
+			this.pieces[0][i] = 3;
+		}
+		if (nrplayers == 2) {
+			this.strateg = new TwoPlayerStragegy(b, color);
+			for (int i = 0; i < 5; i++) {
+				this.pieces[1][i] = 3;
+			} 
+			
+		} else {
+			this.strateg = new ThreePlayerStrategy(b, color);
+			for (int i = 0; i < 5; i++) {
+				this.pieces[1][i] = 1;
+			}
+		}
+	}
+
 	
 	@Override
 	public Move determineMove(Board bord) {

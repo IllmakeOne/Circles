@@ -36,8 +36,9 @@ public class Move {
 	
 	public String toString() {
 		return "Line " + line +
-				" Column  "+ column +
-				" Circle sieze " + circle;
+				" Column  " + column +
+				" Circle sieze " + circle +
+				" Color: " + color ;
 	}
 
 }

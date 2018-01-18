@@ -5,9 +5,9 @@ import org.junit.Test;
 
 import Ringz.Board;
 import Ringz.Color;
-import Ringz.HumanPalyer;
+import Players.HumanPalyer;
 import Ringz.Move;
-import Ringz.Player;
+import Players.Player;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -86,6 +86,13 @@ public class BoardTest {
 		assertEquals(2, bord.arrayMaximum(new int[] {3, 2, 4, 3}));
 		assertEquals(1, bord.arrayMaximum(new int[] {3, 5000, 1, 1}));
 		assertEquals(-1, bord.arrayMaximum(new int[] {3, 1, 3, 1}));
+
+		System.out.println(bord.total()[1]);
+		assertEquals(1, bord.total()[0]); 
+		assertEquals(1, bord.total()[1]); 
+		assertEquals(1, bord.total()[2]); 
+		assertEquals(1, bord.total()[3]); 
+
 	}
 	
 	@Test
@@ -194,6 +201,7 @@ public class BoardTest {
 		Move o2 = new Move(bord.createArray(3, 3, 2), Color.GREEN);
 		Move o6 = new Move(bord.createArray(4, 4, 3), Color.GREEN);
 	
+
 		assertTrue(moves.toString().contains(o.toString()));
 		assertFalse(moves.toString().contains(o2.toString()));
 		assertFalse(moves.toString().contains(o6.toString()));
@@ -250,5 +258,14 @@ public class BoardTest {
 		}
 		assertTrue(bord.isFull());
 	}
+
+	@Test
+	public void testEmptyBoard() {
+		Board board = new Board();
+		assertTrue(board.emptyBoard());
+		assertTrue(!bord.emptyBoard());
+	}
+	
+
 }
 
