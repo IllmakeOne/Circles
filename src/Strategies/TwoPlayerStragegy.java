@@ -10,7 +10,7 @@ public class TwoPlayerStragegy implements Strategy {
 	
 	
 	Random rand = new Random();
-	Board board ;
+	Board board;
 	Color[] colors;
 
 	public TwoPlayerStragegy(Color[] colors) {
@@ -18,7 +18,6 @@ public class TwoPlayerStragegy implements Strategy {
 //		this.board = b;
 	}
 	
-	@Override
 	public Move determineMove() {
 		int[] cord =  new int[3];
 		cord[0] = rand.nextInt(5) + 1;
@@ -30,6 +29,12 @@ public class TwoPlayerStragegy implements Strategy {
 	@Override
 	public String getName() {
 		return "this is dumb as fuck ";
+	}
+
+	@Override
+	public Move determineMove(Board bord, int[][] pieces) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

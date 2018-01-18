@@ -7,6 +7,7 @@ import Ringz.Color;
 import Ringz.Move;
 import Strategies.FourPlayerStrategy;
 import Strategies.Strategy;
+import Strategies.ThreePlayerStrategy;
 import Strategies.TwoPlayerStragegy;
 
 public class ComputerPlayer implements Player {
@@ -38,13 +39,13 @@ public class ComputerPlayer implements Player {
 			this.pieces[0][i] = 3;
 		}
 		if (nrplayers == 2) {
-			this.strateg = new TwoPlayerStragegy(b, color);
+			this.strateg = new TwoPlayerStragegy(this.color);
 			for (int i = 0; i < 5; i++) {
 				this.pieces[1][i] = 3;
 			} 
 			
 		} else {
-			this.strateg = new ThreePlayerStrategy(b, color);
+			this.strateg = new ThreePlayerStrategy(this.color);
 			for (int i = 0; i < 5; i++) {
 				this.pieces[1][i] = 1;
 			}
@@ -100,6 +101,11 @@ public class ComputerPlayer implements Player {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public void decresePiece(int col, int circleSize) {
+		pieces[col][circleSize]--;		
 	}
  
 }
