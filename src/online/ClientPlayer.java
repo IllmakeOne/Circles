@@ -120,8 +120,14 @@ public class ClientPlayer implements Player {
 		return true;
 	}
 	
-	public void decresePiece(int col, int circleSize) {
-		pieces[col][circleSize]--;
+	public void decresePiece(Move move) {
+		int colorindex;
+		if (color[0] == move.getColor()) {
+			colorindex = 0;
+		} else {
+			colorindex = 1;
+		}
+		pieces[colorindex][move.getCircle()]--;
 	}
 	
 	/**
@@ -172,6 +178,14 @@ public class ClientPlayer implements Player {
 	@Override
 	public Move determineMove(Board bord) {
 		return null;
+	}
+
+
+
+	@Override
+	public void decresePiece(int col, int circleSize) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
