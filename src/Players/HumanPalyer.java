@@ -107,7 +107,6 @@ public class HumanPalyer implements Player {
 
 	@Override
 	public int[] getStart() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

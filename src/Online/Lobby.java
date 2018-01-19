@@ -2,20 +2,23 @@ package Online;
 
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import Ringz.Board;
+import Ringz.Color;
 import Ringz.Move;
 
 public class Lobby {
 	
 	private ArrayList<String> clients;
-	private Board board;
 	private String name;
 	private HashMap<Socket, String[]> playersWaiting;
 	
 	public Lobby(String name) {
 		this.name = name;
+		this.clients = new ArrayList<String>();
+		this.playersWaiting = new HashMap<Socket, String[]>();
 	}
 	
 	public boolean addtoClientList(String clientname) {
@@ -68,5 +71,84 @@ public class Lobby {
 			return null;
 		}
 	}
+	
+	
+	public void startGame(Socket[] plays) {
+		Board board = new Board();
+		int current = 0;
+		int numberOfplayers = plays.length;
+    	ArrayList<Socket> aux = new ArrayList<>();
+    	for (int i = 0; i < numberOfplayers; i++) {
+    		aux.add(plays[i]);   		
+    	}
+    	Collections.shuffle(aux);
+    	ArrayList<ClientPlayer> players = createPlayers(aux);
+    	int[] tappers = new int[numberOfplayers];
+    	//this keep track of who is still able to play, 0 if still able to , and 1 if is out
+    	while (!board.isFull() && !allTapped(tappers)) {
+    		if (players.get(current).isOutOfPieces() ||
+    				!board.isStrillAbleToPlace(players.get(current))) {
+    			tappers[current] = 1;
+    		}
+    	}
+    	
+    	
+	//while(board);
+    	
+		
+	}
+	
+	public ArrayList<ClientPlayer> createPlayers(ArrayList<Socket> plays){
+		ArrayList<ClientPlayer> players = new ArrayList<ClientPlayer>();
+		if (plays.size() == 2) {
+			players.add(new ClientPlayer(2, Color.BLUE, Color.PURPLE, "1", plays.get(0)));
+			players.add(new ClientPlayer(2, Color.YELLOW, Color.GREEN, "2", plays.get(1)));
+		} else if (plays.size() == 3) {
+			players.add(new ClientPlayer(2, Color.BLUE, Color.GREEN, "1", plays.get(0)));
+			players.add(new ClientPlayer(2, Color.PURPLE, Color.GREEN, "2", plays.get(1)));
+			players.add(new ClientPlayer(2, Color.YELLOW, Color.GREEN, "3", plays.get(2)));
+		} else {
+			players.add(new ClientPlayer(Color.BLUE, "1", plays.get(0)));
+			players.add(new ClientPlayer(Color.PURPLE, "2", plays.get(1)));
+			players.add(new ClientPlayer(Color.YELLOW, "3", plays.get(2)));
+			players.add(new ClientPlayer(Color.GREEN, "4", plays.get(3)));
+		}
+		
+		return players;
+	}
+	
+	public boolean allTapped(int[] tappers) {
+		return false;
+	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

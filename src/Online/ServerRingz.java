@@ -56,7 +56,7 @@ public class ServerRingz {
 			Thread streamInputHandler = new Thread(server);
 			streamInputHandler.start();
 			server.lobby();
-			server.shutDown();
+		//	server.shutDown();
 		//} catch (IOException e) {
 //			e.printStackTrace();
 		//}

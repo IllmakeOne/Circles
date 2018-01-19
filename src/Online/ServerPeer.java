@@ -95,9 +95,11 @@ public class ServerPeer implements Runnable {
     	try {
     		String message = in.readLine();
     		while (message != null) {
+    			System.out.println(message);
     			dealWithMessage(message);    
+    			message = in.readLine();
     		}
-    		shutDown();
+    	//	shutDown();
 		} catch (IOException e) {
 			System.out.println("sth wrong in run");
 			shutDown();
@@ -120,7 +122,7 @@ public class ServerPeer implements Runnable {
     			break;
     		}
     		case GAME_REQUEST: {
-    			sendPackage(LOBBY);
+    			sendPackage(JOINED_LOBBY);
     			//Preferences is of this format : 
     			//[0]number_players//[1]player_type//[2]prefered_oponent_type
     			String[] preferences = new String[3];
@@ -134,8 +136,7 @@ public class ServerPeer implements Runnable {
     			lobby.addtoWaitingList(sock, preferences);
     			Socket[] players = lobby.startableGame(preferences);
     			if (players != null) {
-    				for ()
-    				
+    				lobby.startGame(players));
     			}
     		}
     	}
@@ -172,6 +173,7 @@ public class ServerPeer implements Runnable {
      */
     public void sendPackage(String sendPackage) {
     	try {
+    		System.out.println(sendPackage);
     		out.write(sendPackage);
     		out.newLine();
     		out.flush();
@@ -189,7 +191,6 @@ public class ServerPeer implements Runnable {
     public void shutDown() {
     	try {
 			sock.close();
-	    	System.exit(0);
 		} catch (IOException e) {
 			System.err.println("sth wrong in shutdow");
 			e.printStackTrace();

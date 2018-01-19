@@ -24,11 +24,7 @@ import View.TUI;
 import View.*;
 import Ringz.Color;
 
-/**
- * Peer for a simple client-server application
- * @author  Theo Ruys
- * @version 2005.02.21
- */
+
 public class Peer extends Observable implements Runnable{
 	
 	public static final String DELIMITER = ";";
@@ -104,10 +100,12 @@ public class Peer extends Observable implements Runnable{
      */
     public Peer(String playerName, String playerType, Socket sockArg) throws IOException {
     	this.nature = playerType;
+    	this.playerColors = new HashMap<String, Color>();
     	this.sock = sockArg;
     	this.gameinProgress = false;
     	this.name = playerName;
     	this.view = new TUI(name);
+    	this.addObserver(view);
     	in = new BufferedReader(new InputStreamReader(sockArg.getInputStream()));
     	out = new BufferedWriter(new OutputStreamWriter(sockArg.getOutputStream()));
     	sendfirstPack();
@@ -121,7 +119,9 @@ public class Peer extends Observable implements Runnable{
     	try {
     		String message = in.readLine();
     		while (message != null) {
-    			dealWithMessage(message);    
+    			System.out.println(message);
+    			dealWithMessage(message);  
+    			message = in.readLine();
     		}
     		shutDown();
 		} catch (IOException e) {
@@ -142,14 +142,13 @@ public class Peer extends Observable implements Runnable{
      */
     public  void lobby() {
     	this.setChanged();
-    	this.notifyObservers("joined");
+    	notifyObservers("joined");
     	String todo = view.whattoDo(this.nature);
     	while (!todo.equals("exit") && gameinProgress == false) {
     		sendPackage(todo);
     		todo = view.whattoDo(this.nature);
     	}
-    	shutDown();
-    	System.exit(0);
+    	//shutDown();
     	
     }
     
@@ -167,7 +166,7 @@ public class Peer extends Observable implements Runnable{
     
     public void dealWithMessage(String message) {
     	String[] words = message.split(DELIMITER);
-    	this.hasChanged();
+    	this.setChanged();
     	switch (words[0]) {
     		case JOINED_LOBBY: {
     			this.notifyObservers("lobby");
@@ -179,6 +178,7 @@ public class Peer extends Observable implements Runnable{
         			this.notifyObservers("accepted");
     			} else {
         			this.notifyObservers("denied");
+        			shutDown();
     			}
     			break;
     		}
@@ -386,8 +386,9 @@ public class Peer extends Observable implements Runnable{
      */
     public void shutDown() {
     	try {
+    		//System.out.println("'his bin shot");
+    		//System.out.println(Thread.currentThread().getStackTrace());
 			sock.close();
-	    	System.exit(0);
 		} catch (IOException e) {
 			System.err.println("sth wrong in shutdow");
 			e.printStackTrace();

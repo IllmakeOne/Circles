@@ -23,7 +23,7 @@ public class ClientRingz {
         int port = 0;
         Socket sock = null;
 
-        // check args[1] - the IP-adress
+        
         try {
             addr = InetAddress.getByName(args[2]);
         } catch (UnknownHostException e) {
@@ -32,7 +32,7 @@ public class ClientRingz {
             System.exit(0);
         }
 
-        // parse args[2] - the port
+        
         try {
             port = Integer.parseInt(args[3]);
         } catch (NumberFormatException e) {
@@ -42,7 +42,7 @@ public class ClientRingz {
             System.exit(0);
         }
 
-        // try to open a Socket to the server
+        
         try {
             sock = new Socket(addr, port);
         } catch (IOException e) {
@@ -50,16 +50,16 @@ public class ClientRingz {
                     + " and port " + port);
         }
 
-        // create Peer object and start the two-way communication
+        
         try {
             Peer client = new Peer(name, nature, sock);
-            Thread streamInputHandler = new Thread(client);
+            Thread streamInputHandler = new Thread(client, "imputhandle");
             streamInputHandler.start();
             client.lobby();
-            client.shutDown();
+          //client.shutDown();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-} // end of class Client
+} 

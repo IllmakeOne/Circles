@@ -232,7 +232,7 @@ public class TUI implements Observer, View {
 			System.out.println("You are in the lobby waiting");
 		
 		} else if (arg1.equals("accepted")) {
-			System.out.println("You have veen accepted, you ahve been connected");
+			System.out.println("You have been accepted, you have been connected");
 		
 		} else if (arg1.equals("denied")) {
 			System.out.println("Thee not worthy");
@@ -251,7 +251,7 @@ public class TUI implements Observer, View {
 	
 	public String whattoDo(String nature) {
 		String stringy = "";
-		System.out.println("For now just lookf for a game , type Request game\n");
+		System.out.println("For now just look for a game , type Request game\n");
 		String input = readString("[]>");
 		int flag = 0;
 		while (flag == 0) {
