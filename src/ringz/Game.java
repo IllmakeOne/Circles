@@ -1,16 +1,13 @@
-package Ringz;
+package ringz;
 
-import Ringz.Color;
-
-import View.View;
+import players.ComputerPlayer;
+import players.HumanPalyer;
+import players.Player;
+import ringz.Board;
+import ringz.Color;
+import view.*;
 
 import java.util.Observer;
-
-import Players.ComputerPlayer;
-import Players.HumanPalyer;
-import Players.Player;
-import Ringz.Board;
-import View.*;
 
 public class Game {
 	

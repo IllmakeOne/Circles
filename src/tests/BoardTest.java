@@ -1,13 +1,13 @@
-package Tests;
+package tests;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import Ringz.Board;
-import Ringz.Color;
-import Players.HumanPalyer;
-import Ringz.Move;
-import Players.Player;
+import players.HumanPalyer;
+import players.Player;
+import ringz.Board;
+import ringz.Color;
+import ringz.Move;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

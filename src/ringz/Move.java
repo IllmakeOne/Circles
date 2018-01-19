@@ -1,8 +1,8 @@
-package Ringz;
+package ringz;
 
 import java.util.Scanner;
 
-import Ringz.Color;
+import ringz.Color;
 
 public class Move {
 	

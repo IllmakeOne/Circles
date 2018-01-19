@@ -1,4 +1,4 @@
-package Ringz;
+package ringz;
 import java.awt.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
-import Players.Player;
+import players.Player;
 
 
 public class Board extends Observable {

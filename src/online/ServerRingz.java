@@ -1,12 +1,12 @@
-package Online;
+package online;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import Ringz.Board;
-import Ringz.Move;
+import ringz.Board;
+import ringz.Move;
 
 
 public class ServerRingz {

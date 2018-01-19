@@ -1,4 +1,4 @@
-package View;
+package view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,10 +6,10 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
-import Online.Peer;
-import Players.HumanPalyer;
-import Players.Player;
-import Ringz.*;
+import online.Peer;
+import players.HumanPalyer;
+import players.Player;
+import ringz.*;
  
 public class TUI implements Observer, View {
 	

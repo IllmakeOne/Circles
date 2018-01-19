@@ -1,4 +1,4 @@
-package Online;
+package online;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,15 +14,14 @@ import java.util.Scanner;
 import javax.swing.colorchooser.DefaultColorSelectionModel;
 import javax.swing.text.View;
 
-import Players.ComputerPlayer;
-import Players.HumanPalyer;
-import Players.Player;
-import Ringz.Board;
-import Ringz.Game;
-import Ringz.Move;
-import View.TUI;
-import View.*;
-import Ringz.Color;
+import players.ComputerPlayer;
+import players.HumanPalyer;
+import players.Player;
+import ringz.Board;
+import ringz.Color;
+import ringz.Game;
+import ringz.Move;
+import view.*;
 
 
 public class Peer extends Observable implements Runnable{

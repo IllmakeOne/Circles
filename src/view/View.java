@@ -1,7 +1,7 @@
-package View;
+package view;
 
-import Players.Player;
-import Ringz.*;
+import players.Player;
+import ringz.*;
 
 public interface View {
 	
