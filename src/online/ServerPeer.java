@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.prefs.PreferencesFactory;
 
@@ -100,10 +101,13 @@ public class ServerPeer implements Runnable {
     			message = in.readLine();
     		}
     	//	shutDown();
-		} catch (IOException e) {
-			System.out.println("sth wrong in run");
+    	} catch (SocketException e) {
+			System.out.println(name + " disconected");
+			lobby.diconected(this);
 			shutDown();
-			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Something else went wrong");
+			shutDown();
 		}
     }
     
@@ -158,7 +162,6 @@ public class ServerPeer implements Runnable {
     public void shutDown() {
     	try {
 			sock.close();
-			System.exit(0);
 		} catch (IOException e) {
 			System.out.println("sth wrong in run");
 			shutDown();

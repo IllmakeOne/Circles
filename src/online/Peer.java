@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Scanner;
@@ -119,11 +120,14 @@ public class Peer extends Observable implements Runnable{
     			dealWithMessage(message);  
     			message = in.readLine();
     		}
+    		System.out.println("You have been disconected");
     		shutDown();
-		} catch (IOException e) {
-			System.out.println("sth wrong in run");
+		} catch (SocketException e) {
+			System.out.println("You have been disconected");
 			shutDown();
-			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Something else went wrong");
+			shutDown();
 		}
     }
 

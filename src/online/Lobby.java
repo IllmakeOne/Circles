@@ -69,7 +69,7 @@ public class Lobby {
 					inPlay < intnrplayers /*tests if it already has enough players*/) {
 					//ads player to the array of players which will start a game
 					players[inPlay] = key;
-					playersWaiting.remove(key);
+					//playersWaiting.remove(key); Mistake!
 				}
 			}
 		}
@@ -85,7 +85,17 @@ public class Lobby {
 
 	
 	/**
-	 * this function starts a game based on an array of players who have the same preferrences
+	 * this function removes someone form the lobby.
+	 * it is called when someone diconects
+	 * @param client
+	 */
+	public void diconected(ServerPeer client) {
+		clients.remove(client.getName());
+		playersWaiting.remove(client);
+	}
+	
+	/**
+	 * this function starts a game based on an array of players who have the same preferrences.
 	 * @param plays
 	 */
 	public void startGame(ServerPeer[] plays) {
