@@ -1,12 +1,12 @@
-package Tests;
+package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import Ringz.Color;
-import Ringz.Move;
+import ringz.Color;
+import ringz.Move;
 
 class MoveTest {
 	private Move mastermove;

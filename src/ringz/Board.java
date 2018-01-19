@@ -1,8 +1,9 @@
-package Ringz;
+package ringz;
 
 import java.util.ArrayList;
 import java.util.Observable;
-import Players.Player;
+
+import players.Player;
 
 
 public class Board extends Observable {
@@ -16,10 +17,10 @@ public class Board extends Observable {
 	/**
 	 * initialize the  board with empty fields.
 	 */
-	/*@ ensures (\forAll int x, int y, int pieces; 0 <= x && x <= DIM
-	* && 0 <= y && y <= DIM && 0 <= pieces && pieces <= DIFFPIECES; Color.EMPTY);
-	*/
-	public /*@ pure */Board() {
+	/*@ ensures (\forAll int x, int y, int pieces;
+	 @ 0 <= x && x <= DIM && 0 <= y && y <= DIM && 
+	 @ 0 <= pieces && pieces <= DIFFPIECES; Color.EMPTY); assignable bord; */
+	public /*@ pure */ Board() {
 		this.bord = new Color[DIM][DIM][DIFFPIECES];
 		for (int x = 0; x < DIM; x++) {
 			for (int y = 0; y < DIM; y++) {
@@ -37,7 +38,7 @@ public class Board extends Observable {
 	/*@ ensures \result == (\forAll int x, int y, int pieces; 0 <= x && x <= DIM
 	* 	&& 0 <= y && y <= DIM && 0 <= pieces && pieces <= DIFFPIECES; Color.EMPTY);
 	@*/
-	public boolean emptyBoard() {
+	public  /*@ pure */ boolean emptyBoard() {
 		for (int i = 0; i < DIM; i++) {
 			for (int j = 0; j < DIM; j++) {
 				for (int k = 0; k < DIFFPIECES; k++) {
@@ -58,12 +59,12 @@ public class Board extends Observable {
 	 * @param circlesize is the circlesize
 	 * @return the array
 	 */
-	/*@ requires 0 <= x && x <= 4;
-	 *	requires 0 <= y && y <= 4;
+	/*@ requires 0 <= x && x <= 4; */
+	/*@ requires x > 0 ;
 	 * 	requires 0 <= circlesize && circlesize <= 4;
 	 *	ensures (\result[0] == circlesize && \result[1] == x && \result[2] == y);
 	 @*/
-	public int[] createArray(int x, int y, int circlesize) {
+	public  /*@ pure */ int[] createArray(int x, int y, int circlesize) {
 		int[] cord = new int[3];
 		cord[0] = circlesize;
 		cord[1] = x;
@@ -78,7 +79,7 @@ public class Board extends Observable {
 	 * @return Arraylist<Move> list with all the possible moves
 	 */
 	
-	public ArrayList<Move> getPossibleMoves(Color color, int[][] pieces) {
+	public /*@ pure */ ArrayList<Move> getPossibleMoves(Color color, int[][] pieces) {
 //		int nrmoves = 0;
 		Move move = null;
 		int cnr = 0;
@@ -114,51 +115,14 @@ public class Board extends Observable {
 		
 		return list;
 
-	}
-//		for (int i = 0; i < DIM; i++) {
-//			for (int j = 0; j < DIM; j++) {
-//				if (hasFriend(i, j, c)) {
-//					if (isCompletlyEmpty(i, j)) {
-//						nrmoves++;
-//					}
-//					for (int k = 1; k < DIFFPIECES; k++) {
-//						if (getRing(i, j, k) == Color.EMPTY) {
-//							nrmoves++;
-//						}
-//					}
-//					
-//				}
-//			}
-//		}	
-//		
-//		Move[] moves = new Move[nrmoves];
-//		nrmoves = 0;
-//		for (int i = 0; i < DIM; i++) {
-//			for (int j = 0; j < DIM; j++) {
-//				if (hasFriend(i, j, c)) {
-//					if (isCompletlyEmpty(i, j)) {
-//						moves[nrmoves] = new Move(createArray(i, j, 0), c);
-//						nrmoves++;
-//					}
-//					for (int k = 1; k < DIFFPIECES; k++) {
-//						if (getRing(i, j, k) == Color.EMPTY) {
-//							moves[nrmoves] = new Move(createArray(i, j, k), c);
-//							nrmoves++;
-//						}
-//					}
-//					
-//				}
-//			}
-//		}
-		
-		
+	}		
 	
 	/**
 	 * return a deep copy of the board.
 	 * @return copy of the board
 	 */
-	public Color[][][] deepCopy() {
-		Color[][][] copy = null;
+	public  /*@ pure */ Color[][][] deepCopy() {
+		Color[][][] copy = new Color[DIM][DIM][DIFFPIECES];
 		for (int i = 0; i < DIM; i++) {
 			for (int j = 0; j < DIM; j++) {
 				for (int k = 0; k < DIFFPIECES; k++) {
@@ -180,7 +144,7 @@ public class Board extends Observable {
 	/*@ ensures (/result >= -1 && /result <= array.length());
 	 * 	
 	 */
-	public int arrayMaximum(int[] array) {
+	public  /*@ pure */ int arrayMaximum(int[] array) {
 		int highestScore = 0, maxindex1 = 1;
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] >= highestScore) {
@@ -206,7 +170,7 @@ public class Board extends Observable {
 	/*@
 	 * ensures \result >= -1 && \result <= 3
 	 */
-	public int colorIndex(Color color) {
+	public  /*@ pure */ int colorIndex(Color color) {
 		switch (color) {
 			case BLUE: {
 				return 0;
@@ -234,8 +198,8 @@ public class Board extends Observable {
 	 * ensures \result >= -1 && \result <= 3
 	 * ensures \result.instanceof(Color);
 	 */
-	public Color intIndex(int i) {
-		switch (i){
+	public  /*@ pure */ Color intIndex(int i) {
+		switch (i) {
 			case 0: {
 				return Color.BLUE;
 			}
@@ -264,7 +228,7 @@ public class Board extends Observable {
 	 * 	requires x >= 0 && x <= 4;
 	 * 	 
 	 */
-	public int[] tallyUp(int x, int y) {
+	public  /*@ pure */ int[] tallyUp(int x, int y) {
 		int[] tally = new int[4];
 		for (int ringsize = 1; ringsize < 5; ringsize++) {
 			colorIndex(getRing(x, y, ringsize));
@@ -279,7 +243,7 @@ public class Board extends Observable {
 	 * index 0 blue, index 1 purple, index 2 yellow, index 3 green.
 	 * on each index it says how many points each has
 	 */
-	public int[] total() {
+	public  /*@ pure */ int[] total() {
 		int[] sum = new int[4];
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
@@ -317,7 +281,7 @@ public class Board extends Observable {
 	 * @param col is the color being looked for
 	 * @return true if the field has the color
 	 */
-	public boolean fieldHas(int x, int y, Color col) {
+	public  /*@ pure */ boolean fieldHas(int x, int y, Color col) {
 		for (int i = 0; i < DIFFPIECES; i++) {
 			if (this.bord[x][y][i] == col) {
 				return true;
@@ -326,7 +290,7 @@ public class Board extends Observable {
 		return false;
 	}
 	
-	public boolean isCompletlyEmpty(int x, int y) {
+	public /*@ pure */ boolean isCompletlyEmpty(int x, int y) {
 		for (int i = 0; i < DIFFPIECES; i++) {
 			if (this.bord[x][y][i] != Color.EMPTY) {
 				return false;
@@ -338,7 +302,7 @@ public class Board extends Observable {
 	/**
 	 * test if a color on a position is has around it at least one other piece of the same color.
 	 */
-	public boolean hasFriend(int x, int y, Color col) {
+	public  /*@ pure */ boolean hasFriend(int x, int y, Color col) {
 		int[] handy = {-1, 0, 1};
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -360,7 +324,7 @@ public class Board extends Observable {
 	 * @param col the color being tested
 	 * @return true if the move is valid
 	 */
-	public boolean validMove(int x, int y, Color col, int circleSize) {
+	public  /*@ pure */ boolean validMove(int x, int y, Color col, int circleSize) {
 		//display();
 		this.setChanged();
 		if (getRing(x, y, 0) == Color.EMPTY) {	
@@ -378,7 +342,7 @@ public class Board extends Observable {
 				if (this.bord[x][y][circleSize] == Color.EMPTY) {
 					return true;
 				} else {
-				System.out.println("Field not empty");
+					System.out.println("Field not empty");
 					notifyObservers("notEmpty");
 					return false;
 				}
@@ -402,7 +366,7 @@ public class Board extends Observable {
 	 * @param play
 	 * @return true if is still able to play
 	 */
-	public boolean isStrillAbleToPlace(Player play) {
+	public  /*@ pure */ boolean isStrillAbleToPlace(Player play) {
 		Color[] col = play.getColor();
 		int[][] pieces = play.getPieces();
 		for (int i = 0; i < DIM; i++) {
@@ -455,38 +419,38 @@ public class Board extends Observable {
 	}
 	
 	/**
-	 * return the epcific field 
+	 * return the specific ring. 
 	 * @param x line
 	 * @param y column
 	 * @param circleSeize hight
 	 * @return 
 	 */
-	public Color getRing(int x, int y, int circleSeize) {
+	public  /*@ pure */ Color getRing(int x, int y, int circleSeize) {
 		return this.bord[x][y][circleSeize];
 	}
 	
 	/**
-	 * gives all the cirlces in a board coordinate
+	 * gives all the cirlces in a board coordinate.
 	 * @param x line
 	 * @param y column 
 	 * @return a vector of Color 
 	 */
-	public Color[] getPin(int x, int y) {
+	public  /*@ pure */ Color[] getPin(int x, int y) {
 		Color[] pin = new Color[DIFFPIECES];
 		for (int i = 0; i < DIFFPIECES; i++) {
 			pin[i] = this.getRing(x, y, i);
 		}
 		return pin;
 	}
-	public Color[][][] getBoard(){
+	public /*@ pure */ Color[][][] getBoard() {
 		return bord;
 	}
 	
 	/**
-	 * tests if the boar dis full or not
-	 * @return
+	 * tests if the board is full or not.
+	 * @return true when full, false when at least 1 spot is free.
 	 */
-	public boolean isFull() {
+	public /*@ pure */ boolean isFull() {
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
 				if (isCompletlyEmpty(i, j)) {
@@ -505,12 +469,12 @@ public class Board extends Observable {
 	}
 	
 	/**
-	 * test is x and y are without bounds
+	 * test is x and y are within bounds.
 	 * @param x
 	 * @param y
 	 * @return
 	 */
-	public boolean inBounds(int x, int y) {
+	public /*@ pure */ boolean inBounds(int x, int y) {
 		if (x > 4 || x < 0) {
 			return false;
 		}
@@ -534,7 +498,7 @@ public class Board extends Observable {
 //		}
 //		return true;
 //	}
-	public void display() {
+	public /*@ pure */ void display() {
 		for (int i = 0; i < 5; i++) {
 			String croth = "";
 			for (int j = 0; j < 5; j++) {
@@ -570,7 +534,7 @@ public class Board extends Observable {
 		
 	}
 	
-	public boolean validMoveWithoutObservers(int x, int y, Color col, int circleSize) {
+	public /*@ pure */ boolean validMoveWithoutObservers(int x, int y, Color col, int circleSize) {
 		//display();
 		if (getRing(x, y, 0) == Color.EMPTY) {	
 			if (this.hasFriend(x, y, col)) {

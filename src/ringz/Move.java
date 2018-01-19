@@ -1,8 +1,4 @@
-package Ringz;
-
-import java.util.Scanner;
-
-import Ringz.Color;
+package ringz;
 
 public class Move {
 	
@@ -38,7 +34,7 @@ public class Move {
 		return "Line " + line +
 				" Column  " + column +
 				" Circle sieze " + circle +
-				" Color: " + color ;
+				" Color: " + color;
 	}
 
 }

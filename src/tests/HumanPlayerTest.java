@@ -1,13 +1,13 @@
-package Tests;
+package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import Players.HumanPalyer;
-import Ringz.Board;
-import Ringz.Color;
+import players.HumanPalyer;
+import ringz.Board;
+import ringz.Color;
 
 class HumanPlayerTest {
 	private HumanPalyer playervs1;

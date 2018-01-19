@@ -1,4 +1,4 @@
-package View;
+package view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,10 +6,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
-import Online.Peer;
-import Players.HumanPalyer;
-import Players.Player;
-import Ringz.*;
+import players.HumanPalyer;
+import players.Player;
+import ringz.*;
  
 public class TUI implements Observer, View {
 	
@@ -83,6 +82,7 @@ public class TUI implements Observer, View {
 		}
 		
 		((HumanPalyer) play).decresePiece(colorIndex, move[0]);
+		in.close();
 		return new Move(move, play.getColor()[colorIndex]);
 	}
 	
@@ -90,11 +90,11 @@ public class TUI implements Observer, View {
 
 	@Override
 	public void updateDisplay(Board board) {
-		for (int i = 0; i < board.DIM; i++) {
+		for (int i = 0; i < Board.DIM; i++) {
 			String croth = "";
-			for (int j = 0; j < board.DIM; j++) {
+			for (int j = 0; j < Board.DIM; j++) {
 				String stringy = "";
-				for (int circlesize = 0; circlesize < board.DIFFPIECES; circlesize++) {
+				for (int circlesize = 0; circlesize < Board.DIFFPIECES; circlesize++) {
 					switch (board.getRing(j, i, circlesize)) {
 						case EMPTY: {
 							stringy += "E";
@@ -148,10 +148,14 @@ public class TUI implements Observer, View {
 	
 	
 	@Override
-	public void outOfPieces(String name) {
-		System.out.println(name + " ,you are out of pieces");
+	public void outOfPieces() {
+		System.out.println(getName() + " ,you are out of pieces");
 		
 	}
+	public String getName() {
+		return this.name;
+	}
+	
 
 
 	@Override
@@ -159,7 +163,7 @@ public class TUI implements Observer, View {
 		int[][] pieces = play.getPieces();
 		Color[] color = play.getColor();
 		int colorcount = 2;
-		if (color[1] == null){
+		if (color[1] == null) {
 			colorcount = 1;
 		}
 		for (int i = 0; i < colorcount; i++) {
@@ -193,8 +197,8 @@ public class TUI implements Observer, View {
 
 	
 	@Override
-	public void notAbletoPlay(String namee) {
-		System.out.println(namee + ",you are not able to place any pieces");
+	public void notAbletoPlay() {
+		System.out.println(getName() + ",you are not able to place any pieces");
 	}
 
 	public void disconnected(String disconee) {
@@ -348,6 +352,7 @@ public class TUI implements Observer, View {
 			}
 			in = new Scanner(System.in);
 		}
+		in.close();
 	}
 	
 	/**
@@ -385,7 +390,6 @@ public class TUI implements Observer, View {
 		Color choce = null;
 		int flag = 1;
 		Scanner in = new Scanner(System.in);
-		String[] words;
 		while (flag == 1) {
 			System.out.println("Please choose one of these colors "
 					+ c1 + " and " + c2);
@@ -455,6 +459,7 @@ public class TUI implements Observer, View {
     		}
     		in = new Scanner(System.in);
     	}
+    	in.close();
     	return move;
     }
 }

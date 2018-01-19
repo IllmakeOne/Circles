@@ -1,7 +1,7 @@
-package Strategies;
+package strategies;
 
-import Ringz.Board;
-import Ringz.Move;
+import ringz.Board;
+import ringz.Move;
 
 public interface Strategy {
 

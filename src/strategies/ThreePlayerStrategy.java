@@ -1,10 +1,10 @@
-package Strategies;
+package strategies;
 
 import java.util.Random;
 
-import Ringz.Board;
-import Ringz.Color;
-import Ringz.Move;
+import ringz.Board;
+import ringz.Color;
+import ringz.Move;
 
 public class ThreePlayerStrategy implements Strategy {
 	

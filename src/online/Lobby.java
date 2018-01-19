@@ -1,11 +1,11 @@
-package Online;
+package online;
 
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import Ringz.Board;
-import Ringz.Move;
+import ringz.Board;
+import ringz.Move;
 
 public class Lobby {
 	

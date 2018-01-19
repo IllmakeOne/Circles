@@ -1,4 +1,4 @@
-package Online;
+package online;
 
 public class Protocol {
 

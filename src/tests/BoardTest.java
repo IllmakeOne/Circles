@@ -1,13 +1,13 @@
-package Tests;
+package tests;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import Ringz.Board;
-import Ringz.Color;
-import Players.HumanPalyer;
-import Ringz.Move;
-import Players.Player;
+import players.HumanPalyer;
+import players.Player;
+import ringz.Board;
+import ringz.Color;
+import ringz.Move;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -59,7 +59,7 @@ public class BoardTest {
 		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 2}, Color.GREEN)));
 		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 3}, Color.GREEN)));
 		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 4}, Color.GREEN)));
-		assertEquals(4, bord.tallyUp(1,1)[0]);
+		assertEquals(4, bord.tallyUp(1, 1)[0]);
 	}
 	
 	@Test
@@ -76,11 +76,12 @@ public class BoardTest {
 		assertEquals(bord.getRing(2, 2, 3), Color.YELLOW); 
 		assertEquals(bord.getRing(2, 2, 4), Color.BLUE); 
 		System.out.println("1 basic is printed");
-		System.out.println("points: "+bord.total()[0]+bord.total()[1]+bord.total()[2]+bord.total()[3]);
+		System.out.println("points: " + bord.total()[0]
+				+ bord.total()[1] + bord.total()[2] + bord.total()[3]);
 		assertEquals(1, bord.total()[0]); 	 
 	}
 	@Test
-	public void TestArrayMaximum() {
+	public void testArrayMaximum() {
 		assertEquals(0, bord.arrayMaximum(new int[] {3, 1, 1, 1}));
 		assertEquals(0, bord.arrayMaximum(new int[] {3, 2, 1, 2}));
 		assertEquals(2, bord.arrayMaximum(new int[] {3, 2, 4, 3}));
@@ -125,8 +126,9 @@ public class BoardTest {
 		assertNotEquals(Color.YELLOW, bord.getRing(2, 2, 1));
 		assertNotEquals(Color.YELLOW, bord.getRing(1, 2, 1));
 		Color[] pin = new Color[] {Color.EMPTY,
-				Color.GREEN, Color.PURPLE, Color.YELLOW, Color.BLUE};
-		assertEquals(bord.getPin(2, 2), (pin));
+			Color.GREEN, Color.PURPLE, Color.YELLOW, Color.BLUE};
+		assertEquals(bord.getPin(2, 2), pin);
+		//ta will get back to us, cannot fix now.
 	}
 	@Test
 	public void testValidMove() {
@@ -232,10 +234,10 @@ public class BoardTest {
 		//nullpointer exception, probably in initiation of copy in method.
 		Color[][][] copy = bord.deepCopy();
 		assertNotEquals(bord.getBoard(), copy);
-		for (int x = 0; x< Board.DIM;x++) {
-			for (int y = 0; y< Board.DIM;y++) {
-				for (int piece = 0; piece<Board.DIFFPIECES;piece++) {
-					assertEquals(bord.getRing(x, y, piece),copy[x][y][piece]);
+		for (int x = 0; x < Board.DIM; x++) {
+			for (int y = 0; y < Board.DIM; y++) {
+				for (int piece = 0; piece < Board.DIFFPIECES; piece++) {
+					assertEquals(bord.getRing(x, y, piece), copy[x][y][piece]);
 				}	
 			}
 		}

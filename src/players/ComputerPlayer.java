@@ -1,14 +1,14 @@
-package Players;
+package players;
 
 import java.util.Random;
 
-import Ringz.Board;
-import Ringz.Color;
-import Ringz.Move;
-import Strategies.FourPlayerStrategy;
-import Strategies.Strategy;
-import Strategies.ThreePlayerStrategy;
-import Strategies.TwoPlayerStragegy;
+import ringz.Board;
+import ringz.Color;
+import ringz.Move;
+import strategies.FourPlayerStrategy;
+import strategies.Strategy;
+import strategies.ThreePlayerStrategy;
+import strategies.TwoPlayerStragegy;
 
 public class ComputerPlayer implements Player {
 
