@@ -17,21 +17,11 @@ public class ClientPlayer implements Player {
 	private int[][] pieces;
 	private Color[] color;
 	private String name;
-	private Socket sock;
-    protected BufferedReader in;
-    protected BufferedWriter out;
+	private ServerPeer sock;
 	
 	
-	public ClientPlayer(Color c, String name, Socket socc) {
-		
-		try {
-			in = new BufferedReader(new InputStreamReader(socc.getInputStream()));
-			out = new BufferedWriter(new OutputStreamWriter(socc.getOutputStream()));
-		} catch (IOException e) {
-			System.out.println("Sth wrong in cretion of ClientPlayer");
-			e.printStackTrace();
-		}
-		
+	public ClientPlayer(Color c, String name, ServerPeer socc) {
+	
 		this.color = new Color[2];
 		this.color[0] = c;
 		this.name = name;
@@ -43,15 +33,8 @@ public class ClientPlayer implements Player {
 
 	
 	
-	public ClientPlayer(int nrplayers, Color c1, Color c2, String name, Socket socc) {
-		try {
-			in = new BufferedReader(new InputStreamReader(socc.getInputStream()));
-			out = new BufferedWriter(new OutputStreamWriter(socc.getOutputStream()));
-		} catch (IOException e) {
-			System.out.println("Sth wrong in cretion of ClientPlayer");
-			e.printStackTrace();
-		}
-		
+	public ClientPlayer(int nrplayers, Color c1, Color c2, String name, ServerPeer socc) {
+	
 		this.color = new Color[2];    	
 		this.color[0] = c1;
 		this.color[1] = c2;
@@ -73,10 +56,10 @@ public class ClientPlayer implements Player {
 	}
 	
 	public Move askForMove() {
-		sendPackage(ServerPeer.MAKE_MOVE);
+		sock.sendPackage(ServerPeer.MAKE_MOVE);
 		Move move = null;
 		try {
-			String message = in.readLine();
+			String message = sock.getIN().readLine();
 			String[] words = message.split(ServerPeer.DELIMITER);
 			if (words[0].equals(ServerPeer.MOVE)) {
 				move = stringTomove(words);
@@ -92,18 +75,18 @@ public class ClientPlayer implements Player {
 
 	public Move stringTomove(String[] words) {
 		int line, column, cirlcesize;
-		Color color;
+		Color colorr;
 		line = Integer.valueOf(words[1]);
     	column = Integer.valueOf(words[2]);
     	cirlcesize = Integer.valueOf(words[4]) - 1;
-    	color = this.color[0];
+    	colorr = this.color[0];
     	if (words.length == 6) {
     		int colorindex = Integer.valueOf(words[5]);
-    		color = this.color[colorindex];
+    		colorr = this.color[colorindex];
     	}
     	int[] coordinates = {cirlcesize, line, column};
     	
-    	return new Move(coordinates, color);    	
+    	return new Move(coordinates, colorr);    	
 	}
 	
 	public boolean isOutOfPieces() {
@@ -130,20 +113,7 @@ public class ClientPlayer implements Player {
 		pieces[colorindex][move.getCircle()]--;
 	}
 	
-	/**
-     * sends a package.
-     * @param sendPackage
-     */
-    public void sendPackage(String sendPackage) {
-    	try {
-    		System.out.println(sendPackage);
-    		out.write(sendPackage);
-    		out.newLine();
-    		out.flush();
-    	} catch (IOException e) {
-    		System.out.println("Something wrong in sending Package in ServerPeer");
-    	}
-    }
+
 
 
 
@@ -166,6 +136,9 @@ public class ClientPlayer implements Player {
 		return this.pieces;
 	}
 
+	public ServerPeer getSocket() {
+		return this.sock;
+	}
 
 
 	@Override

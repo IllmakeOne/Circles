@@ -188,6 +188,7 @@ public class Peer extends Observable implements Runnable{
     			else {
     				sendPackage(PLAYER_STATUS + DELIMITER + acceptance);
         			this.notifyObservers("gamedeny");
+        			shutDown();
     			}
     			break;
     		}

@@ -26,6 +26,7 @@ public class ServerRingz {
 		Socket sock = null;
 		Lobby lobby = new Lobby(name);
 		int nrClinets = 0;
+		boolean ison = true;
 		
 		try {
 			port = Integer.parseInt(args[1]);
@@ -35,20 +36,21 @@ public class ServerRingz {
 			System.exit(0);
 		}
 
-		try {
-			ssock = new ServerSocket(port);
-		} catch (IOException e) {
-			System.out.println("ERROR: could not create a socket on "  + " and port " + port);
-		}
+    	System.out.println("Server Started");
 		
-		System.out.println("Server Started");
-		try {
-			sock = ssock.accept();
-			nrClinets++;
-			System.out.println("Client " +  nrClinets + " connected");
-		} catch (IOException e) {
-			System.out.println("sth wrong in accept");
-		}
+	    while (ison) {
+	    	try {
+	    		ssock = new ServerSocket(port);
+	    	} catch (IOException e) {
+	    		System.out.println("ERROR: could not create a socket on "  + " and port " + port);
+	    	}
+	    	try {
+	    		sock = ssock.accept();
+	    		nrClinets++;
+	    		System.out.println("Client " +  nrClinets + " connected");
+	    	} catch (IOException e) {
+	    		System.out.println("sth wrong in accept");
+	    	}
      
 		
 	//	try {
@@ -62,6 +64,7 @@ public class ServerRingz {
 		//} catch (IOException e) {
 //			e.printStackTrace();
 		//}
+	    }
 	}
 	
 } 

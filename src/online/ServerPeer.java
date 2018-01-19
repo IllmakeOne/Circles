@@ -86,7 +86,7 @@ public class ServerPeer implements Runnable {
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
 		} catch (IOException e) {
-			System.err.println("Sth wrong in ServerPeer");
+			System.err.println("Sth wrong in ServerPeer creation");
 			e.printStackTrace();
 		}
     }
@@ -133,8 +133,8 @@ public class ServerPeer implements Runnable {
     			} else {
     				preferences[2] = NEUTRAL;
     			}
-    			lobby.addtoWaitingList(sock, preferences);
-    			Socket[] players = lobby.startableGame(preferences);
+    			lobby.addtoWaitingList(this, preferences);
+    			ServerPeer[] players = lobby.startableGame(preferences);
     			if (players != null) {
     				lobby.startGame(players);
     			}
@@ -143,7 +143,13 @@ public class ServerPeer implements Runnable {
     }
     		
     
-
+    public String getName() {
+    	return this.name;
+    }
+    
+    public Socket getSocket() {
+    	return this.sock;
+    }
     
     
     /**
@@ -152,11 +158,16 @@ public class ServerPeer implements Runnable {
     public void shutDown() {
     	try {
 			sock.close();
+			System.exit(0);
 		} catch (IOException e) {
 			System.out.println("sth wrong in run");
 			shutDown();
 			e.printStackTrace();
 		}
+    }
+    
+    public BufferedReader getIN() {
+    	return this.in;
     }
  
     

@@ -256,7 +256,7 @@ public class TUI implements Observer, View {
 	
 	public String whattoDo(String nature) {
 		String stringy = "";
-		System.out.println("For now just lookf for a game , type Request game\n");
+		System.out.println("For now just look for a game , type Request game\n");
 		String input = readString("[]>");
 		int flag = 0;
 		while (flag == 0) {
