@@ -121,12 +121,13 @@ public class Board extends Observable {
 	 * return a deep copy of the board.
 	 * @return copy of the board
 	 */
-	public  /*@ pure */ Color[][][] deepCopy() {
-		Color[][][] copy = new Color[DIM][DIM][DIFFPIECES];
+	public  /*@ pure */ Board deepCopy() {
+		Board copy = new Board();
 		for (int i = 0; i < DIM; i++) {
 			for (int j = 0; j < DIM; j++) {
 				for (int k = 0; k < DIFFPIECES; k++) {
-					copy[i][j][k] = getRing(j, j, k);
+					Move move = new Move(new int[]{i,j,k}, getRing(i, j, k));
+					copy.addCircle(move);
 				}
 			}
 		}

@@ -20,13 +20,13 @@ public class ComputerPlayer implements Player {
 	
 	public ComputerPlayer(Color c, String name) {
 		this.color = new Color[2];
-		this.color[0] = c;
-		this.strateg = new FourPlayerStrategy(color);
+		this.color[0] = c;	
 		this.name = "computer two players " + name + " " + strateg.getName();
 		this.pieces = new int[5][5];
 		for (int i = 0; i < 5; i++) {
 			this.pieces[0][i] = 3;
 		}
+		this.strateg = new FourPlayerSmart(color, this);
 	}
 	
 	public ComputerPlayer(int nrplayers, Color c1, Color c2, String nam) {
