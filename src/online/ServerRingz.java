@@ -56,7 +56,11 @@ public class ServerRingz {
 			Thread streamInputHandler = new Thread(server);
 			streamInputHandler.start();
 			server.lobby();
+<<<<<<< HEAD
 		//	server.shutDown();
+=======
+			server.shutDown();
+>>>>>>> branch 'master' of https://git.snt.utwente.nl/s1942727/Circles.git
 		//} catch (IOException e) {
 //			e.printStackTrace();
 		//}

@@ -107,6 +107,10 @@ public class HumanPalyer implements Player {
 
 	@Override
 	public int[] getStart() {
+<<<<<<< HEAD
+=======
+		// TODO Auto-generated method stub
+>>>>>>> branch 'master' of https://git.snt.utwente.nl/s1942727/Circles.git
 		return null;
 	}
 

@@ -1,5 +1,6 @@
 package ringz;
 
+<<<<<<< HEAD
 import players.ComputerPlayer;
 import players.HumanPalyer;
 import players.Player;
@@ -8,6 +9,14 @@ import ringz.Color;
 import view.*;
 
 import java.util.Observer;
+=======
+import java.util.Observer;
+
+import players.ComputerPlayer;
+import players.HumanPalyer;
+import players.Player;
+import view.*;
+>>>>>>> branch 'master' of https://git.snt.utwente.nl/s1942727/Circles.git
 
 public class Game {
 	
