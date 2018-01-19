@@ -92,9 +92,12 @@ public class Lobby {
     	int[] tappers = new int[numberOfplayers];
     	//this keep track of who is still able to play, 0 if still able to , and 1 if is out
     	while (!board.isFull() && !allTapped(tappers)) {
-    		if (players.get(current).isOutOfPieces() ||
-    				!board.isStrillAbleToPlace(players.get(current))) {
+    		if (players.get(current).isOutOfPieces()) {
     			tappers[current] = 1;
+				current = (current + 1) % numberOfplayers;
+    		} else if (!board.isStrillAbleToPlace(players.get(current))) {
+    			tappers[current] = 1;
+				current = (current + 1) % numberOfplayers;
     		} else {
     			Move currentmove = players.get(current).askForMove();
     			if (board.addCircle(currentmove)) {

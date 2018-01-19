@@ -192,7 +192,7 @@ public class Board extends Observable {
 	 * crutch function. inverse of colorIndex
 	 * return blue for 0, purple for 1 , yellow for 2 and green for 3.
 	 * @param i, integer which needs to be converted.
-	 * @return color, the colour correlated with this integer.
+	 * @return color, the color correlated with this integer.
 	 */
 	/*@
 	 * ensures \result >= -1 && \result <= 3
@@ -228,10 +228,10 @@ public class Board extends Observable {
 	 * 	requires x >= 0 && x <= 4;
 	 * 	 
 	 */
-	public  /*@ pure */ int[] tallyUp(int x, int y) {
+	public  /*@ pure */ int[] tallyUp(int line, int column) {
 		int[] tally = new int[4];
 		for (int ringsize = 1; ringsize < 5; ringsize++) {
-			colorIndex(getRing(x, y, ringsize));
+			tally[colorIndex(getRing(line, column, ringsize))]++;
 		}
 		return tally;
 	}

@@ -56,28 +56,29 @@ public class BoardTest {
 	public void tallyUpTest() {
 		//tally up method is not finished.
 		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 1}, Color.GREEN)));
-		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 2}, Color.GREEN)));
-		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 3}, Color.GREEN)));
-		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 4}, Color.GREEN)));
-		assertEquals(4, bord.tallyUp(1, 1)[0]);
+		assertTrue(bord.addCircle(new Move(new int[] {2, 1, 1}, Color.GREEN)));
+		assertTrue(bord.addCircle(new Move(new int[] {3, 1, 1}, Color.GREEN)));
+		assertTrue(bord.addCircle(new Move(new int[] {4, 1, 1}, Color.GREEN)));
+		assertEquals(4, bord.tallyUp(1, 1)[3]);
 	}
 	
 	@Test
 	public void totalTest() {
 		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 1}, Color.GREEN)));
-		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 2}, Color.GREEN)));
-		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 3}, Color.GREEN)));
-		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 4}, Color.GREEN)));
-		assertTrue(bord.addCircle(new Move(new int[] {3, 3, 1}, Color.GREEN)));
-		assertTrue(bord.addCircle(new Move(new int[] {4, 4, 1}, Color.GREEN)));
+		assertTrue(bord.addCircle(new Move(new int[] {2, 1, 1}, Color.GREEN)));
+		assertTrue(bord.addCircle(new Move(new int[] {3, 1, 1}, Color.GREEN)));
 		assertTrue(bord.addCircle(new Move(new int[] {4, 1, 1}, Color.GREEN)));
+		assertTrue(bord.addCircle(new Move(new int[] {1, 3, 3}, Color.GREEN)));
+		assertTrue(bord.addCircle(new Move(new int[] {1, 4, 4}, Color.GREEN)));
+		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 2}, Color.GREEN)));
 		assertEquals(bord.getRing(2, 2, 1), Color.GREEN); 
 		assertEquals(bord.getRing(2, 2, 2), Color.PURPLE); 
 		assertEquals(bord.getRing(2, 2, 3), Color.YELLOW); 
 		assertEquals(bord.getRing(2, 2, 4), Color.BLUE); 
-		System.out.println("1 basic is printed");
-		System.out.println("points: " + bord.total()[0]
-				+ bord.total()[1] + bord.total()[2] + bord.total()[3]);
+		System.out.println("1 basic is printed \n \n \n \n");
+		int[] total = bord.total();
+		System.out.println("points: " + total[0]
+				+ total[1] + total[2] + total[3]);
 		assertEquals(1, bord.total()[0]); 	 
 	}
 	@Test
@@ -246,7 +247,7 @@ public class BoardTest {
 	public void testFieldHas() {
 		assertFalse(bord.fieldHas(1, 1, Color.PURPLE));
 		assertTrue(bord.addCircle(new Move(new int[] 
-		{1, 1, 3}, Color.PURPLE)));
+		{3, 1, 1}, Color.PURPLE)));
 		System.out.println("testFieldHas" + bord.getRing(1, 1, 3));
 		assertTrue(bord.fieldHas(1, 1, Color.PURPLE));	
 	}
