@@ -9,10 +9,10 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.prefs.PreferencesFactory;
 
-import Players.Player;
-import Ringz.Board;
-import Ringz.Color;
-import View.TUI;
+import players.Player;
+import ringz.Board;
+import ringz.Color;
+import view.TUI;
 
 public class ServerPeer implements Runnable {
 	
@@ -95,7 +95,6 @@ public class ServerPeer implements Runnable {
     	try {
     		String message = in.readLine();
     		while (message != null) {
-<<<<<<< HEAD
     			System.out.println(message);
     			dealWithMessage(message);    
     			message = in.readLine();
@@ -137,53 +136,14 @@ public class ServerPeer implements Runnable {
     			lobby.addtoWaitingList(sock, preferences);
     			Socket[] players = lobby.startableGame(preferences);
     			if (players != null) {
-    				lobby.startGame(players));
+    				lobby.startGame(players);
     			}
     		}
     	}
     }
     		
     
-//    public void receivefirstPack() {
-//    	String message;
-//		try {
-//			message = in.readLine();
-//			String[] words = message.split(DELIMITER);
-//			if (words[0].equals(CONNECT)) {
-//				if (lobby.addtoClientList(words[1])) {
-//					sendPackage(CONNECT + DELIMITER + ACCEPT);
-//					this.name = words[1];
-//				} else {
-//					sendPackage(CONNECT + DELIMITER + DECLINE);
-//					shutDown();
-//				}
-//			}
-//		} catch (IOException e) {
-//			System.out.println("its null??");
-//			e.printStackTrace();
-//		}
-//    }
-    
-    public void lobby() {
-    	
-    }
-    
-    /**
-     * sends a package.
-     * @param sendPackage
-     */
-    public void sendPackage(String sendPackage) {
-    	try {
-    		System.out.println(sendPackage);
-    		out.write(sendPackage);
-    		out.newLine();
-    		out.flush();
-    	} catch (IOException e) {
-    		System.out.println("Something wrong in sending Package in ServerPeer");
-    		shutDown();
-    	}
-    }
-    
+
     
     
     /**
@@ -192,73 +152,13 @@ public class ServerPeer implements Runnable {
     public void shutDown() {
     	try {
 			sock.close();
-=======
-    			dealWithMessage(message);    
-    		}
-    		shutDown();
 		} catch (IOException e) {
 			System.out.println("sth wrong in run");
 			shutDown();
 			e.printStackTrace();
 		}
     }
-    
-    public void dealWithMessage(String message) {
-    	String[] words = message.split(DELIMITER);
-    	switch (words[0]) {
-    		case CONNECT: {
-    			if (lobby.addtoClientList(words[1])) {
-    				sendPackage(CONNECT + DELIMITER + ACCEPT);
-    				this.name = words[1];
-    				System.out.println(this.name);
-    			} else {
-    				sendPackage(CONNECT + DELIMITER + DECLINE);
-    				shutDown();
-    			}
-    			break;
-    		}
-    		case GAME_REQUEST: {
-    			sendPackage(LOBBY);
-    			//Preferences is of this format : 
-    			//[0]number_players//[1]player_type//[2]prefered_oponent_type
-    			String[] preferences = new String[3];
-    			preferences[0] = words[1];
-    			preferences[1] = words[2];
-    			if (words.length == 4) {
-    				preferences[2] = words[3];
-    			} else {
-    				preferences[2] = NEUTRAL;
-    			}
-    			lobby.addtoWaitingList(sock, preferences);
-    			Socket[] players = lobby.startableGame(preferences);
-    			if (players != null) {
-    				for ()
-    				
-    			}
-    		}
-    	}
-    }
-    		
-    
-//    public void receivefirstPack() {
-//    	String message;
-//		try {
-//			message = in.readLine();
-//			String[] words = message.split(DELIMITER);
-//			if (words[0].equals(CONNECT)) {
-//				if (lobby.addtoClientList(words[1])) {
-//					sendPackage(CONNECT + DELIMITER + ACCEPT);
-//					this.name = words[1];
-//				} else {
-//					sendPackage(CONNECT + DELIMITER + DECLINE);
-//					shutDown();
-//				}
-//			}
-//		} catch (IOException e) {
-//			System.out.println("its null??");
-//			e.printStackTrace();
-//		}
-//    }
+ 
     
     public void lobby() {
     	
@@ -281,20 +181,7 @@ public class ServerPeer implements Runnable {
     
     
     
-    /**
-     * Closes the connection, the sockets will be terminated.
-     */
-    public void shutDown() {
-    	try {
-			sock.close();
-	    	System.exit(0);
->>>>>>> branch 'master' of https://git.snt.utwente.nl/s1942727/Circles.git
-		} catch (IOException e) {
-			System.err.println("sth wrong in shutdow");
-			e.printStackTrace();
-		}
-    }
-    
+
     
     
     

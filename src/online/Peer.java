@@ -17,7 +17,6 @@ import players.HumanPalyer;
 import players.Player;
 import ringz.Board;
 import ringz.Color;
-import ringz.Game;
 import ringz.Move;
 import view.*;
 

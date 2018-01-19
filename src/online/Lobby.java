@@ -78,6 +78,10 @@ public class Lobby {
 		}
 	}
 
+	public void startGame(Socket[] plays) {
+		for (int)
+	}
+	
 }
 
 		
