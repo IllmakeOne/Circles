@@ -1,6 +1,6 @@
 package online;
 
-import java.net.ServerPeer;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,30 +36,34 @@ public class Lobby {
 	}
 
 
-	public ServerPeer[] startableGame(String[] preferences) {
-
+	/**
+	 * this functions is called when a new player requires a game.
+	 * It will go through all the players who are waiting for a game
+	 *  and select those who match in preference.
+	 * @param preferences
+	 * @return
+	 */
+	public ServerPeer[] startableGame(ServerPeer current) {
+		//ServerPeer current is the new clients who entered the waiting list.
 		//Preferences is of this format : 
 		//[0]number_players//[1]player_type//[2]prefered_oponent_type
+		String[] preferences = playersWaiting.get(current);
 		int intnrplayers = Integer.valueOf(preferences[0]);
 		ServerPeer[] players = new ServerPeer[intnrplayers];
 		//the players that want to play against as many people the the player being tested
-		int inPlay = 0;
-		for (ServerPeer key:playersWaiting.keySet()) {
-			if (playersWaiting.get(key)[1].equals(preferences[0]) && inPlay < intnrplayers) {
-				players[inPlay] = key;
-				inPlay++;
-			}
-		}
+		players[0] = current;
+		int inPlay = 1;
+		//if the player actually wants to play against a certain player type
 		if (!preferences[2].equals(ServerPeer.NEUTRAL)) {
-			//this will go though only if the players wants to go against something specific
 			for (ServerPeer key:playersWaiting.keySet()) {
-				if (playersWaiting.get(key)[0].equals(preferences[0])
-					/*tests if they want the same number of players*/ &&
+				if (playersWaiting.get(key)[0].equals(preferences[0]) &&
+		/* this tested if current and the key have want to play against the same number of players*/
 					playersWaiting.get(key)[1].equals(preferences[2])  &&
-			   /*this tests the tested player matches the preferred player type of the new player)*/
-					inPlay < intnrplayers /*tests if it already has enough players*/) {
-					//ads player to the array of players which will start a game
+			/*this tests the tested player matches the preferred player type of the current player*/
+					inPlay < intnrplayers 
+			/*tests if it already has enough players*/) {
 					players[inPlay] = key;
+					inPlay++;
 				}
 			}
 		} else {
@@ -73,10 +77,14 @@ public class Lobby {
 				}
 			}
 		}
+		
+	
+	
 		//if inPlay is the same as intnrplayers that means
 		//enough players of the preferred type have been gathered
+		//else return null 
 		if (inPlay == intnrplayers) {
-			//removePlayerfromWaiting(players);
+			removePlayerfromWaiting(players);
 			return players;
 		} else {
 			return null;
@@ -95,21 +103,31 @@ public class Lobby {
 	}
 	
 	/**
-	 * this function starts a game based on an array of players who have the same preferrences.
+	 * this function starts a game based on an array of players who have the same preferences.
 	 * @param plays
 	 */
 	public void startGame(ServerPeer[] plays) {
 		Board board = new Board();
 		int current = 0;
 		int numberOfplayers = plays.length;
+    	//the array plays is converted into a list to it can be easily shuffled.
     	ArrayList<ServerPeer> aux = new ArrayList<>();
     	for (int i = 0; i < numberOfplayers; i++) {
     		aux.add(plays[i]);   		
     	}
     	Collections.shuffle(aux);
     	ArrayList<ClientPlayer> players = createPlayers(aux);
+    	
+    	//placing of the first piece
+    	Move firstmove = players.get(current).askForMove();
+    	int[] a = {firstmove.getLine(), //line of the first move
+    			firstmove.getColumn()}; //column of the first move
+    	board.placeStart(a);
+		current = (current + 1) % numberOfplayers;
+    	
     	int[] tappers = new int[numberOfplayers];
-    	//this keep track of who is still able to play, 0 if still able to , and 1 if is out
+    	//this keep track of who is still able to play, 0 if still able to , and 1 if is out.
+    	
     	while (!board.isFull() && !allTapped(tappers)) {
     		if (players.get(current).isOutOfPieces()) {
     			tappers[current] = 1;
@@ -137,7 +155,10 @@ public class Lobby {
 	 * @param numberPlayers number of players 
 	 * @param plays the players
 	 */
-	public void sendResults(Board board, int numberPlayers, ArrayList<ClientPlayer> plays) {
+	public /*pure*/ void sendResults(Board board,
+				int numberPlayers, ArrayList<ClientPlayer> plays) {
+		//results is of this form : 
+		//[0]Blue points;[1] Purple points;[2]Yellow points;[3] Green points
 		int[] results = board.total();
 		String del = ServerPeer.DELIMITER;
 		String stringy = ServerPeer.GAME_ENDED + del;
@@ -201,13 +222,31 @@ public class Lobby {
 	}
 	
 	
-	public boolean allTapped(int[] tappers) {
+	/**
+	 * this function returns true if all elemets of tappers are 1.
+	 *  meaning all players cannot place piece anymore.
+	 * @param tappers
+	 * @return
+	 */
+	/* @requires tappers != null */
+	public /*pure*/ boolean allTapped(int[] tappers) {
 		for (int i = 0; i < tappers.length; i++) {
 			if (tappers[i] == 0) {
 				return false;
 			}
 		}
 		return true;
+	}
+	
+	
+	/**
+	 * this functions removes the players who started a game, form the waiting list.
+	 * @param players
+	 */
+	public void removePlayerfromWaiting(ServerPeer[] players) {
+		for (int i = 0; i < players.length; i++) {
+			playersWaiting.remove(players[i]);
+		}
 	}
 
 	

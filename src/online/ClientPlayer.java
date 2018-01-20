@@ -66,7 +66,7 @@ public class ClientPlayer implements Player {
 			}
 			
 		} catch (IOException e) {
-			System.out.println("Coulnt read move when asked ot maek a move");
+			System.out.println("Coulnt read move when asked ot make a move");
 			e.printStackTrace();
 		}
 		return move;

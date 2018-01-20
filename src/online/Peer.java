@@ -188,8 +188,7 @@ public class Peer extends Observable implements Runnable{
         			this.notifyObservers("gameacc");
     				sendPackage(PLAYER_STATUS + DELIMITER + acceptance);
     				this.createBoard(words);
-    			}
-    			else {
+    			} else {
     				sendPackage(PLAYER_STATUS + DELIMITER + acceptance);
         			this.notifyObservers("gamedeny");
         			shutDown();
@@ -206,7 +205,13 @@ public class Peer extends Observable implements Runnable{
     			break;
     		}
     		case MOVE: {
-    			board.addCircle(stringTomove(words));
+    			if (words[3].equals(STARTING_BASE)) {
+    				int[] startCoordinates = {Integer.valueOf(words[1], //line 
+    						Integer.valueOf(words[2])) }; //column
+    				board.placeStart(startCoordinates);
+    			} else {
+    				board.addCircle(stringTomove(words));
+    			}
     			break;
     		}
     		case GAME_ENDED: {

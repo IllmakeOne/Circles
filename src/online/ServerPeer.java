@@ -138,10 +138,15 @@ public class ServerPeer implements Runnable {
     				preferences[2] = NEUTRAL;
     			}
     			lobby.addtoWaitingList(this, preferences);
-    			ServerPeer[] players = lobby.startableGame(preferences);
+    			ServerPeer[] players = lobby.startableGame(this);
     			if (players != null) {
     				lobby.startGame(players);
     			}
+    			break;
+    		}
+    		case PLAYER_DISCONNECTED: {
+    			shutDown();
+    			break;
     		}
     	}
     }
@@ -184,6 +189,7 @@ public class ServerPeer implements Runnable {
      */
     public void sendPackage(String sendPackage) {
     	try {
+    		System.out.println(sendPackage);
     		out.write(sendPackage);
     		out.newLine();
     		out.flush();

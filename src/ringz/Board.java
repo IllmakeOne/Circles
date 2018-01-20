@@ -486,18 +486,7 @@ public class Board extends Observable {
 		return true;
 	}
 	
-//	/**
-//	 * tests if the board is still playable.
-//	 * it is not playabl ehwen no aplyer is able to palce any more rings.
-//	 * @return
-//	 */
-//	public boolean isPayable() {
-//		boolean test = isFull();
-//		if (this.isFull()) {
-//			return false;
-//		}
-//		return true;
-//	}
+
 	public /*@ pure */ void display() {
 		for (int i = 0; i < 5; i++) {
 			String croth = "";
