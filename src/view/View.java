@@ -24,4 +24,6 @@ public interface View {
 	public void disconnected(String disconee);
 	
 	public String whattoDo(String nature);
+	
+	public void showOponents(String[] oponents);
 }

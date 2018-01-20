@@ -162,7 +162,7 @@ public class TUI implements Observer, View {
 	@Override
 	public void showPieces(Player play) {
 		int[][] pieces = play.getPieces();
-		Color[] color = play.getColor();
+		Color[] color = play.getColor(); 
 		int colorcount = 2;
 		if (color[1] == null) {
 			colorcount = 1;
@@ -254,6 +254,10 @@ public class TUI implements Observer, View {
 	}
 	
 	
+	/**
+	 * this functions determine what the clients wants to do while he/she is in the lobby.
+	 * 
+	 */
 	public String whattoDo(String nature) {
 		String stringy = "";
 		System.out.println("For now just look for a game , type Request game\n");
@@ -279,6 +283,16 @@ public class TUI implements Observer, View {
 		return stringy;
 	}
 	
+	public void showOponents(String[] oponents) {
+		for (int i = 1; i < oponents.length; i++) {
+			System.out.println(i + ". " + oponents[i]);
+		}
+	}
+	
+	/**
+	 * if the clients decides to request a game this will determine which type of game they want.
+	 * @return
+	 */
 	public String[] requestGame() {
 		
 		String[] end = new String[2];

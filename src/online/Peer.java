@@ -88,7 +88,7 @@ public class Peer extends Observable implements Runnable{
 
 
     /*@
-       requires (nameArg != null) && (sockArg != null);
+       requires (nameArg != null) && (sockArg != null); 
      */
     /**
      * Constructor. creates a peer object based in the given parameters.
@@ -112,7 +112,7 @@ public class Peer extends Observable implements Runnable{
      * Reads strings of the stream of the socket-connection and
      * writes the characters to the default output.
      */
-    public void  run() {
+    public void  run() { 
     	try {
     		String message = in.readLine();
     		while (message != null) {
@@ -177,6 +177,7 @@ public class Peer extends Observable implements Runnable{
     		case CONNECT: {
     			if (words[1].equals(ACCEPT)) {
         			this.notifyObservers("accepted");
+        			lobby();
     			} else {
         			this.notifyObservers("denied");
         			shutDown();
@@ -186,6 +187,7 @@ public class Peer extends Observable implements Runnable{
     		}
     		case ALL_PLAYERS_CONNECTED: {
     			String acceptance = view.acceptGame(words);
+    			view.showOponents(words);
     			if (acceptance.equals("0")) {
         			this.notifyObservers("gameacc");
     				sendPackage(PLAYER_STATUS + DELIMITER + acceptance);
@@ -218,6 +220,7 @@ public class Peer extends Observable implements Runnable{
     		}
     		case GAME_ENDED: {
     			view.displayEnd(words);
+    			lobby();
     			break;
     		}
     		case PLAYER_DISCONNECTED: {

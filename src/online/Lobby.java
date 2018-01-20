@@ -66,7 +66,7 @@ public class Lobby {
 					inPlay < intnrplayers 
 			/*tests if it already has enough players*/) {
 					players[inPlay] = key;
-					inPlay++;
+					inPlay++; 
 				}
 			}
 		} else {
@@ -108,6 +108,24 @@ public class Lobby {
 		playersWaiting.remove(client);
 	}
 	
+	
+	/**
+	 * this functions asks all the clients who hav.
+	 * matching preferences if they want to start a game.
+	 * @param client
+	 */
+	public boolean askPlayerToJoin(ServerPeer[] client) {
+		sendallConnected(client);
+		String crutch  = ServerPeer.PLAYER_STATUS + ServerPeer.DELIMITER;
+		for (int i = 0; i < client.length; i++) {
+			if (client[i].getMessage().equals(crutch + ServerPeer.DECLINE)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	
 	/**
 	 * this function starts a game based on an array of players who have the same preferences.
 	 * @param plays
@@ -123,6 +141,7 @@ public class Lobby {
     	}
     	Collections.shuffle(aux);
     	ArrayList<ClientPlayer> players = createPlayers(aux);
+    	
     	
     	//placing of the first piece
     	Move firstmove = players.get(current).askForMove();
@@ -153,6 +172,16 @@ public class Lobby {
     	//send the result to the involved players
     	sendResults(board, numberOfplayers, players);	
 		
+	}
+	
+	public void sendallConnected(ServerPeer[] players) {
+		String message = ServerPeer.ALL_PLAYERS_CONNECTED;
+		for (int i = 0; i < players.length; i++) {
+			message += ServerPeer.DELIMITER + players[i].getName();
+		}
+		for (int i = 0; i < players.length; i++) {
+			players[i].sendPackage(message);
+		}
 	}
 	
 	/**

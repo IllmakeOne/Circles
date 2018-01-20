@@ -22,6 +22,7 @@ public class ClientPlayer implements Player {
 	
 	public ClientPlayer(Color c, String name, ServerPeer socc) {
 	
+		this.sock = socc;
 		this.color = new Color[2];
 		this.color[0] = c;
 		this.name = name;
@@ -34,7 +35,8 @@ public class ClientPlayer implements Player {
 	
 	
 	public ClientPlayer(int nrplayers, Color c1, Color c2, String name, ServerPeer socc) {
-	
+
+		this.sock = socc;
 		this.color = new Color[2];    	
 		this.color[0] = c1;
 		this.color[1] = c2;
@@ -58,7 +60,7 @@ public class ClientPlayer implements Player {
 	public Move askForMove() {
 		sock.sendPackage(ServerPeer.MAKE_MOVE);
 		Move move = null;
-		try {
+		try { 
 			String message = sock.getIN().readLine();
 			String[] words = message.split(ServerPeer.DELIMITER);
 			if (words[0].equals(ServerPeer.MOVE)) {

@@ -254,7 +254,7 @@ public class Board extends Observable {
 						sum[arrayMaximum(tallyUp(i, j))]++;
 					}
 				}
-			}
+			} 
 		}
 	
 		return sum;

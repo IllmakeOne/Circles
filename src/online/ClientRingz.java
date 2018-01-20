@@ -13,7 +13,7 @@ public class ClientRingz {
     /** Starts a Client application. */
     public static void main(String[] args) {
         if (args.length != 4) {
-            System.out.println(USAGE);
+            System.out.println(USAGE); 
             System.exit(0);
         }
  
@@ -55,7 +55,6 @@ public class ClientRingz {
             Peer client = new Peer(name, nature, sock);
             Thread streamInputHandler = new Thread(client, "imputhandle");
             streamInputHandler.start();
-            client.lobby();
           //client.shutDown();
         } catch (IOException e) {
             e.printStackTrace();

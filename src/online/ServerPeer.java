@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
+import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.prefs.PreferencesFactory;
 
@@ -70,10 +71,7 @@ public class ServerPeer implements Runnable {
     
     protected boolean ready = false;
     
-    private Board board;
     private Player clientPlayer;
-    private TUI view;
-    private HashMap<String, Color> playerColors;
     private String nature;
     private int numberPlayers;
     private boolean gameinProgress;
@@ -111,6 +109,26 @@ public class ServerPeer implements Runnable {
 		}
     }
     
+    /**
+     * reads only one package.
+     */
+    public String getMessage() {
+    	String message = null;
+    	try {
+    		message = in.readLine();
+    	} catch (SocketException e) {
+			System.out.println("cant read only one package");
+			lobby.diconected(this);
+			shutDown();
+		} catch (IOException e) {
+			System.out.println("Something else went wrong");
+			shutDown();
+		}
+    	return message;
+    }
+    
+    
+    
     public void dealWithMessage(String message) {
     	String[] words = message.split(DELIMITER);
     	switch (words[0]) {
@@ -140,7 +158,11 @@ public class ServerPeer implements Runnable {
     			lobby.addtoWaitingList(this, preferences);
     			ServerPeer[] players = lobby.startableGame(this);
     			if (players != null) {
-    				lobby.startGame(players);
+    				if (lobby.askPlayerToJoin(players)) {
+    					lobby.startGame(players);
+    				} else {
+    	    			sendPackage(JOINED_LOBBY);
+    				}
     			}
     			break;
     		}
