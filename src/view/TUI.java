@@ -28,19 +28,26 @@ public class TUI implements Observer, View {
     public String acceptGame(String[] message) {
     	System.out.println("A game has been found");
     	System.out.println("You would play against:");
-    	for (int i = 0; i < message.length; i++) {
+    	for (int i = 1; i < message.length; i++) {
     		if (!message[i].equals(this.name)) {
     			System.out.println(i + ".  " + message[i]);
     		}
     	}
     	System.out.println("Do you wish to accept Accept or Decline");
-    	String scan = readString("][< ");
-    	while (!scan.equals("Accept") || !scan.equals("Decline")) {
-    		System.out.println("Please give valid resonse");
-    		scan = readString("][< ");
-    	}
+    	String input = readString("][< ");
+    	int flag = 0;
+		while (flag == 0) {
+			if (input.equals("Accept")) {
+				flag = 1;
+			} else if (input.equals("Decline")) {
+				flag = 1;
+			} else {
+				System.out.println("Please give valid input");
+				input = readString("[]>");
+			}
+		}
     	
-    	if (scan.equals("Accept")) {
+    	if (input.equals("Accept")) {
     		return "0";
     	} else {
     		return "1";
@@ -245,6 +252,9 @@ public class TUI implements Observer, View {
 		} else if (arg1.equals("gameacc")) {
 			System.out.println("You have accepted the game");
 		
+		} else if (arg1.equals("gamedeny")) {
+			System.out.println("You have denied the game");
+		
 		} else if (arg1.equals("gamestart")) {
 			System.out.println("The game has started");
 			
@@ -283,11 +293,14 @@ public class TUI implements Observer, View {
 		return stringy;
 	}
 	
-	public void showOponents(String[] oponents) {
-		for (int i = 1; i < oponents.length; i++) {
-			System.out.println(i + ". " + oponents[i]);
-		}
-	}
+//	/**
+//	 * this function display the oponents.
+//	 */
+//	public void showOponents(String[] oponents) {
+//		for (int i = 1; i < oponents.length; i++) {
+//			System.out.println(i + ". " + oponents[i]);
+//		}
+//	}
 	
 	/**
 	 * if the clients decides to request a game this will determine which type of game they want.

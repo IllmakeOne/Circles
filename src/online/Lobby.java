@@ -110,19 +110,40 @@ public class Lobby {
 	
 	
 	/**
-	 * this functions asks all the clients who hav.
+	 * this functions asks all the clients who have.
 	 * matching preferences if they want to start a game.
 	 * @param client
 	 */
 	public boolean askPlayerToJoin(ServerPeer[] client) {
 		sendallConnected(client);
+		int flag = 1;
 		String crutch  = ServerPeer.PLAYER_STATUS + ServerPeer.DELIMITER;
 		for (int i = 0; i < client.length; i++) {
-			if (client[i].getMessage().equals(crutch + ServerPeer.DECLINE)) {
-				return false;
+			String stringy = client[i].getMessage();
+			System.out.println(stringy + " Reply to ask people to join");
+			if (stringy.equals(crutch + ServerPeer.DECLINE)) {
+				System.out.println("should work in askPlayertoJoin");
+				flag = 0;
 			}
 		}
-		return true;
+		if (flag == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	
+	/**
+	 * this sends a package with LOBBY in case someone decline a game.
+	 * @param client
+	 */
+	public void someoneDecline(ServerPeer[] client) {
+		String stringy = ServerPeer.LOBBY;
+		System.out.println(stringy + "in someone declined");
+		for (int i = 0; i < client.length; i++) {
+			client[i].sendPackage(stringy);
+		}
 	}
 	
 	
@@ -174,12 +195,17 @@ public class Lobby {
 		
 	}
 	
+	/**
+	 * this function notifies the players that a game is about to start.
+	 * @param players
+	 */
 	public void sendallConnected(ServerPeer[] players) {
 		String message = ServerPeer.ALL_PLAYERS_CONNECTED;
 		for (int i = 0; i < players.length; i++) {
 			message += ServerPeer.DELIMITER + players[i].getName();
 		}
 		for (int i = 0; i < players.length; i++) {
+			players[i].inGame();
 			players[i].sendPackage(message);
 		}
 	}

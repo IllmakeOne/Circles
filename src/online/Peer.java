@@ -62,7 +62,6 @@ public class Peer extends Observable implements Runnable{
 	public static final String PLAYER_STATUS = "ps";
 	public static final String GAME_STARTED = "gs";
 	//--------Playing game-------
-	public static final String STARTING_PLAYER = "sp";
 	public static final String MAKE_MOVE = "mm";
 	public static final String MOVE = "mv";
 	//------ending game----
@@ -144,12 +143,12 @@ public class Peer extends Observable implements Runnable{
     	this.setChanged();
     	notifyObservers("joined");
     	String todo = view.whattoDo(this.nature);
-    	while (!todo.equals("exit") && gameinProgress == false) {
+    	if (!todo.equals("exit")) {
     		sendPackage(todo);
-    		todo = view.whattoDo(this.nature);
+    	} else {
+    		sendPackage(PLAYER_DISCONNECTED);
+    		shutDown();
     	}
-    	sendPackage(PLAYER_DISCONNECTED);
-    	shutDown();
     	
     }
     
@@ -169,11 +168,6 @@ public class Peer extends Observable implements Runnable{
     	String[] words = message.split(DELIMITER);
     	this.setChanged();
     	switch (words[0]) {
-    		case JOINED_LOBBY: {
-    			this.notifyObservers("lobby");
-    			this.gameinProgress = true;
-    			break;
-    		}
     		case CONNECT: {
     			if (words[1].equals(ACCEPT)) {
         			this.notifyObservers("accepted");
@@ -185,17 +179,26 @@ public class Peer extends Observable implements Runnable{
     			}
     			break;
     		}
+    		case JOINED_LOBBY: {
+    			this.notifyObservers("lobby");
+    			if (gameinProgress == true) {
+    				lobby();
+    				gameinProgress = false;
+    			}
+    			break;
+    		}
     		case ALL_PLAYERS_CONNECTED: {
     			String acceptance = view.acceptGame(words);
-    			view.showOponents(words);
     			if (acceptance.equals("0")) {
+    				gameinProgress = true;
         			this.notifyObservers("gameacc");
     				sendPackage(PLAYER_STATUS + DELIMITER + acceptance);
     				this.createBoard(words);
     			} else {
     				sendPackage(PLAYER_STATUS + DELIMITER + acceptance);
         			this.notifyObservers("gamedeny");
-        			shutDown();
+        			gameinProgress = false;
+        			lobby();
     			}
     			break;
     		}

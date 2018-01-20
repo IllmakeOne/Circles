@@ -74,7 +74,7 @@ public class ServerPeer implements Runnable {
     private Player clientPlayer;
     private String nature;
     private int numberPlayers;
-    private boolean gameinProgress;
+    private boolean ingame = false;;
     private Lobby lobby;
 
     
@@ -93,10 +93,11 @@ public class ServerPeer implements Runnable {
     public void  run() {
     	try {
     		String message = in.readLine();
-    		while (message != null) {
-    			System.out.println(message);
-    			dealWithMessage(message);    
+    		dealWithMessage(message);   
+    		while (message != null && ingame == false) {
+    			System.out.println(message + "message read in run"); 
     			message = in.readLine();
+    			dealWithMessage(message); 
     		}
     	//	shutDown();
     	} catch (SocketException e) {
@@ -105,6 +106,7 @@ public class ServerPeer implements Runnable {
 			shutDown();
 		} catch (IOException e) {
 			System.out.println("Something else went wrong");
+			lobby.diconected(this);
 			shutDown();
 		}
     }
@@ -118,7 +120,6 @@ public class ServerPeer implements Runnable {
     		message = in.readLine();
     	} catch (SocketException e) {
 			System.out.println("cant read only one package");
-			lobby.diconected(this);
 			shutDown();
 		} catch (IOException e) {
 			System.out.println("Something else went wrong");
@@ -157,11 +158,13 @@ public class ServerPeer implements Runnable {
     			}
     			lobby.addtoWaitingList(this, preferences);
     			ServerPeer[] players = lobby.startableGame(this);
-    			if (players != null) {
+    			if (players != null) { 
+    				ingame = true;
     				if (lobby.askPlayerToJoin(players)) {
     					lobby.startGame(players);
     				} else {
-    	    			sendPackage(JOINED_LOBBY);
+    					lobby.someoneDecline(players);
+    					ingame = false;
     				}
     			}
     			break;
@@ -183,6 +186,9 @@ public class ServerPeer implements Runnable {
     	return this.sock;
     }
     
+    public void inGame() {
+    	ingame = true;
+    }
     
     /**
      * Closes the connection, the sockets will be terminated.

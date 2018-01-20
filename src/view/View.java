@@ -25,5 +25,5 @@ public interface View {
 	
 	public String whattoDo(String nature);
 	
-	public void showOponents(String[] oponents);
+//	public void showOponents(String[] oponents);
 }

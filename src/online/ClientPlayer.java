@@ -20,7 +20,7 @@ public class ClientPlayer implements Player {
 	private ServerPeer sock;
 	
 	
-	public ClientPlayer(Color c, String name, ServerPeer socc) {
+	public ClientPlayer(Color c, String name, ServerPeer socc) { 
 	
 		this.sock = socc;
 		this.color = new Color[2];
