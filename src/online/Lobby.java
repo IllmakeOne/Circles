@@ -59,7 +59,10 @@ public class Lobby {
 				if (playersWaiting.get(key)[0].equals(preferences[0]) &&
 		/* this tested if current and the key have want to play against the same number of players*/
 					playersWaiting.get(key)[1].equals(preferences[2])  &&
+					
 			/*this tests the tested player matches the preferred player type of the current player*/
+					key != current &&
+					/* so it does not add the current player twice */
 					inPlay < intnrplayers 
 			/*tests if it already has enough players*/) {
 					players[inPlay] = key;
@@ -68,11 +71,14 @@ public class Lobby {
 			}
 		} else {
 			for (ServerPeer key:playersWaiting.keySet()) {
-				if (playersWaiting.get(key)[0].equals(preferences[0])
-					/*tests if they want the same number of players*/ &&
+				if (playersWaiting.get(key)[0].equals(preferences[0]) && 
+					/*tests if they want the same number of players*/ 
+					key != current &&
+					/* so it does not add the current player twice */
 					inPlay < intnrplayers /*tests if it already has enough players*/) {
 					//ads player to the array of players which will start a game
 					players[inPlay] = key;
+					inPlay++;
 					//playersWaiting.remove(key); Mistake!
 				}
 			}
@@ -94,7 +100,7 @@ public class Lobby {
 	
 	/**
 	 * this function removes someone form the lobby.
-	 * it is called when someone diconects
+	 * it is called when someone dissconects
 	 * @param client
 	 */
 	public void diconected(ServerPeer client) {
@@ -160,28 +166,27 @@ public class Lobby {
 		//results is of this form : 
 		//[0]Blue points;[1] Purple points;[2]Yellow points;[3] Green points
 		int[] results = board.total();
-		String del = ServerPeer.DELIMITER;
-		String stringy = ServerPeer.GAME_ENDED + del;
+		String stringy = ServerPeer.GAME_ENDED + ServerPeer.DELIMITER;
 		if (numberPlayers == 2) {
-			stringy += plays.get(0).getName() + del 
-					+ (results[0] + results[1]) + del
-					+ plays.get(1).getName() + del 
+			stringy += plays.get(0).getName() + ServerPeer.DELIMITER 
+					+ (results[0] + results[1]) + ServerPeer.DELIMITER
+					+ plays.get(1).getName() + ServerPeer.DELIMITER 
 					+ (results[2] + results[3]);
 		} else if (numberPlayers == 3) {
-			stringy += plays.get(0).getName() + del 
-					+ results[0] + del
-					+ plays.get(1).getName() + del 
-					+ results[1] + del 
-					+ plays.get(2).getName() + del 
+			stringy += plays.get(0).getName() + ServerPeer.DELIMITER 
+					+ results[0] + ServerPeer.DELIMITER
+					+ plays.get(1).getName() + ServerPeer.DELIMITER 
+					+ results[1] + ServerPeer.DELIMITER 
+					+ plays.get(2).getName() + ServerPeer.DELIMITER 
 					+ results[3];
 		} else {
-			stringy += plays.get(0).getName() + del 
-					+ results[0] + del
-					+ plays.get(1).getName() + del 
-					+ results[1] + del 
-					+ plays.get(2).getName() + del 
+			stringy += plays.get(0).getName() + ServerPeer.DELIMITER 
+					+ results[0] + ServerPeer.DELIMITER
+					+ plays.get(1).getName() + ServerPeer.DELIMITER 
+					+ results[1] + ServerPeer.DELIMITER 
+					+ plays.get(2).getName() + ServerPeer.DELIMITER 
 					+ results[2]
-					+ plays.get(3).getName() + del 
+					+ plays.get(3).getName() + ServerPeer.DELIMITER 
 					+ results[3];
 		}
 		
@@ -248,6 +253,8 @@ public class Lobby {
 			playersWaiting.remove(players[i]);
 		}
 	}
+	
+	
 
 	
 }

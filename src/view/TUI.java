@@ -240,7 +240,7 @@ public class TUI implements Observer, View {
 			System.out.println("You have veen accepted, you ahve been connected");
 		
 		} else if (arg1.equals("denied")) {
-			System.out.println("Thee not worthy");
+			System.out.println("Thee not worthy (some else has the username)");
 		
 		} else if (arg1.equals("gameacc")) {
 			System.out.println("You have accepted the game");

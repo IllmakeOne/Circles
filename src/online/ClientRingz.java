@@ -16,7 +16,7 @@ public class ClientRingz {
             System.out.println(USAGE);
             System.exit(0);
         }
-
+ 
         String name = args[1];
         String nature = args[0];
         InetAddress addr = null;

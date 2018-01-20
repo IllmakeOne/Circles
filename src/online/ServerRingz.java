@@ -19,7 +19,7 @@ public class ServerRingz {
 			System.out.println("wrong arguments");
 			System.exit(0);
 		}
-		
+		 
 		String name = args[0];
 		int port = 0;
 		ServerSocket ssock = null;

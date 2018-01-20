@@ -148,7 +148,8 @@ public class Peer extends Observable implements Runnable{
     		sendPackage(todo);
     		todo = view.whattoDo(this.nature);
     	}
-    	//shutDown();
+    	sendPackage(PLAYER_DISCONNECTED);
+    	shutDown();
     	
     }
     
@@ -179,6 +180,7 @@ public class Peer extends Observable implements Runnable{
     			} else {
         			this.notifyObservers("denied");
         			shutDown();
+                    System.exit(0);
     			}
     			break;
     		}

@@ -130,7 +130,7 @@ public class ServerPeer implements Runnable {
     			//Preferences is of this format : 
     			//[0]number_players//[1]player_type//[2]prefered_oponent_type
     			String[] preferences = new String[3];
-    			preferences[0] = words[1];
+    			preferences[0] = words[1]; 
     			preferences[1] = words[2];
     			if (words.length == 4) {
     				preferences[2] = words[3];
@@ -145,6 +145,7 @@ public class ServerPeer implements Runnable {
     			break;
     		}
     		case PLAYER_DISCONNECTED: {
+    			lobby.diconected(this);
     			shutDown();
     			break;
     		}
