@@ -152,7 +152,19 @@ public class ClientPlayer implements Player {
 
 	@Override
 	public Move determineMove(Board bord) {
-		return null;
+		sock.sendPackage(ServerPeer.MAKE_MOVE);
+		Move move = null;
+		try { 
+			String message = sock.getIN().readLine();
+			String[] words = message.split(ServerPeer.DELIMITER);
+			if (words[0].equals(ServerPeer.MOVE)) {
+				move = stringTomove(words);
+			}
+		} catch (IOException e) {
+			System.out.println("Coulnt read move when asked ot make a move");
+			e.printStackTrace();
+		}
+		return move;
 	}
 
 

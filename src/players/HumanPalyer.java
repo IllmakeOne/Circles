@@ -3,6 +3,7 @@ package players;
 import ringz.Board;
 import ringz.Color;
 import ringz.Move;
+import view.*;
 
 public class HumanPalyer implements Player {
 	 
@@ -10,13 +11,15 @@ public class HumanPalyer implements Player {
 	private int[][] pieces;
 	private Color[] color;
 	private String name;
+	private View view;
 	
 	/**
 	 * contrustor of the huma player.  if the gaems ahs 4 players.
 	 * it receives a color which wil hte the players's color
 	 * @param c
 	 */
-	public HumanPalyer(Color c, String name) {
+	public HumanPalyer(Color c, String name, View view) {
+		this.view = view;
 		this.color = new Color[2];
 		this.color[0] = c;
 		this.name = name;
@@ -29,7 +32,8 @@ public class HumanPalyer implements Player {
 	
 
 	
-	public HumanPalyer(int nrplayers, Color c1, Color c2, String name) {
+	public HumanPalyer(int nrplayers, Color c1, Color c2, String name, View view) {
+		this.view = view;
 		this.color = new Color[2];
 		this.color[0] = c1;
 		this.color[1] = c2;
@@ -101,17 +105,13 @@ public class HumanPalyer implements Player {
 	}
 
 	@Override
-	public Move determineMove(Board bord) {
-		return null;
+	public Move determineMove(Board board) {
+		return view.askMove(this, board);
 	}
 
 	@Override
 	public int[] getStart() {
-<<<<<<< HEAD
-=======
-		// TODO Auto-generated method stub
->>>>>>> branch 'master' of https://git.snt.utwente.nl/s1942727/Circles.git
-		return null;
+		return view.getStart();
 	}
 
 

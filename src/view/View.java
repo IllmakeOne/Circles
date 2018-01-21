@@ -1,9 +1,12 @@
 package view;
 
+import java.util.Observer;
+
 import players.Player;
 import ringz.*;
 
-public interface View {
+public interface View extends Observer {
+	
 	
 	public void updateDisplay(Board board);
 	

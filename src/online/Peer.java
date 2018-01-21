@@ -79,11 +79,12 @@ public class Peer extends Observable implements Runnable{
     
     private Board board;
     private Player clientPlayer;
-    private TUI view;
+    private View view;
     private HashMap<String, Color> playerColors;
     private String nature;
     private int numberPlayers;
     private boolean gameinProgress;
+    private boolean yourTurn = false;
 
 
     /*@
@@ -243,11 +244,13 @@ public class Peer extends Observable implements Runnable{
 			notifyObservers("first");
 			sendPackage(askFirst());
 		} else {
-			if (this.nature.equals(HUMAN_PLAYER)) {
-				sendPackage(MOVE + moveTostring(view.askMove(clientPlayer, board)));	
-			} else {
-				sendPackage(MOVE + moveTostring(clientPlayer.determineMove(board)));
-			}
+			sendPackage(moveTostring(clientPlayer.determineMove(board)));	
+			yourTurn = true;
+//			if (this.nature.equals(HUMAN_PLAYER)) {
+//				sendPackage(MOVE + moveTostring(clientPlayer.determineMove(board)));	
+//			} else {
+//				sendPackage(MOVE + moveTostring(clientPlayer.determineMove(board)));
+//			}
 		}
     }
     
@@ -257,7 +260,7 @@ public class Peer extends Observable implements Runnable{
      * @return
      */
     public String moveTostring(Move move) {
-    	String stringy = "";
+    	String stringy = MOVE + DELIMITER;
     	stringy += move.getLine() + DELIMITER 
     				+ move.getColumn() + DELIMITER 
     				+ (move.getCircle() + 1);
@@ -285,9 +288,18 @@ public class Peer extends Observable implements Runnable{
     	color = playerColors.get(words[3] + PRIMARY);
     	if (words.length == 6) {
     		color = playerColors.get(words[3] + words[5]);
+    		int colorIndex = Integer.valueOf(words[5]);
+    		if (yourTurn == true) {
+        		clientPlayer.decresePiece(colorIndex, circlesize);
+        	}
+    	} else {
+    		if (yourTurn == true) {
+        		clientPlayer.decresePiece(0, circlesize);
+        	}
     	}
     	int[] coordinates = {circlesize, line, column};
     	
+    	yourTurn = false;
     	return new Move(coordinates, color);    	
     }
     
@@ -299,13 +311,10 @@ public class Peer extends Observable implements Runnable{
      */
     public String askFirst() {
     	int[] firstMove;
-		if (this.nature.equals(HUMAN_PLAYER)) {
-			firstMove = view.getStart();
-		} else {
-			firstMove = clientPlayer.getStart();
-		}
+		firstMove = clientPlayer.getStart();
 		String stringy = "";
-		stringy += MOVE + firstMove[0] + DELIMITER + firstMove[1] + DELIMITER + STARTING_BASE;
+		stringy += MOVE + DELIMITER + firstMove[0] + DELIMITER + firstMove[1] 
+												 + DELIMITER + STARTING_BASE;
 		return stringy;
     }
     
@@ -328,7 +337,7 @@ public class Peer extends Observable implements Runnable{
 				this.clientPlayer = new HumanPalyer(numberPlayers, 
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
-						this.name);
+						this.name, this.view);
 			} else {
 				this.clientPlayer = new ComputerPlayer(numberPlayers,
 						playerColors.get(name + PRIMARY),
@@ -350,7 +359,7 @@ public class Peer extends Observable implements Runnable{
 				this.clientPlayer = new HumanPalyer(numberPlayers, 
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
-						this.name);
+						this.name, this.view);
 			} else {
 				this.clientPlayer = new ComputerPlayer(numberPlayers,
 						playerColors.get(name + PRIMARY),
@@ -367,7 +376,8 @@ public class Peer extends Observable implements Runnable{
 			playerColors.put(words[4], Color.GREEN);
 			//Also creates local player so we can keep track of the pieces and show them
 			if (this.nature.equals(HUMAN_PLAYER)) {
-				this.clientPlayer = new HumanPalyer(playerColors.get(name + PRIMARY), name);
+				this.clientPlayer = new HumanPalyer(playerColors.get(name + PRIMARY), 
+						name, this.view);
 			} else {
 				this.clientPlayer = new ComputerPlayer(playerColors.get(name + PRIMARY), name);
 			}

@@ -165,7 +165,7 @@ public class Lobby {
     	
     	
     	//placing of the first piece
-    	Move firstmove = players.get(current).askForMove();
+    	Move firstmove = players.get(current).determineMove(board);
     	int[] a = {firstmove.getLine(), //line of the first move
     			firstmove.getColumn()}; //column of the first move
     	board.placeStart(a);
@@ -182,7 +182,7 @@ public class Lobby {
     			tappers[current] = 1;
 				current = (current + 1) % numberOfplayers;
     		} else {
-    			Move currentmove = players.get(current).askForMove();
+    			Move currentmove = players.get(current).determineMove(board);
     			if (board.addCircle(currentmove)) {
     				players.get(current).decresePiece(currentmove);
     				current = (current + 1) % numberOfplayers;
