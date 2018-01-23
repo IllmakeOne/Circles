@@ -26,7 +26,6 @@ public class ServerPeer extends Observable implements Runnable{
     public static final String ACCEPT	= "0";
 	public static final String DECLINE	= "1";
 	
-	
 	public static final String NEUTRAL	= "2";
 	public static final String COMPUTER_PLAYER	= "0";
 	public static final String HUMAN_PLAYER	= "1";
@@ -95,8 +94,10 @@ public class ServerPeer extends Observable implements Runnable{
     
     public void  run() {
     	try {
+    		message = in.readLine();
+			dealWithMessage(message); 
     		while (message != null) {
-    			System.out.println(message + " message read in run"); 
+    			System.out.println(message + " message read in run " + this.name); 
     			message = in.readLine();
     			dealWithMessage(message); 
     		}
@@ -132,7 +133,7 @@ public class ServerPeer extends Observable implements Runnable{
     
     
     public void dealWithMessage(String input) {
-    	String[] words = input.split(DELIMITER);
+    	String[] words = input.split(DELIMITER); 
     	switch (words[0]) {
     		case CONNECT: {
     			if (lobby.addtoClientList(words[1])) {
@@ -174,10 +175,13 @@ public class ServerPeer extends Observable implements Runnable{
     			}
     			break;
     		}
+    		case MOVE: {
+    			setChanged();
+    			notifyObservers(words);
+    			break;
+    		}
     		case PLAYER_DISCONNECTED: {
     			lobby.diconected(this);
-    			setChanged();
-    			notifyObservers("disco");
     			shutDown();
     			break;
     		}

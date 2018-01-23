@@ -6,7 +6,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class ClientRingz {
+public class ClientRingz { 
     private static final String USAGE
         = "usage: java week7.cmdline.Client <player type> <name> <address> <port>";
 

@@ -1,11 +1,7 @@
 package online;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
 
 import players.Player;
 import ringz.Board;
@@ -16,7 +12,6 @@ public class ClientPlayer implements Player {
 
 	private int[][] pieces;
 	private Color[] color;
-	private String name;
 	private ServerPeer sock;
 	
 	
@@ -112,24 +107,18 @@ public class ClientPlayer implements Player {
 		}
 		pieces[colorindex][move.getCircle()]--;
 	}
-	
-
-
-
 
 	@Override
-	public String getName() {
+	public String getName() { 
 		return this.sock.getName();
 	}
-
-
 
 	@Override
 	public Color[] getColor() {
 		return this.color;
 	}
 
-
+	@Override
 	public int[][] getPieces() {
 		return this.pieces;
 	}
@@ -143,7 +132,6 @@ public class ClientPlayer implements Player {
 	public int[] getStart() {
 		return null;
 	}
-
 
 
 	@Override

@@ -11,7 +11,7 @@ import ringz.Move;
 
 public class ServerRingz {
 
-
+ 
 	
 	/** Starts a Server-application. */
 	public static void main(String[] args) {

@@ -156,6 +156,7 @@ public class Peer extends Observable implements Runnable{
     public void sendPackage(String sendPackage) {
     	try {
     		out.write(sendPackage);
+    		System.out.println(sendPackage);
     		out.newLine();
     		out.flush();
     	} catch (IOException e) {
@@ -292,7 +293,7 @@ public class Peer extends Observable implements Runnable{
     		if (yourTurn == true) {
         		clientPlayer.decresePiece(colorIndex, circlesize);
         	}
-    	} else {
+    	} else { 
     		if (yourTurn == true) {
         		clientPlayer.decresePiece(0, circlesize);
         	}

@@ -74,7 +74,7 @@ public class Lobby {
 					inPlay < intnrplayers /*tests if it already has enough players*/) {
 					//ads player to the array of players which will start a game
 					players[inPlay] = key;
-					inPlay++;
+					inPlay++; 
 					//playersWaiting.remove(key); Mistake!
 				}
 			}
@@ -96,6 +96,16 @@ public class Lobby {
 		Thread newGame = new Thread(game);
 		ongoingGames.add(game);
 		newGame.start();
+		try {
+			newGame.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		if (ongoingGames.contains(game)) {
+			ongoingGames.remove(game);
+		}
+		
 	}
 	
 	/**
@@ -106,6 +116,13 @@ public class Lobby {
 	public void diconected(ServerPeer client) {
 		clients.remove(client.getName());
 		playersWaiting.remove(client);
+		for (int i = 0; i < ongoingGames.size(); i++) {
+			if (ongoingGames.get(i).getPlayersasList().contains(client)) {
+				ongoingGames.get(i).someoneLeft();
+				ongoingGames.remove(ongoingGames.get(i));
+				break;
+			}
+		}
 	}
 	
 

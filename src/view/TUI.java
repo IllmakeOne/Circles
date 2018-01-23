@@ -480,7 +480,7 @@ public class TUI implements Observer, View {
     				+ "( must be in the inneer circle \n"
     				+ " first lien then column, both msu tbe betwen 1 and 3 \n");
     		String line = in.nextLine();
-    		words = line.split(" ");
+    		words = line.split(" "); 
     		if (words.length == 2) {
     			for (int i = 0; i < words.length; i++) {
     				move[i] = Integer.parseInt(words[i]);
