@@ -20,12 +20,11 @@ public class ClientPlayer implements Player {
 	private ServerPeer sock;
 	
 	
-	public ClientPlayer(Color c, String name, ServerPeer socc) { 
+	public ClientPlayer(Color c, ServerPeer socc) { 
 	
 		this.sock = socc;
 		this.color = new Color[2];
 		this.color[0] = c;
-		this.name = name;
 		this.pieces = new int[2][5];
 		for (int i = 0; i < Board.DIFFPIECES; i++) {
 			this.pieces[0][i] = 3;
@@ -34,13 +33,12 @@ public class ClientPlayer implements Player {
 
 	
 	
-	public ClientPlayer(int nrplayers, Color c1, Color c2, String name, ServerPeer socc) {
+	public ClientPlayer(int nrplayers, Color c1, Color c2, ServerPeer socc) {
 
 		this.sock = socc;
 		this.color = new Color[2];    	
 		this.color[0] = c1;
 		this.color[1] = c2;
-		this.name = name;
 		this.pieces = new int[2][5];
 		for (int i = 0; i < 5; i++) {
 			this.pieces[0][i] = 3;
@@ -57,23 +55,23 @@ public class ClientPlayer implements Player {
 		}
 	}
 	
-	public Move askForMove() {
-		sock.sendPackage(ServerPeer.MAKE_MOVE);
-		Move move = null;
-		try { 
-			String message = sock.getIN().readLine();
-			String[] words = message.split(ServerPeer.DELIMITER);
-			if (words[0].equals(ServerPeer.MOVE)) {
-				move = stringTomove(words);
-			}
-			
-		} catch (IOException e) {
-			System.out.println("Coulnt read move when asked ot make a move");
-			e.printStackTrace();
-		}
-		return move;
-		
-	}
+//	public Move askForMove() {
+//		sock.sendPackage(ServerPeer.MAKE_MOVE);
+//		Move move = null;
+//		try { 
+//			String message = sock.getIN().readLine();
+//			String[] words = message.split(ServerPeer.DELIMITER);
+//			if (words[0].equals(ServerPeer.MOVE)) {
+//				move = stringTomove(words);
+//			}
+//			
+//		} catch (IOException e) {
+//			System.out.println("Coulnt read move when asked ot make a move");
+//			e.printStackTrace();
+//		}
+//		return move;
+//		
+//	}
 
 	public Move stringTomove(String[] words) {
 		int line, column, cirlcesize;
@@ -121,7 +119,7 @@ public class ClientPlayer implements Player {
 
 	@Override
 	public String getName() {
-		return this.name;
+		return this.sock.getName();
 	}
 
 
@@ -130,8 +128,6 @@ public class ClientPlayer implements Player {
 	public Color[] getColor() {
 		return this.color;
 	}
-
-
 
 
 	public int[][] getPieces() {

@@ -57,8 +57,6 @@ public class ServerRingz {
             ServerPeer server = new ServerPeer(sock, lobby);
 			Thread streamInputHandler = new Thread(server);
 			streamInputHandler.start();
-			server.lobby();
-
 		//	server.shutDown();
 
 		//} catch (IOException e) {

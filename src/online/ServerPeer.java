@@ -71,11 +71,11 @@ public class ServerPeer implements Runnable {
     
     protected boolean ready = false;
     
-    private Player clientPlayer;
     private String nature;
     private int numberPlayers;
     private boolean ingame = false;;
     private Lobby lobby;
+    private String message = "";
 
     
     public ServerPeer(Socket socc, Lobby lobby) {
@@ -92,10 +92,8 @@ public class ServerPeer implements Runnable {
     
     public void  run() {
     	try {
-    		String message = in.readLine();
-    		dealWithMessage(message);   
-    		while (message != null && ingame == false) {
-    			System.out.println(message + "message read in run"); 
+    		while (message != null) {
+    			System.out.println(message + " message read in run"); 
     			message = in.readLine();
     			dealWithMessage(message); 
     		}
@@ -111,27 +109,27 @@ public class ServerPeer implements Runnable {
 		}
     }
     
-    /**
-     * reads only one package.
-     */
-    public String getMessage() {
-    	String message = null;
-    	try {
-    		message = in.readLine();
-    	} catch (SocketException e) {
-			System.out.println("cant read only one package");
-			shutDown();
-		} catch (IOException e) {
-			System.out.println("Something else went wrong");
-			shutDown();
-		}
-    	return message;
-    }
+//    /**
+//     * reads only one package.
+//     */
+//    public String getMessage() {
+//    	String message = null;
+//    	try {
+//    		message = in.readLine();
+//    	} catch (SocketException e) {
+//			System.out.println("cant read only one package");
+//			shutDown();
+//		} catch (IOException e) {
+//			System.out.println("Something else went wrong");
+//			shutDown();
+//		}
+//    	return message;
+//    }
+//    
     
     
-    
-    public void dealWithMessage(String message) {
-    	String[] words = message.split(DELIMITER);
+    public void dealWithMessage(String input) {
+    	String[] words = input.split(DELIMITER);
     	switch (words[0]) {
     		case CONNECT: {
     			if (lobby.addtoClientList(words[1])) {
@@ -142,6 +140,10 @@ public class ServerPeer implements Runnable {
     				sendPackage(CONNECT + DELIMITER + DECLINE);
     				shutDown();
     			}
+    			break;
+    		}
+    		case PLAYER_STATUS: {
+    			ready = true;
     			break;
     		}
     		case GAME_REQUEST: {
@@ -206,11 +208,12 @@ public class ServerPeer implements Runnable {
     public BufferedReader getIN() {
     	return this.in;
     }
- 
     
-    public void lobby() {
-    	
+    
+    public String getCurretMessage() {
+    	return this.message;
     }
+ 
     
     /**
      * sends a package.
