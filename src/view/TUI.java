@@ -260,6 +260,12 @@ public class TUI implements Observer, View {
 			
 		} else if (arg1.equals("joined")) {
 			System.out.println("Hello, what would you like to do?");
+			
+		} else if (arg1.equals("sdeclined")) {
+			System.out.println("Someone decline the game");
+			
+		} else if (arg1.equals("first")) {
+			System.out.println("You are going first");
 		}
 	}
 	

@@ -9,10 +9,12 @@ public class Lobby {
 	private ArrayList<String> clients;
 	private String name;
 	private HashMap<ServerPeer, String[]> playersWaiting;
+	private ArrayList<OnlineGame> ongoingGames;
 	
 	public Lobby(String name) {
 		this.clients = new ArrayList<String>();
 		this.playersWaiting = new HashMap<ServerPeer, String[]>();
+		this.ongoingGames = new ArrayList<>();
 		this.name = name;
 	}
 	
@@ -29,8 +31,6 @@ public class Lobby {
 		playersWaiting.put(socc, preferences);
 	}
 
-	
-	
 
 	/**
 	 * this functions is called when a new player requires a game.
@@ -92,7 +92,9 @@ public class Lobby {
 	}
 
 	public void startGame(ServerPeer[] players) {
-		Thread newGame = new Thread(new OnlineGame(players));
+		OnlineGame game = new OnlineGame(players, this);
+		Thread newGame = new Thread(game);
+		ongoingGames.add(game);
 		newGame.start();
 	}
 	
@@ -106,63 +108,7 @@ public class Lobby {
 		playersWaiting.remove(client);
 	}
 	
-	
-	/**
-	 * this functions asks all the clients who have.
-	 * matching preferences if they want to start a game.
-	 * @param client
-	 */
-	public boolean askPlayerToJoin(ServerPeer[] client) {
-		sendallConnected(client);
-		int flag = 1;
-		String crutch  = ServerPeer.PLAYER_STATUS + ServerPeer.DELIMITER;
-		for (int i = 0; i < client.length; i++) {
-			String stringy = client[i].getCurretMessage();
-			System.out.println(stringy + " Reply to ask people to join");
-			if (stringy.equals(crutch + ServerPeer.DECLINE)) {
-				System.out.println("should work in askPlayertoJoin");
-				flag = 0;
-			}
-		}
-		if (flag == 0) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
-	
-	/**
-	 * this sends a package with LOBBY in case someone decline a game.
-	 * @param client
-	 */
-	public void someoneDecline(ServerPeer[] client) {
-		String stringy = ServerPeer.LOBBY;
-		System.out.println(stringy + "in someone declined");
-		for (int i = 0; i < client.length; i++) {
-			client[i].sendPackage(stringy);
-		}
-	}
-	
-	
 
-	/**
-	 * this function notifies the players that a game is about to start.
-	 * @param players
-	 */
-	public void sendallConnected(ServerPeer[] players) {
-		String message = ServerPeer.ALL_PLAYERS_CONNECTED;
-		for (int i = 0; i < players.length; i++) {
-			message += ServerPeer.DELIMITER + players[i].getName();
-		}
-		for (int i = 0; i < players.length; i++) {
-			players[i].inGame();
-			players[i].sendPackage(message);
-		}
-	}
-	
-
-	
 	/**
 	 * this functions removes the players who started a game, form the waiting list.
 	 * @param players
@@ -172,6 +118,64 @@ public class Lobby {
 			playersWaiting.remove(players[i]);
 		}
 	}
+	
+	
+//	/**
+//	 * this functions asks all the clients who have.
+//	 * matching preferences if they want to start a game.
+//	 * @param client
+//	 */
+//	public boolean askPlayerToJoin(ServerPeer[] client) {
+//		sendallConnected(client);
+//		String stringy = "";
+//		int flag = 1;
+//		String crutch  = ServerPeer.PLAYER_STATUS + ServerPeer.DELIMITER;
+//		for (int i = 0; i < client.length; i++) {
+//			while (client[i].isReady() != true) {
+//				stringy = client[i].getCurretMessage();
+//			}
+//			System.out.println(stringy + " Reply to ask people to join");
+//			if (stringy.equals(crutch + ServerPeer.DECLINE)) {
+//				System.out.println("should work in askPlayertoJoin");
+//				flag = 0;
+//			}
+//		}
+//		if (flag == 0) {
+//			return false;
+//		} else {
+//			return true;
+//		}
+//	}
+	
+//	
+//	/**
+//	 * this sends a package with LOBBY in case someone decline a game.
+//	 * @param client
+//	 */
+//	public void someoneDecline(ServerPeer[] client) {
+//		String stringy = ServerPeer.LOBBY;
+//		System.out.println(stringy + "in someone declined");
+//		for (int i = 0; i < client.length; i++) {
+//			client[i].sendPackage(stringy);
+//		}
+//	}
+//	
+//	
+
+//	/**
+//	 * this function notifies the players that a game is about to start.
+//	 * @param players
+//	 */
+//	public void sendallConnected(ServerPeer[] players) {
+//		String message = ServerPeer.ALL_PLAYERS_CONNECTED;
+//		for (int i = 0; i < players.length; i++) {
+//			message += ServerPeer.DELIMITER + players[i].getName();
+//		}
+//		for (int i = 0; i < players.length; i++) {
+//			players[i].inGame();
+//			players[i].sendPackage(message);
+//		}
+//	}
 	
 	
 //	/**

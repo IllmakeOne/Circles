@@ -183,6 +183,7 @@ public class Peer extends Observable implements Runnable{
     		case JOINED_LOBBY: {
     			this.notifyObservers("lobby");
     			if (gameinProgress == true) {
+    				notifyObservers("sdeclined");
     				lobby();
     				gameinProgress = false;
     			}
@@ -194,7 +195,6 @@ public class Peer extends Observable implements Runnable{
     				gameinProgress = true;
         			this.notifyObservers("gameacc");
     				sendPackage(PLAYER_STATUS + DELIMITER + acceptance);
-    				this.createBoard(words);
     			} else {
     				sendPackage(PLAYER_STATUS + DELIMITER + acceptance);
         			this.notifyObservers("gamedeny");
@@ -205,7 +205,7 @@ public class Peer extends Observable implements Runnable{
     		}
     		case GAME_STARTED: {
     			this.notifyObservers("gamestart");
-    			view.showPieces(clientPlayer);
+				this.createBoard(words);
     			break;
     		}
     		case MAKE_MOVE: {
@@ -332,7 +332,7 @@ public class Peer extends Observable implements Runnable{
 			playerColors.put(words[2] + PRIMARY, Color.YELLOW);
 			playerColors.put(words[2] + SECONDARY, Color.GREEN);
 			
-			//Also creates local player so we can keep track of the pieces and show them
+		   //Also creates local player so we can keep track of the pieces and can be asked for moves
 			if (this.nature.equals(HUMAN_PLAYER)) {
 				this.clientPlayer = new HumanPalyer(numberPlayers, 
 						playerColors.get(name + PRIMARY),
@@ -354,7 +354,8 @@ public class Peer extends Observable implements Runnable{
 			playerColors.put(words[1] + SECONDARY, Color.BLUE);
 			playerColors.put(words[2] + SECONDARY, Color.PURPLE);
 			playerColors.put(words[3] + SECONDARY, Color.YELLOW);
-			//Also creates local player so we can keep track of the pieces and show them
+			
+		   //Also creates local player so we can keep track of the pieces and can be asked for moves
 			if (this.nature.equals(HUMAN_PLAYER)) {
 				this.clientPlayer = new HumanPalyer(numberPlayers, 
 						playerColors.get(name + PRIMARY),
@@ -374,7 +375,8 @@ public class Peer extends Observable implements Runnable{
 			playerColors.put(words[2], Color.PURPLE);
 			playerColors.put(words[3], Color.YELLOW);
 			playerColors.put(words[4], Color.GREEN);
-			//Also creates local player so we can keep track of the pieces and show them
+			
+		   //Also creates local player so we can keep track of the pieces and can be asked for moves
 			if (this.nature.equals(HUMAN_PLAYER)) {
 				this.clientPlayer = new HumanPalyer(playerColors.get(name + PRIMARY), 
 						name, this.view);
@@ -385,24 +387,6 @@ public class Peer extends Observable implements Runnable{
 	} 
     	
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     /**

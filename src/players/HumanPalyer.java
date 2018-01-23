@@ -14,8 +14,8 @@ public class HumanPalyer implements Player {
 	private View view;
 	
 	/**
-	 * contrustor of the huma player.  if the gaems ahs 4 players.
-	 * it receives a color which wil hte the players's color
+	 * contrustor of the human player.  if the games has 4 players.
+	 * it receives a color which will be the players's color
 	 * @param c
 	 */
 	public HumanPalyer(Color c, String name, View view) {
@@ -29,9 +29,11 @@ public class HumanPalyer implements Player {
 		}
 	}
 
-	
-
-	
+	/**
+	 * construcotr of the human player.  if the games has 2 or 3 players.
+	 * it receives two colors, the primary and the secondary
+	 * @param c1 primary color; @param c2 secondary color
+	 */	
 	public HumanPalyer(int nrplayers, Color c1, Color c2, String name, View view) {
 		this.view = view;
 		this.color = new Color[2];

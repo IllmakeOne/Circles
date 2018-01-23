@@ -9,14 +9,17 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.security.MessageDigest;
 import java.util.HashMap;
+import java.util.Observable;
 import java.util.prefs.PreferencesFactory;
+
+import javax.management.Notification;
 
 import players.Player;
 import ringz.Board;
 import ringz.Color;
 import view.TUI;
 
-public class ServerPeer implements Runnable {
+public class ServerPeer extends Observable implements Runnable{
 	
 	public static final String DELIMITER = ";";
 	
@@ -143,7 +146,12 @@ public class ServerPeer implements Runnable {
     			break;
     		}
     		case PLAYER_STATUS: {
-    			ready = true;
+    			setChanged();
+    			if (words[1].equals(ACCEPT)) {
+    				notifyObservers("gameaccepted");
+    			} else if (words[1].equals(DECLINE)) {
+    				notifyObservers("gamedeny");
+    			}
     			break;
     		}
     		case GAME_REQUEST: {
@@ -162,17 +170,14 @@ public class ServerPeer implements Runnable {
     			ServerPeer[] players = lobby.startableGame(this);
     			if (players != null) { 
     				ingame = true;
-    				if (lobby.askPlayerToJoin(players)) {
-    					lobby.startGame(players);
-    				} else {
-    					lobby.someoneDecline(players);
-    					ingame = false;
-    				}
+    				lobby.startGame(players);
     			}
     			break;
     		}
     		case PLAYER_DISCONNECTED: {
     			lobby.diconected(this);
+    			setChanged();
+    			notifyObservers("disco");
     			shutDown();
     			break;
     		}
@@ -190,6 +195,10 @@ public class ServerPeer implements Runnable {
     
     public void inGame() {
     	ingame = true;
+    }
+    
+    public boolean isReady() {
+    	return ready;
     }
     
     /**
@@ -221,7 +230,7 @@ public class ServerPeer implements Runnable {
      */
     public void sendPackage(String sendPackage) {
     	try {
-    		System.out.println(sendPackage);
+    		System.out.println(sendPackage + " in send packaage");
     		out.write(sendPackage);
     		out.newLine();
     		out.flush();
