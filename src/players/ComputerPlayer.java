@@ -5,6 +5,7 @@ import java.util.Random;
 import ringz.Board;
 import ringz.Color;
 import ringz.Move;
+import strategies.FourPlayerSmart;
 import strategies.FourPlayerStrategy;
 import strategies.Strategy;
 import strategies.ThreePlayerStrategy;
@@ -26,7 +27,7 @@ public class ComputerPlayer implements Player {
 		for (int i = 0; i < 5; i++) {
 			this.pieces[0][i] = 3;
 		}
-		this.strateg = new FourPlayerSmart(color, this);
+		this.strateg = new FourPlayerSmart(color);
 	}
 	
 	public ComputerPlayer(int nrplayers, Color c1, Color c2, String nam) {

@@ -232,12 +232,12 @@ public class BoardTest {
 	@Test
 	public void testDeepCoppy() {
 		//nullpointer exception, probably in initiation of copy in method.
-		Color[][][] copy = bord.deepCopy();
+		Board copy = bord.deepCopy();
 		assertNotEquals(bord.getBoard(), copy);
 		for (int x = 0; x < Board.DIM; x++) {
 			for (int y = 0; y < Board.DIM; y++) {
 				for (int piece = 0; piece < Board.DIFFPIECES; piece++) {
-					assertEquals(bord.getRing(x, y, piece), copy[x][y][piece]);
+					assertEquals(bord.getRing(x, y, piece), copy.getRing(x, y, piece));
 				}	
 			}
 		}
