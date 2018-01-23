@@ -111,14 +111,14 @@ public class BoardTest {
 	@Test 
 	public void testAddCircle() {
 		assertTrue(bord.addCircle(new Move(new int[]
-		{2, 3, 1}, Color.GREEN)));
-		assertEquals(Color.GREEN, bord.getRing(2, 3, 1));
+				{1, 2, 3}, Color.GREEN)));
+		assertEquals(Color.GREEN, bord.getRing(1, 2, 3));
 		assertTrue(bord.addCircle(new Move(new int[]
 		{1, 1, 1}, Color.BLUE)));
-		assertEquals(Color.GREEN, bord.getRing(1, 1, 1));
+		assertEquals(Color.BLUE, bord.getRing(1, 1, 1));
 		assertTrue(bord.addCircle(new Move(new int[] 
 		{3, 3, 3}, Color.PURPLE)));
-		assertEquals(Color.GREEN, bord.getRing(3, 3, 3));
+		assertEquals(Color.PURPLE, bord.getRing(3, 3, 3));
 	}
 	@Test
 	public void testGetRingGetPin() {
@@ -230,7 +230,7 @@ public class BoardTest {
 		assertEquals(30, bord.getPossibleMoves(Color.GREEN, pieces).size());
 	}
 	@Test
-	public void testDeepCoppy() {
+	public void testDeepCopy() {
 		//nullpointer exception, probably in initiation of copy in method.
 		Board copy = bord.deepCopy();
 		assertNotEquals(bord.getBoard(), copy);
