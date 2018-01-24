@@ -3,11 +3,14 @@ package online;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Lobby {
+public class Lobby implements Runnable, Observer{
 	
 	private ArrayList<String> clients;
 	private String name;
+	public boolean running = true;
 	private HashMap<ServerPeer, String[]> playersWaiting; 
 	private ArrayList<OnlineGame> ongoingGames;
 	
@@ -31,7 +34,13 @@ public class Lobby {
 		playersWaiting.put(socc, preferences);
 	}
 
-
+	public void run() {
+		while(running) {
+			
+		}
+		
+	}
+	
 	/**
 	 * this functions is called when a new player requires a game.
 	 * It will go through all the players who are waiting for a game
@@ -92,6 +101,9 @@ public class Lobby {
 	}
 
 	public void startGame(ServerPeer[] players) {
+		for (int i = 0; i < players.length; i++) {
+			playersWaiting.remove(players[i]);
+		}
 		OnlineGame game = new OnlineGame(players, this);
 		Thread newGame = new Thread(game);
 		ongoingGames.add(game);
@@ -134,6 +146,27 @@ public class Lobby {
 		for (int i = 0; i < players.length; i++) {
 			playersWaiting.remove(players[i]);
 		}
+	}
+	
+	
+	/**
+	 * this shuts down the lobby.
+	 */
+	public void shutDown() {
+		running = false;
+	}
+	
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg.equals("added")) {
+			ServerPeer[] players = startableGame((ServerPeer) o);
+			if (players !=  null) {
+				startGame(players);
+				
+			}
+		}
+		
 	}
 	
 	

@@ -140,6 +140,7 @@ public class ClientPlayer implements Player {
 		Move move = null;
 		try { 
 			String message = sock.getIN().readLine();
+			System.out.println(message + " read in Determine move");
 			String[] words = message.split(ServerPeer.DELIMITER);
 			if (words[0].equals(ServerPeer.MOVE)) {
 				move = stringTomove(words);

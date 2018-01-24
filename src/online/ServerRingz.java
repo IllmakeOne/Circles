@@ -43,7 +43,10 @@ public class ServerRingz {
     	} catch (IOException e) {
     		System.out.println("ERROR: could not create a socket ");
     	}
-		
+
+    	Thread lobb = new Thread(lobby);
+    	lobb.start();
+    	
 	    while (ison) {
 	    	
 	    	try {
@@ -54,7 +57,6 @@ public class ServerRingz {
 	    		System.out.println("sth wrong in accept");
 	    	}
      
-		
 	//	try {
             ServerPeer client = new ServerPeer(sock, lobby);
 			Thread clientHandler = new Thread(client);

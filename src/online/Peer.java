@@ -215,12 +215,14 @@ public class Peer extends Observable implements Runnable {
     			break;
     		}
     		case MOVE: {
-    			if (words[3].equals(STARTING_BASE)) {
-    				int[] startCoordinates = {Integer.valueOf(words[1], //line 
-    						Integer.valueOf(words[2])) }; //column
+    			if (words[4].equals(STARTING_BASE)) {
+    				int[] startCoordinates = {Integer.parseInt(words[1]), //line 
+    						Integer.parseInt(words[2]) }; //column
     				board.placeStart(startCoordinates);
+    				view.updateDisplay(board);
     			} else {
     				board.addCircle(stringTomove(words));
+    				view.updateDisplay(board);
     			}
     			break;
     		}
@@ -248,11 +250,6 @@ public class Peer extends Observable implements Runnable {
 		} else {
 			sendPackage(moveTostring(clientPlayer.determineMove(board)));	
 			yourTurn = true;
-//			if (this.nature.equals(HUMAN_PLAYER)) {
-//				sendPackage(MOVE + moveTostring(clientPlayer.determineMove(board)));	
-//			} else {
-//				sendPackage(MOVE + moveTostring(clientPlayer.determineMove(board)));
-//			}
 		}
     }
     

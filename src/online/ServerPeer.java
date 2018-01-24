@@ -82,6 +82,7 @@ public class ServerPeer extends Observable implements Runnable {
     public ServerPeer(Socket socc, Lobby lobby) {
     	this.lobby = lobby;
     	this.sock = socc;
+    	addObserver(lobby);
     	try {
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
@@ -95,10 +96,13 @@ public class ServerPeer extends Observable implements Runnable {
     public void  run() {
     	try {
 			message = in.readLine();
-    		while (message != null) { 
+			if (message != null) {
     			dealWithMessage(message); 
-    			System.out.println(message + " message read in run " + this.name); 
+			}
+    		while (message != null && ingame != true) {  
     			message = in.readLine();
+    			System.out.println(message + " message read in run " + this.name); 
+    			dealWithMessage(message); 
     		}
     		//shutDown();
     	} catch (SocketException e) {
@@ -131,6 +135,7 @@ public class ServerPeer extends Observable implements Runnable {
     
     public void dealWithMessage(String input) {
     	String[] words = input.split(DELIMITER); 
+		setChanged();
     	switch (words[0]) {
     		case CONNECT: {
     			if (lobby.addtoClientList(words[1])) {
@@ -145,7 +150,6 @@ public class ServerPeer extends Observable implements Runnable {
     			break;
     		}
     		case PLAYER_STATUS: {
-    			setChanged();
     			if (words[1].equals(ACCEPT)) {
     				notifyObservers("gameaccepted");
     			} else if (words[1].equals(DECLINE)) {
@@ -166,15 +170,11 @@ public class ServerPeer extends Observable implements Runnable {
     				preferences[2] = NEUTRAL;
     			}
     			lobby.addtoWaitingList(this, preferences);
-    			ServerPeer[] players = lobby.startableGame(this);
-    			if (players != null) { 
-    				ingame = true; 
-    				lobby.startGame(players);
-    			}
+    			notifyObservers("added");
+    			
     			break;
     		}
     		case MOVE: {
-    			setChanged();
     			notifyObservers(message);
     			break;
     		}

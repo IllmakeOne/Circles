@@ -89,7 +89,7 @@ public class TUI implements Observer, View {
 			readMove(move, colorIndex, play);
 		}
 		
-		((HumanPalyer) play).decresePiece(colorIndex, move[0]);
+		//((HumanPalyer) play).decresePiece(colorIndex, move[0]);
 		in.close();
 		return new Move(move, play.getColor()[colorIndex]);
 	}
@@ -367,14 +367,13 @@ public class TUI implements Observer, View {
 		 * @param colorIndex is the index of the color of the player
 		 */
 	public void readMove(int[] move, int colorIndex, Player play) {
-		Scanner in = new Scanner(System.in);
 		int flag = 1;
 		String[] words;
 		while (flag == 1) {
 			System.out.println("Please give move \n"
 					+ "The first number is the size of the piece, \n"
 					+ "The second number the line and the thirds , the column \n");
-			String line = in.nextLine();
+			String line = readString("[]>");
 			words = line.split(" ");
 			if (words.length == 3) {
 				for (int i = 0; i < words.length; i++) {
@@ -384,9 +383,7 @@ public class TUI implements Observer, View {
 					flag = 0;
 				}
 			}
-			in = new Scanner(System.in);
 		}
-		in.close();
 	}
 	
 	/**
@@ -478,7 +475,7 @@ public class TUI implements Observer, View {
     	while (flag == 1) {
     		System.out.println("Please the coordinate of the first piece \n"
     				+ "( must be in the inneer circle \n"
-    				+ " first lien then column, both msu tbe betwen 1 and 3 \n");
+    				+ " first line, then the column, both must be between 1 and 3  (including) \n");
     		String line = in.nextLine();
     		words = line.split(" "); 
     		if (words.length == 2) {

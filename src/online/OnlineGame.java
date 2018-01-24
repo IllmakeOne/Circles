@@ -35,27 +35,37 @@ public class OnlineGame implements Runnable, Observer{
 	
 	@Override
 	public void run() {
-		if (askPlayerToJoin(plays)) {
+		//the array plays is converted into a list to it can be easily shuffled.
+		ArrayList<ServerPeer> aux = new ArrayList<>();
+		for (int i = 0; i < numberOfplayers; i++) {
+			plays[i].inGame();
+			aux.add(plays[i]);   		
+		}
+		Collections.shuffle(aux);
+		ArrayList<ClientPlayer> players = createPlayers(aux);
+   
+		if (askPlayerToJoin(players)) {
 			Board board = new Board();
 			int current = 0;
 			itStarts(plays);
-			//the array plays is converted into a list to it can be easily shuffled.
-			ArrayList<ServerPeer> aux = new ArrayList<>();
-			for (int i = 0; i < numberOfplayers; i++) {
-				aux.add(plays[i]);   		
-			}
-			Collections.shuffle(aux);
-			ArrayList<ClientPlayer> players = createPlayers(aux);
-	   
+			
 	    	//placing of the first piece
 	    	Move firstmove = players.get(current).determineMove(board);
 	    	int[] a = {firstmove.getLine(), //line of the first move
 	    			firstmove.getColumn()}; //column of the first move
-	    	if (!somoneoneDisconected) {
-	    		System.out.println(a[0] + " " + a[1]);
-	    		board.placeStart(a);
-	    		current = (current + 1) % numberOfplayers;
+
+    		if (!somoneoneDisconected) {
+    			while (validFirstPiece(a) != true) {
+	    			firstmove = players.get(current).determineMove(board);
+	    			a[0] = firstmove.getLine(); //line of the first move
+	    			a[1] = firstmove.getColumn(); //column of the first moves
+	    			System.out.println(a[0] + " " + a[1]);
+	    		}
+    			board.placeStart(a);
+    			sendMoveToall(firstmove, players.get(current).getName());
+    			current = (current + 1) % numberOfplayers;
 	    	}
+    		
 	    	
 	    	int[] tappers = new int[numberOfplayers];
 	    	//this keep track of who is still able to play, 0 if still able to , and 1 if is out.
@@ -88,6 +98,32 @@ public class OnlineGame implements Runnable, Observer{
 	}
 
 
+	/**
+	 * this function send the move to all players.
+	 * @param move
+	 * @param whoMadetheMove
+	 */
+	public void sendMoveToall(Move move, String whoMadetheMove) {
+		String stringy = moveTostring(move, whoMadetheMove);
+		for (int i = 0; i < plays.length; i++) {
+			plays[i].sendPackage(stringy);
+		}
+		
+	}
+	
+	
+	
+	/**
+	 * this functions tests of the coodinates for the first move are valid.
+	 * @param cord
+	 * @return
+	 */
+	public boolean validFirstPiece(int[] cord) {
+		if (cord[0] > 0 && cord[0] < 4 && cord[1] > 0 && cord[1] < 4) {
+			return true;
+		}
+		return false;
+	}
  
 	/**
  	* this function returns true if all elemets of tappers are 1.
@@ -106,15 +142,18 @@ public class OnlineGame implements Runnable, Observer{
 	}
 	
 
-	
+	/**
+	 * inform all the players in the game that he game has started.
+	 * @param client
+	 */
 	public void itStarts(ServerPeer[] client) {
 		String stringy = ServerPeer.GAME_STARTED;
 		System.out.println(stringy + " in itStarts");
 		for (int i = 0; i < client.length; i++) {
 			client[i].sendPackage(stringy);
 		}
-		
 	}
+	
 	/**
 	 * this function creates an array of ClinetsPlayers with which a game will start
 	 * this keeps track of everyone's pieces.
@@ -138,6 +177,31 @@ public class OnlineGame implements Runnable, Observer{
 		}
 		
 		return players;
+	}
+	
+	public String moveTostring(Move move, String whoMadetheMove) {
+		String result = ServerPeer.MOVE + ServerPeer.DELIMITER;
+		result += move.getLine() + ServerPeer.DELIMITER + 
+				move.getColumn() + ServerPeer.DELIMITER +
+				whoMadetheMove + ServerPeer.DELIMITER +
+				(move.getCircle() + 1);
+		
+		//this adds secondary or priamry color
+		if (numberOfplayers == 3) {
+			if (move.getColor() == Color.GREEN) {
+				result += ServerPeer.DELIMITER + ServerPeer.SECONDARY;
+			} else {
+				result += ServerPeer.DELIMITER + ServerPeer.PRIMARY;
+			}
+		} else if (numberOfplayers == 2) {
+			if (move.getColor() == Color.PURPLE || move.getColor() == Color.GREEN) {
+				result += ServerPeer.DELIMITER + ServerPeer.SECONDARY;
+			} else {
+				result += ServerPeer.DELIMITER + ServerPeer.PRIMARY;
+			}
+		}
+		
+		return result;
 	}
 	
 	
@@ -188,13 +252,47 @@ public class OnlineGame implements Runnable, Observer{
 		
 	}
 
+
+
+	@Override
+	public void update(Observable o, Object arg) {
+		String[] words = arg.toString().split(ServerPeer.DELIMITER);
+		if (arg.equals("gameaccepted")) {
+			replies++;
+		} else if (arg.equals("gamedeny")) {
+			startable = false;
+			replies++;
+		} else if (arg.equals("disco")) {
+			somoneoneDisconected = true;
+		}
+//		} else if (words[0].equals(ServerPeer.MOVE) && 
+//					words[3].equals(ServerPeer.STARTING_BASE)) {
+//			currentMove = ClientPlayer;
+//		}
+	}
+	
+	public ArrayList<ServerPeer> getPlayersasList() {
+		ArrayList<ServerPeer> aux = new ArrayList<>();
+		for (int i = 0; i < numberOfplayers; i++) {
+			aux.add(plays[i]);   		
+		}
+		return aux;
+	}
+	
+	public void someoneLeft() {
+		this.somoneoneDisconected = true;
+	}
+
+	
+	
+//-----------------------Asking for aproval------------------
 	
 	/**
 	 * this functions asks all the clients who have.
 	 * matching preferences if they want to start a game.
 	 * @param client
 	 */
-	public boolean askPlayerToJoin(ServerPeer[] client) {
+	public boolean askPlayerToJoin(ArrayList<ClientPlayer> client) {
 		sendallConnected(client);		
 		while (replies != numberOfplayers) {
 			try {
@@ -214,19 +312,18 @@ public class OnlineGame implements Runnable, Observer{
 	 * this function notifies the players that a game is about to start.
 	 * @param players
 	 */
-	public void sendallConnected(ServerPeer[] players) {
+	public void sendallConnected(ArrayList<ClientPlayer> players) {
 		String message = ServerPeer.ALL_PLAYERS_CONNECTED;
 		String words;
-		for (int i = 0; i < players.length; i++) {
-			message += ServerPeer.DELIMITER + players[i].getName();
+		for (int i = 0; i < players.size(); i++) {
+			message += ServerPeer.DELIMITER + players.get(i).getName();
 		}
-		for (int i = 0; i < players.length; i++) {
-			players[i].inGame();
-			players[i].sendPackage(message);
+		for (int i = 0; i < players.size(); i++) {
+			players.get(i).getSocket().sendPackage(message);
 		}
 		
 		try {
-			words = players[0].getIN().readLine();
+			words = plays[0].getIN().readLine();
 			if (words.equals(ServerPeer.PLAYER_STATUS 
 					+ ServerPeer.DELIMITER + ServerPeer.ACCEPT)) {
 				replies++;
@@ -273,37 +370,6 @@ public class OnlineGame implements Runnable, Observer{
 			client[i].sendPackage(stringy);
 		}
 	}
-
-
-	@Override
-	public void update(Observable o, Object arg) {
-		String[] words = arg.toString().split(ServerPeer.DELIMITER);
-		if (arg.equals("gameaccepted")) {
-			replies++;
-		} else if (arg.equals("gamedeny")) {
-			startable = false;
-			replies++;
-		} else if (arg.equals("disco")) {
-			somoneoneDisconected = true;
-		}
-//		} else if (words[0].equals(ServerPeer.MOVE) && 
-//					words[3].equals(ServerPeer.STARTING_BASE)) {
-//			currentMove = ClientPlayer;
-//		}
-	}
-	
-	public ArrayList<ServerPeer> getPlayersasList() {
-		ArrayList<ServerPeer> aux = new ArrayList<>();
-		for (int i = 0; i < numberOfplayers; i++) {
-			aux.add(plays[i]);   		
-		}
-		return aux;
-	}
-	
-	public void someoneLeft() {
-		this.somoneoneDisconected = true;
-	}
-
 	
 	
 	
