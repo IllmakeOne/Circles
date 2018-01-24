@@ -22,7 +22,7 @@ import ringz.Move;
 import view.*;
 
 
-public class Peer extends Observable implements Runnable{
+public class Peer extends Observable implements Runnable {
 	
 	public static final String DELIMITER = ";";
 	
@@ -192,6 +192,7 @@ public class Peer extends Observable implements Runnable{
     		}
     		case ALL_PLAYERS_CONNECTED: {
     			String acceptance = view.acceptGame(words);
+    			setNumberPlayers(words);
     			if (acceptance.equals("0")) {
     				gameinProgress = true;
         			this.notifyObservers("gameacc");
@@ -325,8 +326,7 @@ public class Peer extends Observable implements Runnable{
      */
     public void createBoard(String[] words) {
     	this.board = new Board();
-    	if (words.length == 3) {
-    		numberPlayers = 2;
+    	if (numberPlayers == 3) {
 			//Creates Hashmap with name of the player + SECONDARY/PRIMARY color
 			playerColors.put(words[1] + PRIMARY, Color.BLUE);
 			playerColors.put(words[1] + SECONDARY, Color.PURPLE);
@@ -345,8 +345,7 @@ public class Peer extends Observable implements Runnable{
 						playerColors.get(name + SECONDARY), 
 						this.name);
 			}
-		} else if (words.length == 4) {
-			numberPlayers = 3;
+		} else if (numberPlayers == 4) {
 			//Creates Hashmap with the first three color being unique to a player
 			// then puts the same SECONDARY color to all the players
 			playerColors.put(words[1] + PRIMARY, Color.BLUE);
@@ -369,8 +368,7 @@ public class Peer extends Observable implements Runnable{
 						this.name);
 			}
 				
-		} else if (words.length == 5) {
-			numberPlayers = 4;
+		} else if (numberPlayers == 5) {
 			//this just gives a color to everyone
 			playerColors.put(words[1], Color.BLUE);
 			playerColors.put(words[2], Color.PURPLE);
@@ -387,6 +385,19 @@ public class Peer extends Observable implements Runnable{
 		}
 	} 
     	
+    
+    /**
+     * this function sets the number of players.
+     */
+	public void setNumberPlayers(String[] words) {
+		if (words.length == 3) {
+			numberPlayers = 2;
+		} else if (words.length == 4) {
+			numberPlayers = 3;
+		} else {
+			numberPlayers = 4;
+		}
+	}
 
     
     
@@ -407,6 +418,11 @@ public class Peer extends Observable implements Runnable{
     /**  returns name of the peer object*/
     public String getName() {
         return name;
+    }
+    
+    @Override 
+    public String toString() {
+    	return name;
     }
 
 }
