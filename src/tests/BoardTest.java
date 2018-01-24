@@ -61,7 +61,6 @@ public class BoardTest {
 		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 4}, Color.GREEN)));
 		assertEquals(4, bord.tallyUp(1, 1)[0]);
 	}
-	
 	@Test
 	public void totalTest() {
 		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 1}, Color.GREEN)));
