@@ -121,12 +121,13 @@ public class Board extends Observable {
 	 * return a deep copy of the board.
 	 * @return copy of the board
 	 */
-	public  /*@ pure */ Color[][][] deepCopy() {
-		Color[][][] copy = new Color[DIM][DIM][DIFFPIECES];
+	public  /*@ pure */ Board deepCopy() {
+		Board copy = new Board();
 		for (int i = 0; i < DIM; i++) {
 			for (int j = 0; j < DIM; j++) {
 				for (int k = 0; k < DIFFPIECES; k++) {
-					copy[i][j][k] = getRing(j, j, k);
+					Move move = new Move(new int[]{i, j, k}, getRing(i, j, k));
+					copy.addCircleNoCheck(move);
 				}
 			}
 		}
@@ -416,6 +417,26 @@ public class Board extends Observable {
 		} else {
 			return  false;
 		}
+	}
+	/**
+	 * ads a cricle does not check if it is valid. 
+	 * @param copy 
+	 * @param circleSeize the seize of the circle
+	 * @param col the color of the circle
+	 * @param x the line
+	 * @param y the column
+	 */
+	public void addCircleNoCheck(Move move) {
+		int x, y, circleSeize;
+		Color col;
+		x = move.getLine();
+		y = move.getColumn();
+		circleSeize = move.getCircle();
+		col = move.getColor();
+		
+		this.bord[x][y][circleSeize] = col;
+			//System.out.println("circles aded");
+			
 	}
 	
 	/**

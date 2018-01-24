@@ -61,7 +61,6 @@ public class BoardTest {
 		assertTrue(bord.addCircle(new Move(new int[] {4, 1, 1}, Color.GREEN)));
 		assertEquals(4, bord.tallyUp(1, 1)[3]);
 	}
-	
 	@Test
 	public void totalTest() {
 		assertTrue(bord.addCircle(new Move(new int[] {1, 1, 1}, Color.GREEN)));
@@ -112,14 +111,14 @@ public class BoardTest {
 	@Test 
 	public void testAddCircle() {
 		assertTrue(bord.addCircle(new Move(new int[]
-		{2, 3, 1}, Color.GREEN)));
-		assertEquals(Color.GREEN, bord.getRing(2, 3, 1));
+				{1, 2, 3}, Color.GREEN)));
+		assertEquals(Color.GREEN, bord.getRing(1, 2, 3));
 		assertTrue(bord.addCircle(new Move(new int[]
 		{1, 1, 1}, Color.BLUE)));
-		assertEquals(Color.GREEN, bord.getRing(1, 1, 1));
+		assertEquals(Color.BLUE, bord.getRing(1, 1, 1));
 		assertTrue(bord.addCircle(new Move(new int[] 
 		{3, 3, 3}, Color.PURPLE)));
-		assertEquals(Color.GREEN, bord.getRing(3, 3, 3));
+		assertEquals(Color.PURPLE, bord.getRing(3, 3, 3));
 	}
 	@Test
 	public void testGetRingGetPin() {
@@ -231,14 +230,14 @@ public class BoardTest {
 		assertEquals(30, bord.getPossibleMoves(Color.GREEN, pieces).size());
 	}
 	@Test
-	public void testDeepCoppy() {
+	public void testDeepCopy() {
 		//nullpointer exception, probably in initiation of copy in method.
-		Color[][][] copy = bord.deepCopy();
+		Board copy = bord.deepCopy();
 		assertNotEquals(bord.getBoard(), copy);
 		for (int x = 0; x < Board.DIM; x++) {
 			for (int y = 0; y < Board.DIM; y++) {
 				for (int piece = 0; piece < Board.DIFFPIECES; piece++) {
-					assertEquals(bord.getRing(x, y, piece), copy[x][y][piece]);
+					assertEquals(bord.getRing(x, y, piece), copy.getRing(x, y, piece));
 				}	
 			}
 		}
