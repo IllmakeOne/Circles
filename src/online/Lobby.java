@@ -8,7 +8,7 @@ public class Lobby {
 	
 	private ArrayList<String> clients;
 	private String name;
-	private HashMap<ServerPeer, String[]> playersWaiting;
+	private HashMap<ServerPeer, String[]> playersWaiting; 
 	private ArrayList<OnlineGame> ongoingGames;
 	
 	public Lobby(String name) {
@@ -16,7 +16,7 @@ public class Lobby {
 		this.playersWaiting = new HashMap<ServerPeer, String[]>();
 		this.ongoingGames = new ArrayList<>();
 		this.name = name;
-	}
+	} 
 	
 	public boolean addtoClientList(String clientname) {
 		if (clients.contains(clientname)) {

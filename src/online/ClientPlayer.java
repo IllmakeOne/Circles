@@ -116,7 +116,7 @@ public class ClientPlayer implements Player {
 	@Override
 	public Color[] getColor() {
 		return this.color;
-	}
+	} 
 
 	@Override
 	public int[][] getPieces() {

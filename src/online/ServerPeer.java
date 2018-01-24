@@ -19,7 +19,7 @@ import ringz.Board;
 import ringz.Color;
 import view.TUI;
 
-public class ServerPeer extends Observable implements Runnable{
+public class ServerPeer extends Observable implements Runnable {
 	
 	public static final String DELIMITER = ";";
 	
@@ -77,8 +77,7 @@ public class ServerPeer extends Observable implements Runnable{
     private int numberPlayers;
     private boolean ingame = false;;
     private Lobby lobby;
-    private String message = "";
-
+    private String message;
     
     public ServerPeer(Socket socc, Lobby lobby) {
     	this.lobby = lobby;
@@ -90,25 +89,23 @@ public class ServerPeer extends Observable implements Runnable{
 			System.err.println("Sth wrong in ServerPeer creation");
 			e.printStackTrace();
 		}
+    //	System.out.println(PLAYER_STATUS + DELIMITER + ACCEPT);
     }
     
     public void  run() {
     	try {
-    		message = in.readLine();
-			dealWithMessage(message); 
-    		while (message != null) {
+			message = in.readLine();
+    		while (message != null) { 
+    			dealWithMessage(message); 
     			System.out.println(message + " message read in run " + this.name); 
     			message = in.readLine();
-    			dealWithMessage(message); 
     		}
-    	//	shutDown();
+    		//shutDown();
     	} catch (SocketException e) {
 			System.out.println(name + " disconected");
-			lobby.diconected(this);
 			shutDown();
 		} catch (IOException e) {
 			System.out.println("Something else went wrong");
-			lobby.diconected(this);
 			shutDown();
 		}
     }
@@ -139,6 +136,7 @@ public class ServerPeer extends Observable implements Runnable{
     			if (lobby.addtoClientList(words[1])) {
     				sendPackage(CONNECT + DELIMITER + ACCEPT);
     				this.name = words[1];
+    				Thread.currentThread().setName(name);
     				System.out.println(this.name);
     			} else {
     				sendPackage(CONNECT + DELIMITER + DECLINE);
@@ -170,7 +168,7 @@ public class ServerPeer extends Observable implements Runnable{
     			lobby.addtoWaitingList(this, preferences);
     			ServerPeer[] players = lobby.startableGame(this);
     			if (players != null) { 
-    				ingame = true;
+    				ingame = true; 
     				lobby.startGame(players);
     			}
     			break;
@@ -194,7 +192,7 @@ public class ServerPeer extends Observable implements Runnable{
     }
     
     public Socket getSocket() {
-    	return this.sock;
+    	return this.sock; 
     }
     
     public void inGame() {
@@ -211,9 +209,9 @@ public class ServerPeer extends Observable implements Runnable{
     public void shutDown() {
     	try {
 			sock.close();
+			lobby.diconected(this);
 		} catch (IOException e) {
-			System.out.println("sth wrong in run");
-			shutDown();
+			System.out.println("sth wrong in shutting down");
 			e.printStackTrace();
 		}
     }
@@ -223,8 +221,17 @@ public class ServerPeer extends Observable implements Runnable{
     }
     
     
-    public String getCurretMessage() {
-    	return this.message;
+//    public String getCurretMessage() {
+//    	return this.message;
+//    }
+    
+    /**
+     * this is just to make things easier when debugging in deugging view.
+     * @see java.lang.Object#toString()
+     */
+    @Override 
+    public String toString() {
+    	return this.name + " " + this.message;
     }
  
     
@@ -243,49 +250,6 @@ public class ServerPeer extends Observable implements Runnable{
     		shutDown();
     	}
     }
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
