@@ -175,7 +175,7 @@ public class ServerPeer extends Observable implements Runnable {
     		}
     		case MOVE: {
     			setChanged();
-    			notifyObservers(words);
+    			notifyObservers(message);
     			break;
     		}
     		case PLAYER_DISCONNECTED: {

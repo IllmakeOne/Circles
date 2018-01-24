@@ -197,6 +197,7 @@ public class Peer extends Observable implements Runnable {
     				gameinProgress = true;
         			this.notifyObservers("gameacc");
     				sendPackage(PLAYER_STATUS + DELIMITER + acceptance);
+    				this.createBoard(words);
     			} else {
     				sendPackage(PLAYER_STATUS + DELIMITER + acceptance);
         			this.notifyObservers("gamedeny");
@@ -207,7 +208,6 @@ public class Peer extends Observable implements Runnable {
     		}
     		case GAME_STARTED: {
     			this.notifyObservers("gamestart");
-				this.createBoard(words);
     			break;
     		}
     		case MAKE_MOVE: {
@@ -326,7 +326,7 @@ public class Peer extends Observable implements Runnable {
      */
     public void createBoard(String[] words) {
     	this.board = new Board();
-    	if (numberPlayers == 3) {
+    	if (numberPlayers == 2) {
 			//Creates Hashmap with name of the player + SECONDARY/PRIMARY color
 			playerColors.put(words[1] + PRIMARY, Color.BLUE);
 			playerColors.put(words[1] + SECONDARY, Color.PURPLE);
@@ -345,7 +345,7 @@ public class Peer extends Observable implements Runnable {
 						playerColors.get(name + SECONDARY), 
 						this.name);
 			}
-		} else if (numberPlayers == 4) {
+		} else if (numberPlayers == 3) {
 			//Creates Hashmap with the first three color being unique to a player
 			// then puts the same SECONDARY color to all the players
 			playerColors.put(words[1] + PRIMARY, Color.BLUE);
@@ -368,7 +368,7 @@ public class Peer extends Observable implements Runnable {
 						this.name);
 			}
 				
-		} else if (numberPlayers == 5) {
+		} else if (numberPlayers == 4) {
 			//this just gives a color to everyone
 			playerColors.put(words[1], Color.BLUE);
 			playerColors.put(words[2], Color.PURPLE);

@@ -21,7 +21,7 @@ public class Move {
 	
 	public int getLine() {
 		return line;
-	}
+	} 
 	
 	public int getColumn() {
 		return column;

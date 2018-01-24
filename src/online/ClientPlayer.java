@@ -73,10 +73,10 @@ public class ClientPlayer implements Player {
 		Color colorr;
 		line = Integer.valueOf(words[1]);
     	column = Integer.valueOf(words[2]);
-    	cirlcesize = Integer.valueOf(words[4]) - 1;
+    	cirlcesize = Integer.valueOf(words[3]) - 1;
     	colorr = this.color[0];
-    	if (words.length == 6) {
-    		int colorindex = Integer.valueOf(words[5]);
+    	if (words.length == 5) {
+    		int colorindex = Integer.valueOf(words[4]);
     		colorr = this.color[colorindex];
     	}
     	int[] coordinates = {cirlcesize, line, column};
@@ -135,7 +135,7 @@ public class ClientPlayer implements Player {
 
 
 	@Override
-	public Move determineMove(Board bord) {
+	public Move determineMove(Board bord) { 
 		sock.sendPackage(ServerPeer.MAKE_MOVE);
 		Move move = null;
 		try { 
@@ -151,7 +151,10 @@ public class ClientPlayer implements Player {
 		return move;
 	}
 
-
+	@Override
+	public String toString() {
+		return this.sock.getName();
+	}
 
 	@Override
 	public void decresePiece(int col, int circleSize) {
