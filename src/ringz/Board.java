@@ -126,7 +126,7 @@ public class Board extends Observable {
 		for (int i = 0; i < DIM; i++) {
 			for (int j = 0; j < DIM; j++) {
 				for (int k = 0; k < DIFFPIECES; k++) {
-					Move move = new Move(new int[]{i, j, k}, getRing(i, j, k));
+					Move move = new Move(new int[]{k, i, j}, getRing(i, j, k));
 					copy.addCircleNoCheck(move);
 				}
 			}
@@ -145,7 +145,7 @@ public class Board extends Observable {
 	/*@ ensures (/result >= -1 && /result <= array.length());
 	 * 	
 	 */
-	public  /*@ pure */ int arrayMaximum(int[] array) {
+	public static  /*@ pure */ int arrayMaximum(int[] array) {
 		int highestScore = 0, maxindex1 = 1;
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] >= highestScore) {
@@ -231,8 +231,10 @@ public class Board extends Observable {
 	 */
 	public  /*@ pure */ int[] tallyUp(int line, int column) {
 		int[] tally = new int[4];
-		for (int ringsize = 1; ringsize < 5; ringsize++) {
-			tally[colorIndex(getRing(line, column, ringsize))]++;
+		for (int ringsize = 0; ringsize < DIFFPIECES; ringsize++) {
+			if (colorIndex(getRing(line, column, ringsize)) != -1) {
+				tally[colorIndex(getRing(line, column, ringsize))]++;
+			}	
 		}
 		return tally;
 	}
@@ -335,7 +337,7 @@ public class Board extends Observable {
 						notifyObservers("added");
 						return true;
 					} else {
-						System.out.println("There are peices here, cant put base");
+						//System.out.println("There are peices here, cant put base");
 						notifyObservers("notCompEmpty");
 						return false;
 					}
@@ -343,17 +345,17 @@ public class Board extends Observable {
 				if (this.bord[x][y][circleSize] == Color.EMPTY) {
 					return true;
 				} else {
-					System.out.println("Field not empty");
+					//System.out.println("Field not empty");
 					notifyObservers("notEmpty");
 					return false;
 				}
 			} else {
-				System.out.println("Has no near piece of the same coolor NEAR IT");
+				//System.out.println("Has no near piece of the same coolor NEAR IT");
 				notifyObservers("noFriend");
 				return false;
 			}
 		} else {
-			System.out.println("The space already has a BASE");
+			//System.out.println("The space already has a BASE");
 			notifyObservers("hasBase");
 			return false;
 		}

@@ -1,9 +1,6 @@
 package ringz;
 
 
-import java.util.Scanner;
-
-import ringz.Color;
 
 public class Move {
 	
@@ -13,9 +10,9 @@ public class Move {
 	private int circle;
 	
 	public Move(int[] cord, Color c) {
-		circle = cord[2];
-		line = cord[0];
-		column = cord[1];
+		circle = cord[0];
+		line = cord[1];
+		column = cord[2];
 		this.color = c;
 	}
 	
@@ -39,7 +36,7 @@ public class Move {
 		return "Line " + line +
 				" Column  " + column +
 				" Circle sieze " + circle +
-				" Color: " + color ;
+				" Color: " + color;
 	}
 }
 
