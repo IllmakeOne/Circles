@@ -16,10 +16,10 @@ public class ServerRingz {
 	/** Starts a Server-application. */
 	public static void main(String[] args) {
 		if (args.length != 2) {
-			System.out.println("wrong arguments");
+			System.out.println("wrong arguments"); 
 			System.exit(0);
 		}
-		 
+		  
 		String name = args[0];
 		int port = 0;
 		ServerSocket ssock = null;
@@ -37,13 +37,15 @@ public class ServerRingz {
 		}
 
     	System.out.println("Server Started");
+    	
+    	try {
+    		ssock = new ServerSocket(port);
+    	} catch (IOException e) {
+    		System.out.println("ERROR: could not create a socket ");
+    	}
 		
 	    while (ison) {
-	    	try {
-	    		ssock = new ServerSocket(port);
-	    	} catch (IOException e) {
-	    		System.out.println("ERROR: could not create a socket on "  + " and port " + port);
-	    	}
+	    	
 	    	try {
 	    		sock = ssock.accept();
 	    		nrClinets++;
@@ -54,9 +56,9 @@ public class ServerRingz {
      
 		
 	//	try {
-            ServerPeer server = new ServerPeer(sock, lobby);
-			Thread streamInputHandler = new Thread(server);
-			streamInputHandler.start();
+            ServerPeer client = new ServerPeer(sock, lobby);
+			Thread clientHandler = new Thread(client);
+			clientHandler.start();
 		//	server.shutDown();
 
 		//} catch (IOException e) {

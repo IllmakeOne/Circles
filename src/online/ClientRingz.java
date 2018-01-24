@@ -10,12 +10,12 @@ public class ClientRingz {
     private static final String USAGE
         = "usage: java week7.cmdline.Client <player type> <name> <address> <port>";
 
-    /** Starts a Client application. */
+    /** Starts a Client application. */ 
     public static void main(String[] args) {
         if (args.length != 4) {
             System.out.println(USAGE); 
             System.exit(0);
-        }
+        } 
  
         String name = args[1];
         String nature = args[0];
@@ -39,9 +39,9 @@ public class ClientRingz {
             System.out.println(USAGE);
             System.out.println("ERROR: port " + args[3]
             		           + " is not an integer");
-            System.exit(0);
+            System.exit(0); 	
         }
-
+        
         
         try {
             sock = new Socket(addr, port);

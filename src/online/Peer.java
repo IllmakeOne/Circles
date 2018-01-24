@@ -137,7 +137,7 @@ public class Peer extends Observable implements Runnable{
 
     /**
      * Reads a string from the console and sends this string over
-     * the socket-connection to the Peer process.
+     * the socket-connection to the Peer process. 
      * On Peer.EXIT the method ends
      */
     public  void lobby() {
@@ -312,7 +312,7 @@ public class Peer extends Observable implements Runnable{
      */
     public String askFirst() {
     	int[] firstMove;
-		firstMove = clientPlayer.getStart();
+		firstMove = clientPlayer.getStart(); 
 		String stringy = "";
 		stringy += MOVE + DELIMITER + firstMove[0] + DELIMITER + firstMove[1] 
 												 + DELIMITER + STARTING_BASE;
