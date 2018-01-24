@@ -7,27 +7,21 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Scanner;
 
-import javax.swing.colorchooser.DefaultColorSelectionModel;
-import javax.swing.text.View;
 
 import players.ComputerPlayer;
 import players.HumanPalyer;
 import players.Player;
 import ringz.Board;
 import ringz.Color;
-import ringz.Game;
 import ringz.Move;
 import view.*;
 
-/**
- * Peer for a simple client-server application
- * @author  Theo Ruys
- * @version 2005.02.21
- */
+
 public class Peer extends Observable implements Runnable{
 	
 	public static final String DELIMITER = ";";
@@ -68,7 +62,6 @@ public class Peer extends Observable implements Runnable{
 	public static final String PLAYER_STATUS = "ps";
 	public static final String GAME_STARTED = "gs";
 	//--------Playing game-------
-	public static final String STARTING_PLAYER = "sp";
 	public static final String MAKE_MOVE = "mm";
 	public static final String MOVE = "mv";
 	//------ending game----
@@ -86,15 +79,16 @@ public class Peer extends Observable implements Runnable{
     
     private Board board;
     private Player clientPlayer;
-    private TUI view;
+    private View view;
     private HashMap<String, Color> playerColors;
     private String nature;
     private int numberPlayers;
     private boolean gameinProgress;
+    private boolean yourTurn = false;
 
 
     /*@
-       requires (nameArg != null) && (sockArg != null);
+       requires (nameArg != null) && (sockArg != null); 
      */
     /**
      * Constructor. creates a peer object based in the given parameters.
@@ -103,10 +97,12 @@ public class Peer extends Observable implements Runnable{
      */
     public Peer(String playerName, String playerType, Socket sockArg) throws IOException {
     	this.nature = playerType;
+    	this.playerColors = new HashMap<String, Color>();
     	this.sock = sockArg;
     	this.gameinProgress = false;
     	this.name = playerName;
     	this.view = new TUI(name);
+    	this.addObserver(view);
     	in = new BufferedReader(new InputStreamReader(sockArg.getInputStream()));
     	out = new BufferedWriter(new OutputStreamWriter(sockArg.getOutputStream()));
     	sendfirstPack();
@@ -116,17 +112,22 @@ public class Peer extends Observable implements Runnable{
      * Reads strings of the stream of the socket-connection and
      * writes the characters to the default output.
      */
-    public void  run() {
+    public void  run() { 
     	try {
     		String message = in.readLine();
     		while (message != null) {
-    			dealWithMessage(message);    
+    			System.out.println(message);
+    			dealWithMessage(message);  
+    			message = in.readLine();
     		}
+    		System.out.println("You have been disconected");
     		shutDown();
-		} catch (IOException e) {
-			System.out.println("sth wrong in run");
+		} catch (SocketException e) {
+			System.out.println("You have been disconected");
 			shutDown();
-			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Something else went wrong");
+			shutDown();
 		}
     }
 
@@ -141,20 +142,21 @@ public class Peer extends Observable implements Runnable{
      */
     public  void lobby() {
     	this.setChanged();
-    	this.notifyObservers("joined");
+    	notifyObservers("joined");
     	String todo = view.whattoDo(this.nature);
-    	while (!todo.equals("exit") && gameinProgress == false) {
+    	if (!todo.equals("exit")) {
     		sendPackage(todo);
-    		todo = view.whattoDo(this.nature);
+    	} else {
+    		sendPackage(PLAYER_DISCONNECTED);
+    		shutDown();
     	}
-    	shutDown();
-    	System.exit(0);
     	
     }
     
     public void sendPackage(String sendPackage) {
     	try {
     		out.write(sendPackage);
+    		System.out.println(sendPackage);
     		out.newLine();
     		out.flush();
     	} catch (IOException e) {
@@ -166,37 +168,45 @@ public class Peer extends Observable implements Runnable{
     
     public void dealWithMessage(String message) {
     	String[] words = message.split(DELIMITER);
-    	this.hasChanged();
+    	this.setChanged();
     	switch (words[0]) {
-    		case JOINED_LOBBY: {
-    			this.notifyObservers("lobby");
-    			this.gameinProgress = true;
-    			break;
-    		}
     		case CONNECT: {
     			if (words[1].equals(ACCEPT)) {
         			this.notifyObservers("accepted");
+        			lobby();
     			} else {
         			this.notifyObservers("denied");
+        			shutDown();
+                    System.exit(0);
+    			}
+    			break;
+    		}
+    		case JOINED_LOBBY: {
+    			this.notifyObservers("lobby");
+    			if (gameinProgress == true) {
+    				notifyObservers("sdeclined");
+    				lobby();
+    				gameinProgress = false;
     			}
     			break;
     		}
     		case ALL_PLAYERS_CONNECTED: {
     			String acceptance = view.acceptGame(words);
     			if (acceptance.equals("0")) {
+    				gameinProgress = true;
         			this.notifyObservers("gameacc");
     				sendPackage(PLAYER_STATUS + DELIMITER + acceptance);
-    				this.createBoard(words);
-    			}
-    			else {
+    			} else {
     				sendPackage(PLAYER_STATUS + DELIMITER + acceptance);
         			this.notifyObservers("gamedeny");
+        			gameinProgress = false;
+        			lobby();
     			}
     			break;
     		}
     		case GAME_STARTED: {
     			this.notifyObservers("gamestart");
-    			view.showPieces(clientPlayer);
+				this.createBoard(words);
     			break;
     		}
     		case MAKE_MOVE: {
@@ -204,11 +214,18 @@ public class Peer extends Observable implements Runnable{
     			break;
     		}
     		case MOVE: {
-    			board.addCircle(stringTomove(words));
+    			if (words[3].equals(STARTING_BASE)) {
+    				int[] startCoordinates = {Integer.valueOf(words[1], //line 
+    						Integer.valueOf(words[2])) }; //column
+    				board.placeStart(startCoordinates);
+    			} else {
+    				board.addCircle(stringTomove(words));
+    			}
     			break;
     		}
     		case GAME_ENDED: {
     			view.displayEnd(words);
+    			lobby();
     			break;
     		}
     		case PLAYER_DISCONNECTED: {
@@ -228,11 +245,13 @@ public class Peer extends Observable implements Runnable{
 			notifyObservers("first");
 			sendPackage(askFirst());
 		} else {
-			if (this.nature.equals(HUMAN_PLAYER)) {
-				sendPackage(MOVE + moveTostring(view.askMove(clientPlayer, board)));	
-			} else {
-				sendPackage(MOVE + moveTostring(clientPlayer.determineMove(board)));
-			}
+			sendPackage(moveTostring(clientPlayer.determineMove(board)));	
+			yourTurn = true;
+//			if (this.nature.equals(HUMAN_PLAYER)) {
+//				sendPackage(MOVE + moveTostring(clientPlayer.determineMove(board)));	
+//			} else {
+//				sendPackage(MOVE + moveTostring(clientPlayer.determineMove(board)));
+//			}
 		}
     }
     
@@ -242,7 +261,7 @@ public class Peer extends Observable implements Runnable{
      * @return
      */
     public String moveTostring(Move move) {
-    	String stringy = "";
+    	String stringy = MOVE + DELIMITER;
     	stringy += move.getLine() + DELIMITER 
     				+ move.getColumn() + DELIMITER 
     				+ (move.getCircle() + 1);
@@ -270,9 +289,18 @@ public class Peer extends Observable implements Runnable{
     	color = playerColors.get(words[3] + PRIMARY);
     	if (words.length == 6) {
     		color = playerColors.get(words[3] + words[5]);
+    		int colorIndex = Integer.valueOf(words[5]);
+    		if (yourTurn == true) {
+        		clientPlayer.decresePiece(colorIndex, circlesize);
+        	}
+    	} else { 
+    		if (yourTurn == true) {
+        		clientPlayer.decresePiece(0, circlesize);
+        	}
     	}
     	int[] coordinates = {circlesize, line, column};
     	
+    	yourTurn = false;
     	return new Move(coordinates, color);    	
     }
     
@@ -284,13 +312,10 @@ public class Peer extends Observable implements Runnable{
      */
     public String askFirst() {
     	int[] firstMove;
-		if (this.nature.equals(HUMAN_PLAYER)) {
-			firstMove = view.getStart();
-		} else {
-			firstMove = clientPlayer.getStart();
-		}
+		firstMove = clientPlayer.getStart();
 		String stringy = "";
-		stringy += MOVE + firstMove[0] + DELIMITER + firstMove[1] + DELIMITER + STARTING_BASE;
+		stringy += MOVE + DELIMITER + firstMove[0] + DELIMITER + firstMove[1] 
+												 + DELIMITER + STARTING_BASE;
 		return stringy;
     }
     
@@ -308,12 +333,12 @@ public class Peer extends Observable implements Runnable{
 			playerColors.put(words[2] + PRIMARY, Color.YELLOW);
 			playerColors.put(words[2] + SECONDARY, Color.GREEN);
 			
-			//Also creates local player so we can keep track of the pieces and show them
+		   //Also creates local player so we can keep track of the pieces and can be asked for moves
 			if (this.nature.equals(HUMAN_PLAYER)) {
 				this.clientPlayer = new HumanPalyer(numberPlayers, 
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
-						this.name);
+						this.name, this.view);
 			} else {
 				this.clientPlayer = new ComputerPlayer(numberPlayers,
 						playerColors.get(name + PRIMARY),
@@ -330,12 +355,13 @@ public class Peer extends Observable implements Runnable{
 			playerColors.put(words[1] + SECONDARY, Color.BLUE);
 			playerColors.put(words[2] + SECONDARY, Color.PURPLE);
 			playerColors.put(words[3] + SECONDARY, Color.YELLOW);
-			//Also creates local player so we can keep track of the pieces and show them
+			
+		   //Also creates local player so we can keep track of the pieces and can be asked for moves
 			if (this.nature.equals(HUMAN_PLAYER)) {
 				this.clientPlayer = new HumanPalyer(numberPlayers, 
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
-						this.name);
+						this.name, this.view);
 			} else {
 				this.clientPlayer = new ComputerPlayer(numberPlayers,
 						playerColors.get(name + PRIMARY),
@@ -350,9 +376,11 @@ public class Peer extends Observable implements Runnable{
 			playerColors.put(words[2], Color.PURPLE);
 			playerColors.put(words[3], Color.YELLOW);
 			playerColors.put(words[4], Color.GREEN);
-			//Also creates local player so we can keep track of the pieces and show them
+			
+		   //Also creates local player so we can keep track of the pieces and can be asked for moves
 			if (this.nature.equals(HUMAN_PLAYER)) {
-				this.clientPlayer = new HumanPalyer(playerColors.get(name + PRIMARY), name);
+				this.clientPlayer = new HumanPalyer(playerColors.get(name + PRIMARY), 
+						name, this.view);
 			} else {
 				this.clientPlayer = new ComputerPlayer(playerColors.get(name + PRIMARY), name);
 			}
@@ -362,31 +390,14 @@ public class Peer extends Observable implements Runnable{
 
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     /**
      * Closes the connection, the sockets will be terminated.
      */
     public void shutDown() {
     	try {
+    		//System.out.println("'his bin shot");
+    		//System.out.println(Thread.currentThread().getStackTrace());
 			sock.close();
-	    	System.exit(0);
 		} catch (IOException e) {
 			System.err.println("sth wrong in shutdow");
 			e.printStackTrace();

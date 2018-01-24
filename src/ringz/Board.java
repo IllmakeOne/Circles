@@ -193,7 +193,7 @@ public class Board extends Observable {
 	 * crutch function. inverse of colorIndex
 	 * return blue for 0, purple for 1 , yellow for 2 and green for 3.
 	 * @param i, integer which needs to be converted.
-	 * @return color, the colour correlated with this integer.
+	 * @return color, the color correlated with this integer.
 	 */
 	/*@
 	 * ensures \result >= -1 && \result <= 3
@@ -229,10 +229,10 @@ public class Board extends Observable {
 	 * 	requires x >= 0 && x <= 4;
 	 * 	 
 	 */
-	public  /*@ pure */ int[] tallyUp(int x, int y) {
+	public  /*@ pure */ int[] tallyUp(int line, int column) {
 		int[] tally = new int[4];
 		for (int ringsize = 1; ringsize < 5; ringsize++) {
-			colorIndex(getRing(x, y, ringsize));
+			tally[colorIndex(getRing(line, column, ringsize))]++;
 		}
 		return tally;
 	}
@@ -255,7 +255,7 @@ public class Board extends Observable {
 						sum[arrayMaximum(tallyUp(i, j))]++;
 					}
 				}
-			}
+			} 
 		}
 	
 		return sum;
@@ -507,18 +507,7 @@ public class Board extends Observable {
 		return true;
 	}
 	
-//	/**
-//	 * tests if the board is still playable.
-//	 * it is not playabl ehwen no aplyer is able to palce any more rings.
-//	 * @return
-//	 */
-//	public boolean isPayable() {
-//		boolean test = isFull();
-//		if (this.isFull()) {
-//			return false;
-//		}
-//		return true;
-//	}
+
 	public /*@ pure */ void display() {
 		for (int i = 0; i < 5; i++) {
 			String croth = "";

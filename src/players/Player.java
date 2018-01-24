@@ -6,18 +6,22 @@ import ringz.Move;
 
 public interface Player {
 
-	public String getName();
+	/* @ensure \result != null */
+	public /*pure*/ String getName();
 		
-	public Color[] getColor();
+
+	/* @ensure \result != null */
+	public /*pure*/ Color[] getColor();
 	
-	public int[][] getPieces();
+
+	/* @ensure \result != null */
+	public /*pure*/ int[][] getPieces();
 	
 //	public Color chooseColor(Color c1, Color c2);
 	
 	public int[] getStart();
 	
 	public boolean isOutOfPieces();
-
 
 	public Move determineMove(Board bord);
 

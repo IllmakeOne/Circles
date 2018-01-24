@@ -1,11 +1,15 @@
 package ringz;
 
-import java.util.Observer;
 
 import players.ComputerPlayer;
 import players.HumanPalyer;
 import players.Player;
+import ringz.Board;
+import ringz.Color;
 import view.*;
+
+import java.util.Observer;
+
 
 public class Game {
 	
@@ -143,7 +147,7 @@ public class Game {
 //		players[2] = new ComputerPlayer(Color.YELLOW, "3");
 //		players[3] = new ComputerPlayer(Color.GREEN, "4");
 		
-		Game game = new Game(players, new TUI());
+		Game game = new Game(players, new TUI("name"));
 		game.play();
 		
 	}

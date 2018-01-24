@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
+
 import players.HumanPalyer;
 import players.Player;
 import ringz.*;
@@ -27,19 +28,26 @@ public class TUI implements Observer, View {
     public String acceptGame(String[] message) {
     	System.out.println("A game has been found");
     	System.out.println("You would play against:");
-    	for (int i = 0; i < message.length; i++) {
+    	for (int i = 1; i < message.length; i++) {
     		if (!message[i].equals(this.name)) {
     			System.out.println(i + ".  " + message[i]);
     		}
     	}
     	System.out.println("Do you wish to accept Accept or Decline");
-    	String scan = readString("][< ");
-    	while (!scan.equals("Accept") || !scan.equals("Decline")) {
-    		System.out.println("Please give valid resonse");
-    		scan = readString("][< ");
-    	}
+    	String input = readString("][< ");
+    	int flag = 0;
+		while (flag == 0) {
+			if (input.equals("Accept")) {
+				flag = 1;
+			} else if (input.equals("Decline")) {
+				flag = 1;
+			} else {
+				System.out.println("Please give valid input");
+				input = readString("[]>");
+			}
+		}
     	
-    	if (scan.equals("Accept")) {
+    	if (input.equals("Accept")) {
     		return "0";
     	} else {
     		return "1";
@@ -161,7 +169,7 @@ public class TUI implements Observer, View {
 	@Override
 	public void showPieces(Player play) {
 		int[][] pieces = play.getPieces();
-		Color[] color = play.getColor();
+		Color[] color = play.getColor(); 
 		int colorcount = 2;
 		if (color[1] == null) {
 			colorcount = 1;
@@ -239,23 +247,36 @@ public class TUI implements Observer, View {
 			System.out.println("You have veen accepted, you ahve been connected");
 		
 		} else if (arg1.equals("denied")) {
-			System.out.println("Thee not worthy");
+			System.out.println("Thee not worthy (some else has the username)");
 		
 		} else if (arg1.equals("gameacc")) {
 			System.out.println("You have accepted the game");
+		
+		} else if (arg1.equals("gamedeny")) {
+			System.out.println("You have denied the game");
 		
 		} else if (arg1.equals("gamestart")) {
 			System.out.println("The game has started");
 			
 		} else if (arg1.equals("joined")) {
 			System.out.println("Hello, what would you like to do?");
+			
+		} else if (arg1.equals("sdeclined")) {
+			System.out.println("Someone decline the game");
+			
+		} else if (arg1.equals("first")) {
+			System.out.println("You are going first");
 		}
 	}
 	
 	
+	/**
+	 * this functions determine what the clients wants to do while he/she is in the lobby.
+	 * 
+	 */
 	public String whattoDo(String nature) {
 		String stringy = "";
-		System.out.println("For now just lookf for a game , type Request game\n");
+		System.out.println("For now just look for a game , type Request game\n");
 		String input = readString("[]>");
 		int flag = 0;
 		while (flag == 0) {
@@ -278,6 +299,19 @@ public class TUI implements Observer, View {
 		return stringy;
 	}
 	
+//	/**
+//	 * this function display the oponents.
+//	 */
+//	public void showOponents(String[] oponents) {
+//		for (int i = 1; i < oponents.length; i++) {
+//			System.out.println(i + ". " + oponents[i]);
+//		}
+//	}
+	
+	/**
+	 * if the clients decides to request a game this will determine which type of game they want.
+	 * @return
+	 */
 	public String[] requestGame() {
 		
 		String[] end = new String[2];
@@ -446,7 +480,7 @@ public class TUI implements Observer, View {
     				+ "( must be in the inneer circle \n"
     				+ " first lien then column, both msu tbe betwen 1 and 3 \n");
     		String line = in.nextLine();
-    		words = line.split(" ");
+    		words = line.split(" "); 
     		if (words.length == 2) {
     			for (int i = 0; i < words.length; i++) {
     				move[i] = Integer.parseInt(words[i]);
@@ -462,6 +496,9 @@ public class TUI implements Observer, View {
     	in.close();
     	return move;
     }
+
+
+
 }
 
 

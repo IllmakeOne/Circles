@@ -6,21 +6,25 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.SocketException;
+import java.security.MessageDigest;
 import java.util.HashMap;
+import java.util.Observable;
 import java.util.prefs.PreferencesFactory;
 
-import Players.Player;
-import Ringz.Board;
-import Ringz.Color;
-import View.TUI;
+import javax.management.Notification;
 
-public class ServerPeer implements Runnable {
+import players.Player;
+import ringz.Board;
+import ringz.Color;
+import view.TUI;
+
+public class ServerPeer extends Observable implements Runnable{
 	
 	public static final String DELIMITER = ";";
 	
     public static final String ACCEPT	= "0";
 	public static final String DECLINE	= "1";
-	
 	
 	public static final String NEUTRAL	= "2";
 	public static final String COMPUTER_PLAYER	= "0";
@@ -69,14 +73,11 @@ public class ServerPeer implements Runnable {
     
     protected boolean ready = false;
     
-    private Board board;
-    private Player clientPlayer;
-    private TUI view;
-    private HashMap<String, Color> playerColors;
     private String nature;
     private int numberPlayers;
-    private boolean gameinProgress;
+    private boolean ingame = false;;
     private Lobby lobby;
+    private String message = "";
 
     
     public ServerPeer(Socket socc, Lobby lobby) {
@@ -86,27 +87,53 @@ public class ServerPeer implements Runnable {
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
 		} catch (IOException e) {
-			System.err.println("Sth wrong in ServerPeer");
+			System.err.println("Sth wrong in ServerPeer creation");
 			e.printStackTrace();
 		}
     }
     
     public void  run() {
     	try {
-    		String message = in.readLine();
+    		message = in.readLine();
+			dealWithMessage(message); 
     		while (message != null) {
-    			dealWithMessage(message);    
+    			System.out.println(message + " message read in run " + this.name); 
+    			message = in.readLine();
+    			dealWithMessage(message); 
     		}
-    		shutDown();
-		} catch (IOException e) {
-			System.out.println("sth wrong in run");
+    	//	shutDown();
+    	} catch (SocketException e) {
+			System.out.println(name + " disconected");
+			lobby.diconected(this);
 			shutDown();
-			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Something else went wrong");
+			lobby.diconected(this);
+			shutDown();
 		}
     }
     
-    public void dealWithMessage(String message) {
-    	String[] words = message.split(DELIMITER);
+//    /**
+//     * reads only one package.
+//     */
+//    public String getMessage() {
+//    	String message = null;
+//    	try {
+//    		message = in.readLine();
+//    	} catch (SocketException e) {
+//			System.out.println("cant read only one package");
+//			shutDown();
+//		} catch (IOException e) {
+//			System.out.println("Something else went wrong");
+//			shutDown();
+//		}
+//    	return message;
+//    }
+//    
+    
+    
+    public void dealWithMessage(String input) {
+    	String[] words = input.split(DELIMITER); 
     	switch (words[0]) {
     		case CONNECT: {
     			if (lobby.addtoClientList(words[1])) {
@@ -119,52 +146,87 @@ public class ServerPeer implements Runnable {
     			}
     			break;
     		}
+    		case PLAYER_STATUS: {
+    			setChanged();
+    			if (words[1].equals(ACCEPT)) {
+    				notifyObservers("gameaccepted");
+    			} else if (words[1].equals(DECLINE)) {
+    				notifyObservers("gamedeny");
+    			}
+    			break;
+    		}
     		case GAME_REQUEST: {
-    			sendPackage(LOBBY);
+    			sendPackage(JOINED_LOBBY);
     			//Preferences is of this format : 
     			//[0]number_players//[1]player_type//[2]prefered_oponent_type
     			String[] preferences = new String[3];
-    			preferences[0] = words[1];
+    			preferences[0] = words[1]; 
     			preferences[1] = words[2];
     			if (words.length == 4) {
     				preferences[2] = words[3];
     			} else {
     				preferences[2] = NEUTRAL;
     			}
-    			lobby.addtoWaitingList(sock, preferences);
-    			Socket[] players = lobby.startableGame(preferences);
-    			if (players != null) {
-    				for ()
-    				
+    			lobby.addtoWaitingList(this, preferences);
+    			ServerPeer[] players = lobby.startableGame(this);
+    			if (players != null) { 
+    				ingame = true;
+    				lobby.startGame(players);
     			}
+    			break;
+    		}
+    		case MOVE: {
+    			setChanged();
+    			notifyObservers(words);
+    			break;
+    		}
+    		case PLAYER_DISCONNECTED: {
+    			lobby.diconected(this);
+    			shutDown();
+    			break;
     		}
     	}
     }
     		
     
-//    public void receivefirstPack() {
-//    	String message;
-//		try {
-//			message = in.readLine();
-//			String[] words = message.split(DELIMITER);
-//			if (words[0].equals(CONNECT)) {
-//				if (lobby.addtoClientList(words[1])) {
-//					sendPackage(CONNECT + DELIMITER + ACCEPT);
-//					this.name = words[1];
-//				} else {
-//					sendPackage(CONNECT + DELIMITER + DECLINE);
-//					shutDown();
-//				}
-//			}
-//		} catch (IOException e) {
-//			System.out.println("its null??");
-//			e.printStackTrace();
-//		}
-//    }
-    
-    public void lobby() {
-    	
+    public String getName() {
+    	return this.name;
     }
+    
+    public Socket getSocket() {
+    	return this.sock;
+    }
+    
+    public void inGame() {
+    	ingame = true;
+    }
+    
+    public boolean isReady() {
+    	return ready;
+    }
+    
+    /**
+     * Closes the connection, the sockets will be terminated.
+     */
+    public void shutDown() {
+    	try {
+			sock.close();
+		} catch (IOException e) {
+			System.out.println("sth wrong in run");
+			shutDown();
+			e.printStackTrace();
+		}
+    }
+    
+    public BufferedReader getIN() {
+    	return this.in;
+    }
+    
+    
+    public String getCurretMessage() {
+    	return this.message;
+    }
+ 
     
     /**
      * sends a package.
@@ -172,6 +234,7 @@ public class ServerPeer implements Runnable {
      */
     public void sendPackage(String sendPackage) {
     	try {
+    		System.out.println(sendPackage + " in send packaage");
     		out.write(sendPackage);
     		out.newLine();
     		out.flush();
@@ -183,19 +246,7 @@ public class ServerPeer implements Runnable {
     
     
     
-    /**
-     * Closes the connection, the sockets will be terminated.
-     */
-    public void shutDown() {
-    	try {
-			sock.close();
-	    	System.exit(0);
-		} catch (IOException e) {
-			System.err.println("sth wrong in shutdow");
-			e.printStackTrace();
-		}
-    }
-    
+
     
     
     

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import players.HumanPalyer;
 import ringz.Board;
 import ringz.Color;
+import view.TUI;
 
 class HumanPlayerTest {
 	private HumanPalyer playervs1;
@@ -15,9 +16,11 @@ class HumanPlayerTest {
 	private HumanPalyer playervs3;
 	@BeforeEach
 	void setUp() throws Exception {
-		playervs3 = new HumanPalyer(Color.YELLOW, "the best playa ewaa");
-		playervs2 = new HumanPalyer(3, Color.GREEN, Color.YELLOW, "the best playa ewaa");
-		playervs1 = new HumanPalyer(2, Color.GREEN, Color.YELLOW, "the best playa ewaa");
+		playervs3 = new HumanPalyer(Color.YELLOW, "the best playa ewaa", new TUI(""));
+		playervs2 = new HumanPalyer(3, Color.GREEN, Color.YELLOW, 
+				"the best playa ewaa", new TUI(""));
+		playervs1 = new HumanPalyer(2, Color.GREEN, Color.YELLOW, 
+				"the best playa ewaa", new TUI(""));
 	}
 
 	@Test
@@ -103,5 +106,12 @@ class HumanPlayerTest {
 	void testDetermineMove() {
 		assertEquals(1, 1);
 		//not needed
+	}
+	
+	@Test
+	public void testgetFirst() {
+		int[] a = playervs1.getStart();
+		assertTrue(a[0] == 1);
+		assertTrue(a[1] == 2);
 	}
 }
