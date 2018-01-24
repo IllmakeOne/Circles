@@ -61,8 +61,9 @@ public class FourPlayerSmart implements Strategy {
 			if(this.board.fieldHas(apply.getLine(), apply.getColumn(),colors[0])) {
 				badMove = new Double(-30000);//don't place a ring on a field already won
 			} else {
-				if (isEnemys(apply) >= 0 );
-				//canBeContested
+				if (isEnemys(apply) != board.colorIndex(colors[0]) && isEnemys(apply) != -1)  {
+					canbecontested(apply, isEnemys(apply));
+				}
 			}
 			
 			int circle = apply.getCircle();
@@ -96,34 +97,36 @@ public class FourPlayerSmart implements Strategy {
 		}
 		return -1;
 	}
-	public boolean canBeContested(Move m) {
-		//Color[] pin = board.getPin(m.getLine(), m.getColumn());
-		int[] pin = board.tallyUp(m.getLine(), m.getColumn());
-		int skipthisone = board.colorIndex(colors[0]); //somehow don't check for own place
-		int 
-		if(pin[skipthisone] == 1 && board.tallyUp(x, y)) {//if you have 0 and another color already has 2 don't place,
-			for (int i = 0; i < skipthisone ; i++) {//if someone has more then 3 pieces, not contestable
-				if(  pin[i] >= 3 ) {
+	public int circlesPlaced(int x, int y) {
+		int[] pin = board.tallyUp(x, y);
+		int total = 0;
+		for (int i = 0; i < 4; i++) {
+			total = total + pin[i];
+		}
+		return total;	
+	}
+	public boolean canBeContested(Move m, int enemyColor) {
+		int x = m.getLine();
+		int y = m.getLine();
+		int owncolor = board.colorIndex(colors[0]);
+		int[] pin = board.tallyUp(x, y);
+		int otherColor = circlesPlaced(x, y) - owncolor - pin[enemyColor];
+		switch (pin[enemyColor]) {
+			case 2: {
+				if (otherColor == 1) {
 					return false;
-				}
+				} else if (otherColor == 0 && pin[owncolor] == 1) {
+					return true;
+				}	
 			}
-			for (int i = skipthisone + 1; i < 4 ; i++) {
-				if(  pin[i] > 3 ) {
-					return false;
-				}
-			}
-			for (int i = 0; i < skipthisone ; i++) {//if someone has more then 3 pieces, not contestable
-				if(  pin[i] >= 3 ) {
-					return false;
-				}
-			}
-			for (int i = skipthisone + 1; i < 4 ; i++) {
-				if(  pin[i] >= 3 ) {
-					return false;
-				}
+			case 1: {
+				
 			}
 		}
-		return true;		
+		if (pin[enemyColor] == 2) {
+			
+		}
+		return false;	
 	}
 	public Double MovesModifier(Board board, int[][] pieces,Board copy, int[][] remainPiece) {
 		//HashMap<Move, Double> moves = new HashMap<Move, Double>();
