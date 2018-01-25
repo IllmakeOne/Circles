@@ -147,7 +147,6 @@ public class Peer extends Observable implements Runnable {
     	if (!todo.equals("exit")) {
     		sendPackage(todo);
     	} else {
-    		sendPackage(PLAYER_DISCONNECTED);
     		shutDown();
     	}
     	
@@ -215,6 +214,7 @@ public class Peer extends Observable implements Runnable {
     			break;
     		}
     		case MOVE: {
+    			notifyObservers("move" + words[3]);
     			if (words[4].equals(STARTING_BASE)) {
     				int[] startCoordinates = {Integer.parseInt(words[1]), //line 
     						Integer.parseInt(words[2]) }; //column
@@ -405,6 +405,7 @@ public class Peer extends Observable implements Runnable {
     	try {
     		//System.out.println("'his bin shot");
     		//System.out.println(Thread.currentThread().getStackTrace());
+    		sendPackage(PLAYER_DISCONNECTED);
 			sock.close();
 		} catch (IOException e) {
 			System.err.println("sth wrong in shutdow");

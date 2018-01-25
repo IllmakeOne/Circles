@@ -1,5 +1,7 @@
 package online;
 
+import static org.junit.jupiter.api.Assumptions.assumingThat;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,10 +81,15 @@ public class OnlineGame implements Runnable, Observer{
 					current = (current + 1) % numberOfplayers;
 	    		} else {
 	    			Move currentmove = players.get(current).determineMove(board);
-	    			if (board.addCircle(currentmove)) {
-	    				players.get(current).decresePiece(currentmove);
-	    				current = (current + 1) % numberOfplayers;
-	    			} 
+	    			try {
+	    				if (board.addCircle(currentmove)) {
+	    					players.get(current).decresePiece(currentmove);
+	    					sendMoveToall(currentmove, players.get(current).getName());
+	    					current = (current + 1) % numberOfplayers;
+	    				}
+	    			} catch (NullPointerException e) {
+	    				lobby.diconected(players.get(current).getSocket());
+	    			}
 	    		}
 	    	}
 	    	
@@ -279,8 +286,14 @@ public class OnlineGame implements Runnable, Observer{
 		return aux;
 	}
 	
-	public void someoneLeft() {
+	public void someoneLeft(ServerPeer leaver) {
 		this.somoneoneDisconected = true;
+		String stringy = ServerPeer.PLAYER_DISCONNECTED + ServerPeer.DELIMITER + leaver.getName();
+		for (int i = 0; i < plays.length; i++) {
+			if (plays[i] != leaver) {
+				plays[i].sendPackage(stringy);
+			}
+		}
 	}
 
 	

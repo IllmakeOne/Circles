@@ -90,7 +90,6 @@ public class TUI implements Observer, View {
 		}
 		
 		//((HumanPalyer) play).decresePiece(colorIndex, move[0]);
-		in.close();
 		return new Move(move, play.getColor()[colorIndex]);
 	}
 	
@@ -266,6 +265,8 @@ public class TUI implements Observer, View {
 			
 		} else if (arg1.equals("first")) {
 			System.out.println("You are going first");
+		} else if (arg1.toString().startsWith("move")) {
+			System.out.println(arg1.toString().substring(4) + " made the move");
 		}
 	}
 	
@@ -362,8 +363,8 @@ public class TUI implements Observer, View {
 	//------------------Stuff to help with the reading of a move ----------------
 	
 		/**
-		 * reads form user three numbers, cirlce zize, lien and column.
-		 * @param move is the arraty int that remebrts the user's input
+		 * reads form user three numbers, circle size, lien and column.
+		 * @param move is the array int that remebers the user's input
 		 * @param colorIndex is the index of the color of the player
 		 */
 	public void readMove(int[] move, int colorIndex, Player play) {
@@ -372,7 +373,9 @@ public class TUI implements Observer, View {
 		while (flag == 1) {
 			System.out.println("Please give move \n"
 					+ "The first number is the size of the piece, \n"
-					+ "The second number the line and the thirds , the column \n");
+					+ "The second number the line and the thirds , the column \n"
+					+ "Coodinates betwen 1 and 5 \n"
+					+ "1 base; 2 small ; 3 medium ; 4 large ; 5 largest;");
 			String line = readString("[]>");
 			words = line.split(" ");
 			if (words.length == 3) {
@@ -387,8 +390,8 @@ public class TUI implements Observer, View {
 	}
 	
 	/**
-	 * a fcntion that tests if the given parametre, a int arraty, is valid as a move.
-	 * this fucntion is only used in determineMove as a cruthch.
+	 * a function that tests if the given parameter, a int array, is valid as a move.
+	 * this function is only used in determineMove as a crutch.
 	 * @param x
 	 * @return
 	 */
@@ -439,7 +442,6 @@ public class TUI implements Observer, View {
 			
 			in = new Scanner(System.in);
 		}
-		in.close();
 		return choce;
 	}
 	
@@ -490,7 +492,6 @@ public class TUI implements Observer, View {
     		}
     		in = new Scanner(System.in);
     	}
-    	in.close();
     	return move;
     }
 

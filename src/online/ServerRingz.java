@@ -44,8 +44,8 @@ public class ServerRingz {
     		System.out.println("ERROR: could not create a socket ");
     	}
 
-    	Thread lobb = new Thread(lobby);
-    	lobb.start();
+    	Thread lobbyThread = new Thread(lobby);
+    	lobbyThread.start();
     	
 	    while (ison) {
 	    	

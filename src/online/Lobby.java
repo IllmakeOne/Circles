@@ -127,14 +127,15 @@ public class Lobby implements Runnable, Observer{
 	 */
 	public void diconected(ServerPeer client) {
 		clients.remove(client.getName());
-		playersWaiting.remove(client);
+		playersWaiting.remove(client);//here
 		for (int i = 0; i < ongoingGames.size(); i++) {
 			if (ongoingGames.get(i).getPlayersasList().contains(client)) {
-				ongoingGames.get(i).someoneLeft();
+				ongoingGames.get(i).someoneLeft(client);
 				ongoingGames.remove(ongoingGames.get(i));
 				break;
 			}
 		}
+		client.shutDown();
 	}
 	
 

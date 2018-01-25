@@ -171,7 +171,6 @@ public class ServerPeer extends Observable implements Runnable {
     			}
     			lobby.addtoWaitingList(this, preferences);
     			notifyObservers("added");
-    			
     			break;
     		}
     		case MOVE: {

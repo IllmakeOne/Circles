@@ -2,6 +2,7 @@ package online;
 
 
 import java.io.IOException;
+import java.net.SocketException;
 
 import players.Player;
 import ringz.Board;
@@ -145,10 +146,12 @@ public class ClientPlayer implements Player {
 			if (words[0].equals(ServerPeer.MOVE)) {
 				move = stringTomove(words);
 			}
+		} catch (SocketException e) {
+			sock.shutDown();
 		} catch (IOException e) {
 			System.out.println("Coulnt read move when asked ot make a move");
 			e.printStackTrace();
-		}
+		} 
 		return move;
 	}
 
