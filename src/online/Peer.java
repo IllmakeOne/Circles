@@ -159,7 +159,6 @@ public class Peer extends Observable implements Runnable {
     		out.newLine();
     		out.flush();
     	} catch (IOException e) {
-    		System.out.println("Something wrong in sending Package in Peer");
     		shutDown();
     	}
     }
@@ -228,6 +227,7 @@ public class Peer extends Observable implements Runnable {
     		}
     		case GAME_ENDED: {
     			view.displayEnd(words);
+    			gameinProgress = false;
     			lobby();
     			break;
     		}
@@ -410,6 +410,8 @@ public class Peer extends Observable implements Runnable {
 		} catch (IOException e) {
 			System.err.println("sth wrong in shutdow");
 			e.printStackTrace();
+		} catch (StackOverflowError e) {
+			System.out.println(" Server closed ");
 		}
     }
 

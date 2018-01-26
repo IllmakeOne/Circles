@@ -10,6 +10,7 @@ import strategies.FourPlayerStrategy;
 import strategies.Strategy;
 import strategies.ThreePlayerStrategy;
 import strategies.TwoPlayerStragegy;
+import view.TUI;
 
 public class ComputerPlayer implements Player {
 
@@ -22,7 +23,7 @@ public class ComputerPlayer implements Player {
 	public ComputerPlayer(Color c, String name) {
 		this.color = new Color[2];
 		this.color[0] = c;	
-		this.name = "computer two players " + name + " " + strateg.getName();
+		this.name = "computer four players " + name + " " + strateg.getName();
 		this.pieces = new int[5][5];
 		for (int i = 0; i < 5; i++) {
 			this.pieces[0][i] = 3;
@@ -56,8 +57,10 @@ public class ComputerPlayer implements Player {
 	
 	@Override
 	public Move determineMove(Board bord) {
+		TUI tui = new TUI("gaU");
+		tui.showPieces(this);
 		Move move = strateg.determineMove(bord, this.pieces);
-		pieces[0][move.getCircle()]--;
+		//pieces[0][move.getCircle()]--;
 		return move;
 	}
 

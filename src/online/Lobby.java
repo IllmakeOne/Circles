@@ -6,15 +6,19 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Lobby implements Runnable, Observer{
+import view.ServerTUI;
+
+public class Lobby implements Runnable{
 	
 	private ArrayList<String> clients;
 	private String name;
 	public boolean running = true;
 	private HashMap<ServerPeer, String[]> playersWaiting; 
 	private ArrayList<OnlineGame> ongoingGames;
+	private ServerTUI tui;
 	
-	public Lobby(String name) {
+	public Lobby(String name, ServerTUI tui) {
+		this.tui = tui;
 		this.clients = new ArrayList<String>();
 		this.playersWaiting = new HashMap<ServerPeer, String[]>();
 		this.ongoingGames = new ArrayList<>();
@@ -32,10 +36,14 @@ public class Lobby implements Runnable, Observer{
 	
 	public void addtoWaitingList(ServerPeer socc, String[] preferences) {
 		playersWaiting.put(socc, preferences);
+		ServerPeer[] players = startableGame(socc);
+		if (players !=  null) {
+			new Thread(() -> startGame(players)).start();
+		}
 	}
 
 	public void run() {
-		while(running) {
+		while (running) {
 			
 		}
 		
@@ -105,17 +113,19 @@ public class Lobby implements Runnable, Observer{
 			playersWaiting.remove(players[i]);
 		}
 		OnlineGame game = new OnlineGame(players, this);
-		Thread newGame = new Thread(game);
+		//Thread newGame = new Thread(game);
 		ongoingGames.add(game);
-		newGame.start();
-		try {
-			newGame.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		game.run();
+		tui.gameStarted(players);
+//		try {
+//			game.join();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 		
 		if (ongoingGames.contains(game)) {
 			ongoingGames.remove(game);
+			tui.gameEnded(players);
 		}
 		
 	}
@@ -126,8 +136,15 @@ public class Lobby implements Runnable, Observer{
 	 * @param client
 	 */
 	public void diconected(ServerPeer client) {
-		clients.remove(client.getName());
-		playersWaiting.remove(client);//here
+		try {
+			clients.remove(client.getName());
+			if (playersWaiting.containsKey(client)) {
+				playersWaiting.remove(client);
+			}
+		} catch (StackOverflowError e) {
+			// do nothing, it means the payer was already removed somewhere
+			
+		}
 		for (int i = 0; i < ongoingGames.size(); i++) {
 			if (ongoingGames.get(i).getPlayersasList().contains(client)) {
 				ongoingGames.get(i).someoneLeft(client);
@@ -157,19 +174,19 @@ public class Lobby implements Runnable, Observer{
 		running = false;
 	}
 	
-
-	@Override
-	public void update(Observable o, Object arg) {
-		if (arg.equals("added")) {
-			ServerPeer[] players = startableGame((ServerPeer) o);
-			if (players !=  null) {
-				startGame(players);
-				
-			}
-		}
-		
-	}
-	
+//
+//	@Override
+//	public void update(Observable o, Object arg) {
+//		if (arg.equals("added")) {
+//			ServerPeer[] players = startableGame((ServerPeer) o);
+//			if (players !=  null) {
+//				new Thread(() -> startGame(players)).start();
+//				
+//			}
+//		}
+//		
+//	}
+//	
 	
 //	/**
 //	 * this functions asks all the clients who have.

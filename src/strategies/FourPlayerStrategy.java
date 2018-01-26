@@ -22,7 +22,7 @@ public class FourPlayerStrategy implements Strategy {
 	
 	@Override
 	public Move determineMove(Board bord, int[][] pieces) {
-		ArrayList<Move> move = bord.getPossibleMoves(colors[0], pieces);
+		ArrayList<Move> move = bord.getPossibleMoves(colors,  pieces);
 		int random = rand.nextInt(move.size());
 		return move.get(random);
 	}

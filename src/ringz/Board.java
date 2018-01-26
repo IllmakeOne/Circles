@@ -75,43 +75,43 @@ public class Board extends Observable {
 	
 	/**
 	 * return an array of possible moves a color can take.
-	 * @param color the colour of player's possible moves 
-	 * @return Arraylist<Move> list with all the possible moves
+	 * @param color the color of player's possible moves 
+	 * @return ArrayList<Move> list with all the possible moves
 	 */
 	
-	public /*@ pure */ ArrayList<Move> getPossibleMoves(Color color, int[][] pieces) {
+	public /*@ pure */ ArrayList<Move> getPossibleMoves(Color[] color, int[][] pieces) {
 //		int nrmoves = 0;
 		Move move = null;
-		int cnr = 0;
 		ArrayList<Move> list = new ArrayList<Move>();
-		for (int i = 0; i < DIM; i++) {
-			for (int j = 0; j < DIM; j++) {
-				if (hasFriend(i, j, color)) {
-					if (isCompletlyEmpty(i, j) &&
-							pieces[cnr][0] != 0) {
-						move = new Move(createArray(i, j, 0), color);
-						//System.out.println(getRing(j, j, 0));
-						//System.out.println(move);
-						list.add(move);
-						//return move;
-					} 
-					if (getRing(i, j, 0) == Color.EMPTY) {
-						for (int k = 1; k < DIFFPIECES; k++) {
-							if (getRing(i, j, k) == Color.EMPTY &&
-									pieces[cnr][k] != 0) {
-							//	System.out.println(getRing(j, j, 0));
-							//	System.out.println(getRing(j, j, k));
-								move = new Move(createArray(i, j, k), color);
-								list.add(move);
-							//	System.out.println(move);
-							//	return move;
+		for (int cnr = 0; cnr < color.length; cnr++){
+			for (int i = 0; i < DIM; i++) {
+				for (int j = 0; j < DIM; j++) {
+					if (hasFriend(i, j, color[cnr])) {
+						if (isCompletlyEmpty(i, j) &&
+								pieces[cnr][0] != 0) {
+							move = new Move(createArray(i, j, 0), color[cnr]);
+							//System.out.println(getRing(j, j, 0));
+							//System.out.println(move);
+							list.add(move);
+							//return move;
+						} 
+						if (getRing(i, j, 0) == Color.EMPTY) {
+							for (int k = 1; k < DIFFPIECES; k++) {
+								if (getRing(i, j, k) == Color.EMPTY &&
+										pieces[cnr][k] != 0) {
+									//	System.out.println(getRing(j, j, 0));
+									//	System.out.println(getRing(j, j, k));
+									move = new Move(createArray(i, j, k), color[cnr]);
+									list.add(move);
+									//	System.out.println(move);
+									//	return move;
+								}
 							}
 						}
 					}
-					
 				}
-			}
-		}	
+			}	
+		}
 		
 		return list;
 
@@ -350,7 +350,7 @@ public class Board extends Observable {
 					return false;
 				}
 			} else {
-				//System.out.println("Has no near piece of the same coolor NEAR IT");
+				//System.out.println("Has no near piece of the same color NEAR IT");
 				notifyObservers("noFriend");
 				return false;
 			}
@@ -370,31 +370,12 @@ public class Board extends Observable {
 	 * @return true if is still able to play
 	 */
 	public  /*@ pure */ boolean isStrillAbleToPlace(Player play) {
-		Color[] col = play.getColor();
-		int[][] pieces = play.getPieces();
-		for (int i = 0; i < DIM; i++) {
-			for (int j = 0; j < DIM; j++) {
-				for (int k = 0; k < DIFFPIECES; k++) {
-					if (validMoveWithoutObservers(i, j, col[0], k) &&
-							pieces[0][k] != 0) {
-						return true;
-					}
-				}
-			}
-		}		
-		if (col.length == 2) {
-			for (int i = 0; i < DIM; i++) {
-				for (int j = 0; j < DIM; j++) {
-					for (int k = 0; k < DIFFPIECES; k++) {
-						if (validMoveWithoutObservers(i, j, col[1], k) &&
-								pieces[1][k] != 0) {
-							return true;
-						}
-					}
-				}
-			}
-		}		
-		return false;
+		ArrayList<Move> move = this.getPossibleMoves(play.getColor(), play.getPieces());
+		if (move.isEmpty()) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	

@@ -141,7 +141,7 @@ public class ClientPlayer implements Player {
 		Move move = null;
 		try { 
 			String message = sock.getIN().readLine();
-			System.out.println(message + " read in Determine move");
+			//System.out.println(message + " read in Determine move");
 			String[] words = message.split(ServerPeer.DELIMITER);
 			if (words[0].equals(ServerPeer.MOVE)) {
 				move = stringTomove(words);
@@ -149,7 +149,7 @@ public class ClientPlayer implements Player {
 		} catch (SocketException e) {
 			sock.shutDown();
 		} catch (IOException e) {
-			System.out.println("Coulnt read move when asked ot make a move");
+			System.out.println("Couldn't read move when asked ot make a move");
 			e.printStackTrace();
 		} 
 		return move;

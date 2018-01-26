@@ -10,13 +10,17 @@ import java.net.SocketException;
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Observable;
+import java.util.concurrent.TimeUnit;
 import java.util.prefs.PreferencesFactory;
 
 import javax.management.Notification;
 
+import org.junit.platform.commons.util.ReflectionUtils;
+
 import players.Player;
 import ringz.Board;
 import ringz.Color;
+import view.ServerTUI;
 import view.TUI;
 
 public class ServerPeer extends Observable implements Runnable {
@@ -73,16 +77,19 @@ public class ServerPeer extends Observable implements Runnable {
     
     protected boolean ready = false;
     
-    private String nature;
-    private int numberPlayers;
     private boolean ingame = false;;
     private Lobby lobby;
     private String message;
+    private String[] preferences;
+    private boolean isON = true;
+    private ServerTUI serverTui;
     
-    public ServerPeer(Socket socc, Lobby lobby) {
+    public ServerPeer(Socket socc, Lobby lobby, ServerTUI servertui) {
+    	this.serverTui = servertui;
     	this.lobby = lobby;
     	this.sock = socc;
-    	addObserver(lobby);
+    	addObserver(servertui);
+    	preferences = new String[3];
     	try {
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
@@ -95,15 +102,24 @@ public class ServerPeer extends Observable implements Runnable {
     
     public void  run() {
     	try {
+    		
 			message = in.readLine();
 			if (message != null) {
     			dealWithMessage(message); 
 			}
-    		while (message != null && ingame != true) {  
+    		while (message != null) { 
+    			while (ingame) {
+    				try {
+    					TimeUnit.MILLISECONDS.sleep(100);
+    				} catch (InterruptedException e) { 
+    					System.out.println("somehitng wrong in asking players to join");
+    				}
+    			}
     			message = in.readLine();
-    			System.out.println(message + " message read in run " + this.name); 
+    		//	System.out.println(message + " message read in run " + this.name); 
     			dealWithMessage(message); 
     		}
+    		
     		//shutDown();
     	} catch (SocketException e) {
 			System.out.println(name + " disconected");
@@ -112,6 +128,7 @@ public class ServerPeer extends Observable implements Runnable {
 			System.out.println("Something else went wrong");
 			shutDown();
 		}
+   
     }
     
 //    /**
@@ -132,6 +149,27 @@ public class ServerPeer extends Observable implements Runnable {
 //    }
 //    
     
+//    public void gettingMessage() {
+//    	try {
+//			message = in.readLine();
+//			if (message != null) {
+//    			dealWithMessage(message); 
+//			}
+//    		while (message != null && ingame != true) {  
+//    			message = in.readLine();
+//    		//	System.out.println(message + " message read in run " + this.name); 
+//    			dealWithMessage(message); 
+//    		}
+//    		
+//    		//shutDown();
+//    	} catch (SocketException e) {
+//			System.out.println(name + " disconected");
+//			shutDown();
+//		} catch (IOException e) {
+//			System.out.println("Something else went wrong");
+//			shutDown();
+//		}
+//    }
     
     public void dealWithMessage(String input) {
     	String[] words = input.split(DELIMITER); 
@@ -141,8 +179,8 @@ public class ServerPeer extends Observable implements Runnable {
     			if (lobby.addtoClientList(words[1])) {
     				sendPackage(CONNECT + DELIMITER + ACCEPT);
     				this.name = words[1];
+    				notifyObservers(CONNECT);
     				Thread.currentThread().setName(name);
-    				System.out.println(this.name);
     			} else {
     				sendPackage(CONNECT + DELIMITER + DECLINE);
     				shutDown();
@@ -152,16 +190,18 @@ public class ServerPeer extends Observable implements Runnable {
     		case PLAYER_STATUS: {
     			if (words[1].equals(ACCEPT)) {
     				notifyObservers("gameaccepted");
+    				notifyObservers(ACCEPT);
     			} else if (words[1].equals(DECLINE)) {
     				notifyObservers("gamedeny");
+    				notifyObservers(DECLINE);
     			}
     			break;
     		}
     		case GAME_REQUEST: {
     			sendPackage(JOINED_LOBBY);
+    			notifyObservers(JOINED_LOBBY);
     			//Preferences is of this format : 
     			//[0]number_players//[1]player_type//[2]prefered_oponent_type
-    			String[] preferences = new String[3];
     			preferences[0] = words[1]; 
     			preferences[1] = words[2];
     			if (words.length == 4) {
@@ -184,7 +224,10 @@ public class ServerPeer extends Observable implements Runnable {
     		}
     	}
     }
-    		
+    	
+    public String[] getPreferences() {
+    	return this.preferences;
+    }
     
     public String getName() {
     	return this.name;
@@ -198,6 +241,10 @@ public class ServerPeer extends Observable implements Runnable {
     	ingame = true;
     }
     
+    public void gameOver() {
+    	ingame = false;
+    }
+    
     public boolean isReady() {
     	return ready;
     }
@@ -207,11 +254,9 @@ public class ServerPeer extends Observable implements Runnable {
      */
     public void shutDown() {
     	try {
-			sock.close();
 			lobby.diconected(this);
-		} catch (IOException e) {
-			System.out.println("sth wrong in shutting down");
-			e.printStackTrace();
+		} catch (StackOverflowError e) {
+			System.out.println("cant shut down in servepeer");
 		}
     }
     
@@ -225,12 +270,12 @@ public class ServerPeer extends Observable implements Runnable {
 //    }
     
     /**
-     * this is just to make things easier when debugging in deugging view.
+     * this is just to make things easier when debugging in debugging view.
      * @see java.lang.Object#toString()
      */
     @Override 
     public String toString() {
-    	return this.name + " " + this.message;
+    	return this.name;
     }
  
     
@@ -240,7 +285,7 @@ public class ServerPeer extends Observable implements Runnable {
      */
     public void sendPackage(String sendPackage) {
     	try {
-    		System.out.println(sendPackage + " in send packaage");
+    	//	System.out.println(sendPackage + " in send packaage");
     		out.write(sendPackage);
     		out.newLine();
     		out.flush();

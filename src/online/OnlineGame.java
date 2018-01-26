@@ -51,22 +51,26 @@ public class OnlineGame implements Runnable, Observer{
 			int current = 0;
 			itStarts(plays);
 			
-	    	//placing of the first piece
-	    	Move firstmove = players.get(current).determineMove(board);
-	    	int[] a = {firstmove.getLine(), //line of the first move
-	    			firstmove.getColumn()}; //column of the first move
+			try { 
+				//placing of the first piece
+				Move firstmove = players.get(current).determineMove(board);
+				int[] a = {firstmove.getLine(), //line of the first move
+						firstmove.getColumn()}; //column of the first move
 
-    		if (!somoneoneDisconected) {
-    			while (validFirstPiece(a) != true) {
-	    			firstmove = players.get(current).determineMove(board);
-	    			a[0] = firstmove.getLine(); //line of the first move
-	    			a[1] = firstmove.getColumn(); //column of the first moves
-	    			System.out.println(a[0] + " " + a[1]);
-	    		}
-    			board.placeStart(a);
-    			sendMoveToall(firstmove, players.get(current).getName());
-    			current = (current + 1) % numberOfplayers;
-	    	}
+				if (!somoneoneDisconected) {
+					while (validFirstPiece(a) != true) {
+						firstmove = players.get(current).determineMove(board);
+						a[0] = firstmove.getLine(); //line of the first move
+						a[1] = firstmove.getColumn(); //column of the first moves
+						System.out.println(a[0] + " " + a[1]);
+					}
+					board.placeStart(a);
+					sendMoveToall(firstmove, players.get(current).getName());
+					current = (current + 1) % numberOfplayers;
+				}
+			} catch (StackOverflowError e) {
+				lobby.diconected(players.get(current).getSocket());
+			}
     		
 	    	
 	    	int[] tappers = new int[numberOfplayers];
@@ -96,7 +100,6 @@ public class OnlineGame implements Runnable, Observer{
 	    	if (somoneoneDisconected != true) {
 	    		//send the result to the involved players if one one disconected
 		    	sendResults(board, numberOfplayers, players);	
-		    	lobby.removePlayerfromWaiting(plays);
 	    	}
 	    	
 		} else {
@@ -155,7 +158,6 @@ public class OnlineGame implements Runnable, Observer{
 	 */
 	public void itStarts(ServerPeer[] client) {
 		String stringy = ServerPeer.GAME_STARTED;
-		System.out.println(stringy + " in itStarts");
 		for (int i = 0; i < client.length; i++) {
 			client[i].sendPackage(stringy);
 		}
@@ -254,7 +256,9 @@ public class OnlineGame implements Runnable, Observer{
 		
 		for (int i = 0; i < numberPlayers; i++) {
 			players.get(i).getSocket().sendPackage(stringy);
+			players.get(i).getSocket().gameOver();
 		}
+		
 		
 		
 	}
@@ -292,6 +296,7 @@ public class OnlineGame implements Runnable, Observer{
 		for (int i = 0; i < plays.length; i++) {
 			if (plays[i] != leaver) {
 				plays[i].sendPackage(stringy);
+				lobby.addtoWaitingList(plays[i], plays[i].getPreferences());
 			}
 		}
 	}
@@ -334,22 +339,22 @@ public class OnlineGame implements Runnable, Observer{
 		for (int i = 0; i < players.size(); i++) {
 			players.get(i).getSocket().sendPackage(message);
 		}
-		
-		try {
-			words = plays[0].getIN().readLine();
-			if (words.equals(ServerPeer.PLAYER_STATUS 
-					+ ServerPeer.DELIMITER + ServerPeer.ACCEPT)) {
-				replies++;
-			} else if (words.equals(ServerPeer.PLAYER_STATUS 
-					+ ServerPeer.DELIMITER + ServerPeer.DECLINE)) {
-				replies++;
-				startable = false;
-			}
-		} catch (IOException e) {
-			System.out.println("Sth wrong in sendallConnected");
-			e.printStackTrace();
-		}
-		
+//		
+//		try {
+//			words = plays[0].getIN().readLine();
+//			if (words.equals(ServerPeer.PLAYER_STATUS 
+//					+ ServerPeer.DELIMITER + ServerPeer.ACCEPT)) {
+//				replies++;
+//			} else if (words.equals(ServerPeer.PLAYER_STATUS 
+//					+ ServerPeer.DELIMITER + ServerPeer.DECLINE)) {
+//				replies++;
+//				startable = false;
+//			}
+//		} catch (IOException e) {
+//			System.out.println("Sth wrong in sendallConnected");
+//			e.printStackTrace();
+//		}
+//		
 //		for (int i = 0; i < players.length; i++) {
 //			try {
 //				words = players[i].getIN().readLine();

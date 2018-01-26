@@ -2,10 +2,13 @@ package view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
+import java.util.Random;
 
+import org.junit.platform.commons.util.ReflectionUtils;
 
 import players.HumanPalyer;
 import players.Player;
@@ -16,6 +19,7 @@ public class TUI implements Observer, View {
 	private static final String SHOW = "show";
 	private static final String PIECES = "pieces";
 	private static final String MOVE = "move";
+	private static final String HINT = "hint";
 	
 	private String name;
 	
@@ -61,7 +65,8 @@ public class TUI implements Observer, View {
 		System.out.println("What would you like to do?" + 
 				" \n 'show' to display the board again" +
 				" \n 'pieces' to show your pieces " +
-				" \n 'move' to make a move");
+				" \n 'move' to make a move" +
+				" \n 'hint' if you need a hint");
 		int flag = 1;
 		String imput;
 		while (flag != 0) {
@@ -70,6 +75,8 @@ public class TUI implements Observer, View {
 				updateDisplay(board);
 			} else if (imput.equals(PIECES)) {
 				showPieces(play);
+			} else if (imput.equals(HINT)) {
+				showHint(play, board);
 			} else if (imput.equals(MOVE)) {
 				flag = 0;
 				System.out.println(" You will make a move now " +
@@ -93,7 +100,20 @@ public class TUI implements Observer, View {
 		return new Move(move, play.getColor()[colorIndex]);
 	}
 	
-	
+	public void showHint(Player play, Board board) {
+		ArrayList<Move> move = board.getPossibleMoves(play.getColor(), play.getPieces());
+		Random rand = new Random();
+		if (!move.isEmpty()) {
+			int random = rand.nextInt(move.size());
+			System.out.println("A move could be for example \n");
+			System.out.println("Line: " + move.get(random).getLine());
+			System.out.println("Column: " + move.get(random).getColumn());
+			System.out.println("Circle size: " + move.get(random).getCircle());
+			System.out.println("Color :" + move.get(random).getColor());
+		} else {
+			System.out.println("You shoulndt be in this situation");
+		}
+	}
 
 	@Override
 	public void updateDisplay(Board board) {
@@ -216,10 +236,12 @@ public class TUI implements Observer, View {
 	 * this function displays the end score.
 	 */
 	public void displayEnd(String[] words) {
+		System.out.println("The game has ended, the results are :");
 		for (int i = 1; i < words.length; i += 2) {
 			System.out.println("Player " + words[i] + " has " 
 						+ words[i + 1] + " points");
 		}
+		System.out.println("\n");
 	}
 
 	@Override
@@ -459,9 +481,14 @@ public class TUI implements Observer, View {
         try {
             input = in.readLine();
         } catch (IOException e) {
+        	System.out.println("error in ReadString");
         }
-
-        return (input == null) ? "" : input;
+        
+        if (input == null) {
+        	return "";
+        } else {
+        	return input;
+        }
     }
 
 
