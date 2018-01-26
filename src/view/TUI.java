@@ -521,9 +521,7 @@ public class TUI implements Observer, View {
     	}
     	return move;
     }
-
-
-
+   
 }
 
 

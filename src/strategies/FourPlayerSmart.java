@@ -52,7 +52,7 @@ public class FourPlayerSmart implements Strategy {
 			badMove = new Double(0);
 			Double cbc = new Double(1); //if the player doesn't have te field it
 			//should not look for this.
-			if (this.board.fieldHas(apply.getLine(), apply.getColumn(), colors[0])) {
+			if (this.board.hasField(apply.getLine(), apply.getColumn(), colors[0])) {
 				badMove = new Double(-30000); //don't place a ring on a field already won
 			} else { //if it is not ours, check if it is someone else's, 
 				//if it cannot be contested, dont place
@@ -87,7 +87,7 @@ public class FourPlayerSmart implements Strategy {
 	 */
 	public int isEnemys(Move m) {
 		for (int i = 0; i < 4; i++) {
-			if (board.fieldHas(m.getLine(), m.getColumn(), board.intIndex(i))) {
+			if (board.hasField(m.getLine(), m.getColumn(), board.intIndex(i))) {
 				return i;
 			}
 		}

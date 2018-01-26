@@ -361,6 +361,50 @@ public class Board extends Observable {
 		}
 		
 	}
+	/**
+	 * checks if the player with color c has the field.
+	 * @param x x
+	 * @param y y
+	 * @param c color
+	 * @return true if person has won this field, false if not
+	 */
+	public boolean hasField(int x, int y, Color c) {
+		if (!fieldHas(x, y, c)) {
+			return false;
+		}
+		int[] score = tallyUp(x, y);
+		int total = 0;
+		for (int i = 0; i < DIFFPIECES; i++) {
+			total = total + score[i];
+		}
+		if (bord[x][y][0].equals(c)) {
+			return true;
+		}
+		if (score[colorIndex(c)] > 2) {
+			return true;
+		}
+		if (score[colorIndex(c)] == 2) {
+			if (total < 2) {
+				return true;
+			} else {
+				int diffcolor = 0;
+				for (int i = 0; i < colorIndex(c); i++) {
+					diffcolor = diffcolor + score[i];
+				}
+				for (int i =  colorIndex(c); i < 4; i++) {
+					diffcolor = diffcolor + score[i];
+				}
+				if (diffcolor == 2) {
+					return true;
+				}
+			}
+		}
+		if (score[colorIndex(c)] == 1 && total == 0) {
+			return true;
+		}
+		return false;
+		
+	}
 	
 	/**
 	 * this functions tests if a given player has options to play.
