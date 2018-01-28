@@ -1,5 +1,6 @@
 package strategies;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import ringz.Board;
@@ -14,9 +15,17 @@ public class ThreePlayerStrategy implements Strategy {
 	public ThreePlayerStrategy(Color[] color) {
 		this.colors = color; 
 	}
-	public Move determineMove() {
-		// TODO Auto-generated mhod stub
-		return null;
+	
+	@Override
+	public Move determineMove(Board bord, int[][] pieces) {
+		ArrayList<Move> move = bord.getPossibleMoves(colors, pieces);
+		
+		if (!move.isEmpty()) {
+			int random = rand.nextInt(move.size());
+			return move.get(random);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -25,10 +34,5 @@ public class ThreePlayerStrategy implements Strategy {
 		return null;
 	}
 
-	@Override
-	public Move determineMove(Board bord, int[][] pieces) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

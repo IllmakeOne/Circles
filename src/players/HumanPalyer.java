@@ -30,7 +30,7 @@ public class HumanPalyer implements Player {
 	}
 
 	/**
-	 * construcotr of the human player.  if the games has 2 or 3 players.
+	 * constructor of the human player.  if the games has 2 or 3 players.
 	 * it receives two colors, the primary and the secondary
 	 * @param c1 primary color; @param c2 secondary color
 	 */	

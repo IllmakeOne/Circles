@@ -88,7 +88,7 @@ public class ServerRingz {
 		ServerSocket ssock = null;
 		Socket sock = null;
 		ServerTUI tui = new ServerTUI();
-		Lobby lobby = new Lobby(name, tui);
+		Lobby lobby = new Lobby(tui);
 		boolean ison = true;
 		
 		try {
@@ -107,9 +107,7 @@ public class ServerRingz {
     		System.out.println("ERROR: could not create a socket ");
     	}
 
-    	Thread lobbyThread = new Thread(lobby);
-    	lobbyThread.start();
-    	
+  	
 	    while (ison) {
 	    	
 	    	try {

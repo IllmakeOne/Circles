@@ -119,58 +119,18 @@ public class ServerPeer extends Observable implements Runnable {
     		//	System.out.println(message + " message read in run " + this.name); 
     			dealWithMessage(message); 
     		}
-    		
-    		//shutDown();
+    		System.out.println("called in run");
+    		lobby.diconected(this);
     	} catch (SocketException e) {
-			System.out.println(name + " disconected");
-			shutDown();
+			lobby.diconected(this);
 		} catch (IOException e) {
 			System.out.println("Something else went wrong");
-			shutDown();
+			lobby.diconected(this);
 		}
    
     }
     
-//    /**
-//     * reads only one package.
-//     */
-//    public String getMessage() {
-//    	String message = null;
-//    	try {
-//    		message = in.readLine();
-//    	} catch (SocketException e) {
-//			System.out.println("cant read only one package");
-//			shutDown();
-//		} catch (IOException e) {
-//			System.out.println("Something else went wrong");
-//			shutDown();
-//		}
-//    	return message;
-//    }
-//    
-    
-//    public void gettingMessage() {
-//    	try {
-//			message = in.readLine();
-//			if (message != null) {
-//    			dealWithMessage(message); 
-//			}
-//    		while (message != null && ingame != true) {  
-//    			message = in.readLine();
-//    		//	System.out.println(message + " message read in run " + this.name); 
-//    			dealWithMessage(message); 
-//    		}
-//    		
-//    		//shutDown();
-//    	} catch (SocketException e) {
-//			System.out.println(name + " disconected");
-//			shutDown();
-//		} catch (IOException e) {
-//			System.out.println("Something else went wrong");
-//			shutDown();
-//		}
-//    }
-    
+
     public void dealWithMessage(String input) {
     	String[] words = input.split(DELIMITER); 
 		setChanged();
@@ -183,7 +143,7 @@ public class ServerPeer extends Observable implements Runnable {
     				Thread.currentThread().setName(name);
     			} else {
     				sendPackage(CONNECT + DELIMITER + DECLINE);
-    				shutDown();
+    				lobby.diconected(this);
     			}
     			break;
     		}
@@ -215,11 +175,6 @@ public class ServerPeer extends Observable implements Runnable {
     		}
     		case MOVE: {
     			notifyObservers(message);
-    			break;
-    		}
-    		case PLAYER_DISCONNECTED: {
-    			lobby.diconected(this);
-    			shutDown();
     			break;
     		}
     	}
@@ -254,9 +209,13 @@ public class ServerPeer extends Observable implements Runnable {
      */
     public void shutDown() {
     	try {
-			lobby.diconected(this);
+    		setChanged();
+    		notifyObservers("disconected");
+			sock.close();
 		} catch (StackOverflowError e) {
 			System.out.println("cant shut down in servepeer");
+		} catch (IOException e) {
+			System.out.println("cant close socket in serverpeer");
 		}
     }
     

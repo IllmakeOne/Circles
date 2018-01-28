@@ -360,7 +360,7 @@ public class TUI implements Observer, View {
 		while (flag == 0) {
 			if (input.equals("yes")) {
 				flag = 1;
-				System.out.println("Agains human(0) or computer(1)");
+				System.out.println("Agains human(1) or computer(0)");
 				input = readString("[]>");
 				while (flag2 == 0) {
 					if (input.equals("0") || input.equals("1")) {
@@ -386,7 +386,7 @@ public class TUI implements Observer, View {
 	
 		/**
 		 * reads form user three numbers, circle size, lien and column.
-		 * @param move is the array int that remebers the user's input
+		 * @param move is the array int that remembers the user's input
 		 * @param colorIndex is the index of the color of the player
 		 */
 	public void readMove(int[] move, int colorIndex, Player play) {
@@ -397,7 +397,7 @@ public class TUI implements Observer, View {
 					+ "The first number is the size of the piece, \n"
 					+ "The second number the line and the thirds , the column \n"
 					+ "Coodinates betwen 1 and 5 \n"
-					+ "1 base; 2 small ; 3 medium ; 4 large ; 5 largest;");
+					+ "1 base; 2 dots ; 3 small rings ; 4 medium rings ; 5 large rings;");
 			String line = readString("[]>");
 			words = line.split(" ");
 			if (words.length == 3) {

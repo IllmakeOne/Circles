@@ -19,10 +19,12 @@ public class ServerTUI implements Observer {
 			System.out.println(o.toString() + " entered the waiting lobby");
 		} else if (arg.equals(ServerPeer.CONNECT)) {
 			System.out.println(o.toString() + " connected");
-		} else if (arg.equals(ServerPeer.ACCEPT)) {
+		} else if (arg.equals("gameaccepted")) {
 			System.out.println(o.toString() + " accepted a game");
 		} else if (arg.equals(ServerPeer.DECLINE)) {
 			System.out.println(o.toString() + " declined a game");
+		} else if (arg.equals("disconected")) {
+			System.out.println(o.toString() + " disconected");
 		}
 		
 	}

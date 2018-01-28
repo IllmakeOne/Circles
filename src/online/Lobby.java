@@ -3,32 +3,32 @@ package online;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
 
 import view.ServerTUI;
 
-public class Lobby implements Runnable{
+public class Lobby {
 	
-	private ArrayList<String> clients;
-	private String name;
-	public boolean running = true;
+	private ArrayList<String> clients; //list of all the clients who are connected at the moment
+	private ArrayList<String> alltimeclients; //list of all the clients who ever 
+	
+	//list of all the clients who are looking for a game at the moment
 	private HashMap<ServerPeer, String[]> playersWaiting; 
-	private ArrayList<OnlineGame> ongoingGames;
+	
+	private ArrayList<OnlineGame> ongoingGames; //list of all ongoing games
 	private ServerTUI tui;
 	
-	public Lobby(String name, ServerTUI tui) {
+	public Lobby(ServerTUI tui) {
 		this.tui = tui;
 		this.clients = new ArrayList<String>();
 		this.playersWaiting = new HashMap<ServerPeer, String[]>();
 		this.ongoingGames = new ArrayList<>();
-		this.name = name;
 	} 
 	
 	public boolean addtoClientList(String clientname) {
 		if (clients.contains(clientname)) {
 			return false;
 		} else {
+			alltimeclients.add(clientname);
 			clients.add(clientname);
 			return true;
 		}
@@ -42,12 +42,7 @@ public class Lobby implements Runnable{
 		}
 	}
 
-	public void run() {
-		while (running) {
-			
-		}
-		
-	}
+
 	
 	/**
 	 * this functions is called when a new player requires a game.
@@ -72,14 +67,18 @@ public class Lobby implements Runnable{
 				if (playersWaiting.get(key)[0].equals(preferences[0]) &&
 		/* this tested if current and the key have want to play against the same number of players*/
 					playersWaiting.get(key)[1].equals(preferences[2])  &&
-					
 			/*this tests the tested player matches the preferred player type of the current player*/
 					key != current &&
 					/* so it does not add the current player twice */
 					inPlay < intnrplayers 
 			/*tests if it already has enough players*/) {
-					players[inPlay] = key;
-					inPlay++; 
+					if (playersWaiting.get(key)[2].equals(ServerPeer.NEUTRAL)) {
+						players[inPlay] = key;
+						inPlay++; 
+					} else if (playersWaiting.get(key)[2].equals(playersWaiting.get(current)[1])) {
+						players[inPlay] = key;
+						inPlay++; 
+					}
 				}
 			}
 		} else {
@@ -89,10 +88,13 @@ public class Lobby implements Runnable{
 					key != current &&
 					/* so it does not add the current player twice */
 					inPlay < intnrplayers /*tests if it already has enough players*/) {
-					//ads player to the array of players which will start a game
-					players[inPlay] = key;
-					inPlay++; 
-					//playersWaiting.remove(key); Mistake!
+					if (playersWaiting.get(key)[2].equals(ServerPeer.NEUTRAL)) {
+						players[inPlay] = key;
+						inPlay++; 
+					} else if (playersWaiting.get(key)[2].equals(playersWaiting.get(current)[1])) {
+						players[inPlay] = key;
+						inPlay++; 
+					}
 				}
 			}
 		}	
@@ -101,7 +103,7 @@ public class Lobby implements Runnable{
 		//enough players of the preferred type have been gathered
 		//else return null 
 		if (inPlay == intnrplayers) {
-			removePlayerfromWaiting(players);
+			removePlayerSfromWaiting(players);
 			return players;
 		} else {
 			return null;
@@ -113,15 +115,9 @@ public class Lobby implements Runnable{
 			playersWaiting.remove(players[i]);
 		}
 		OnlineGame game = new OnlineGame(players, this);
-		//Thread newGame = new Thread(game);
 		ongoingGames.add(game);
 		game.run();
 		tui.gameStarted(players);
-//		try {
-//			game.join();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 		
 		if (ongoingGames.contains(game)) {
 			ongoingGames.remove(game);
@@ -132,19 +128,11 @@ public class Lobby implements Runnable{
 	
 	/**
 	 * this function removes someone form the lobby.
-	 * it is called when someone dissconects
+	 * it is called when someone dissconects while it is in a game.
 	 * @param client
 	 */
-	public void diconected(ServerPeer client) {
-		try {
-			clients.remove(client.getName());
-			if (playersWaiting.containsKey(client)) {
-				playersWaiting.remove(client);
-			}
-		} catch (StackOverflowError e) {
-			// do nothing, it means the payer was already removed somewhere
-			
-		}
+	public void diconectedWhileinGame(ServerPeer client) {
+		removePlayerfromLobby(client);
 		for (int i = 0; i < ongoingGames.size(); i++) {
 			if (ongoingGames.get(i).getPlayersasList().contains(client)) {
 				ongoingGames.get(i).someoneLeft(client);
@@ -152,27 +140,49 @@ public class Lobby implements Runnable{
 				break;
 			}
 		}
+	}
+	
+	/**
+	 * this function removes someone form the lobby.
+	 * it is called when someone dissconects while not in a game
+	 * @param client
+	 */
+	public void diconected(ServerPeer client) {
+		removePlayerfromLobby(client);
+		removePlayerfromwaiting(client);
 		client.shutDown();
 	}
 	
 
 	/**
-	 * this functions removes the players who started a game, form the waiting list.
+	 * this functions removes the players who started a game, from the waiting list.
 	 * @param players
 	 */
-	public void removePlayerfromWaiting(ServerPeer[] players) {
+	public void removePlayerSfromWaiting(ServerPeer[] players) {
 		for (int i = 0; i < players.length; i++) {
 			playersWaiting.remove(players[i]);
 		}
 	}
 	
+	/**
+	 * this function removes a client (who disconected) form the client list.
+	 */
+	public void removePlayerfromLobby(ServerPeer client) {
+		clients.remove(client.getName());
+	}
 	
 	/**
-	 * this shuts down the lobby.
+	 * this functions removes the player (who disconected) form the waiting list.
 	 */
-	public void shutDown() {
-		running = false;
+	public void removePlayerfromwaiting(ServerPeer client) {
+		if (playersWaiting.containsKey(client)) {
+			playersWaiting.remove(client);
+		}
 	}
+	
+	
+	
+	
 	
 //
 //	@Override

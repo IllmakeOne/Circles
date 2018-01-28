@@ -1,8 +1,6 @@
 package online;
 
-import static org.junit.jupiter.api.Assumptions.assumingThat;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Observable;
@@ -13,7 +11,7 @@ import ringz.Board;
 import ringz.Color;
 import ringz.Move;
 
-public class OnlineGame implements Runnable, Observer{
+public class OnlineGame implements Runnable, Observer {
 
 	private ServerPeer[] plays;
 	private boolean startable = true;
@@ -21,8 +19,6 @@ public class OnlineGame implements Runnable, Observer{
 	private int numberOfplayers;
 	private Lobby lobby;
 	private boolean somoneoneDisconected = false;
-	private Move currentMove;
-	private int[] startCord;
 	
 	public OnlineGame(ServerPeer[] plays, Lobby lobby) {
 		this.lobby = lobby;
@@ -92,7 +88,7 @@ public class OnlineGame implements Runnable, Observer{
 	    					current = (current + 1) % numberOfplayers;
 	    				}
 	    			} catch (NullPointerException e) {
-	    				lobby.diconected(players.get(current).getSocket());
+	    				lobby.diconectedWhileinGame(players.get(current).getSocket());
 	    			}
 	    		}
 	    	}

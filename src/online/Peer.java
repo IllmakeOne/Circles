@@ -92,8 +92,8 @@ public class Peer extends Observable implements Runnable {
      */
     /**
      * Constructor. creates a peer object based in the given parameters.
-     * @param   nameArg name of the Peer-proces
-     * @param   sockArg Socket of the Peer-proces
+     * @param   nameArg name of the Peer-process
+     * @param   sockArg Socket of the Peer-process
      */
     public Peer(String playerName, String playerType, Socket sockArg) throws IOException {
     	this.nature = playerType;
@@ -405,7 +405,6 @@ public class Peer extends Observable implements Runnable {
     	try {
     		//System.out.println("'his bin shot");
     		//System.out.println(Thread.currentThread().getStackTrace());
-    		sendPackage(PLAYER_DISCONNECTED);
 			sock.close();
 		} catch (IOException e) {
 			System.err.println("sth wrong in shutdow");
@@ -415,11 +414,16 @@ public class Peer extends Observable implements Runnable {
 		}
     }
 
-    /**  returns name of the peer object*/
+   /**
+    * @return the name of the client.
+    */
     public String getName() {
         return name;
     }
     
+    /**
+     * @return the name of the client, this function is for debugging purposes. 
+     */
     @Override 
     public String toString() {
     	return name;
