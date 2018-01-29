@@ -76,25 +76,42 @@ public class Peer extends Observable implements Runnable {
     protected BufferedReader in;
     protected BufferedWriter out;
     
-    
+   //this is the client's copy of the board, it is only modified with moves comming from the server.
     private Board board;
-    private Player clientPlayer;
+    
+//this is the client's player class which keeps track of his/her pieces and asks for moves and such.
+    private Player player;
+    
+    /* this is the client's user interface, it is a TUI but,
+ space is left for an easy implementation of other UIs, as long as they respect the view interface*/
     private View view;
+    
+    //this keeps track of every's colors.
     private HashMap<String, Color> playerColors;
+    
+    // the nature is 0 or 1 which is human or computer
     private String nature;
+    
     private int numberPlayers;
     private boolean gameinProgress;
     private boolean yourTurn = false;
+    
+    //the thinking time is basically the level of smartness of the AI if the client has one.
     public int thinkingtime;
 
 
-    /*@
-       requires (playerName != null) && (sockArg != null); 
-     */
+   
     /**
      * Constructor. creates a peer object based in the given parameters.
      * @param   nameArg name of the Peer-process
      * @param   sockArg Socket of the Peer-process
+     */
+    /*
+    * @requires (playerName != null) && (sockArg != null);
+    * @requires playerType.equals("0") || playerType.equals("1");
+    * @ensure in != null && out != null && getNature().equals(playerType);
+    * @ensure name.equals(playerName) && view != null;
+    * @ensure nature.equals(COMPUTER_PLAYER) ==> thinkingtime != 0;
      */
     public Peer(String playerName, String playerType, Socket sockArg) throws IOException {
     	this.nature = playerType;
@@ -124,10 +141,8 @@ public class Peer extends Observable implements Runnable {
     			dealWithMessage(message);  
     			message = in.readLine();
     		}
-    		System.out.println("You have been disconected");
     		shutDown();
 		} catch (SocketException e) {
-			System.out.println("You have been disconected");
 			shutDown();
 		} catch (IOException e) {
 			System.out.println("Something else went wrong");
@@ -252,7 +267,7 @@ public class Peer extends Observable implements Runnable {
 			notifyObservers("first");
 			sendPackage(askFirst());
 		} else {
-			sendPackage(moveTostring(clientPlayer.determineMove(board)));	
+			sendPackage(moveTostring(player.determineMove(board)));	
 			yourTurn = true;
 		}
     }
@@ -268,7 +283,7 @@ public class Peer extends Observable implements Runnable {
     				+ move.getColumn() + DELIMITER 
     				+ (move.getCircle() + 1);
     	if (numberPlayers != 4) {
-    		if (move.getColor() == clientPlayer.getColor()[0]) {
+    		if (move.getColor() == player.getColor()[0]) {
     			stringy += DELIMITER + PRIMARY;
     		} else {
     			stringy += DELIMITER + SECONDARY;
@@ -291,19 +306,14 @@ public class Peer extends Observable implements Runnable {
     	color = playerColors.get(words[3] + PRIMARY);
     	if (words.length == 6) {
     		color = playerColors.get(words[3] + words[5]);
-    		int colorIndex = Integer.valueOf(words[5]);
-    		if (yourTurn == true) {
-        		clientPlayer.decresePiece(colorIndex, circlesize);
-        	}
-    	} else { 
-    		if (yourTurn == true) {
-        		clientPlayer.decresePiece(0, circlesize);
-        	}
     	}
     	int[] coordinates = {circlesize, line, column};
-    	
+    	Move move = new Move(coordinates, color);
+    	if (yourTurn == true) {
+    		player.decresePiece(move);
+    	}
     	yourTurn = false;
-    	return new Move(coordinates, color);    	
+    	return move;	
     }
     
     /**
@@ -314,7 +324,7 @@ public class Peer extends Observable implements Runnable {
      */
     public String askFirst() {
     	int[] firstMove;
-		firstMove = clientPlayer.getStart(); 
+		firstMove = player.getStart(); 
 		String stringy = "";
 		stringy += MOVE + DELIMITER + firstMove[0] + DELIMITER + firstMove[1] 
 												 + DELIMITER + STARTING_BASE;
@@ -337,12 +347,12 @@ public class Peer extends Observable implements Runnable {
 			
 		   //Also creates local player so we can keep track of the pieces and can be asked for moves
 			if (this.nature.equals(HUMAN_PLAYER)) {
-				this.clientPlayer = new HumanPalyer(numberPlayers, 
+				this.player = new HumanPalyer(numberPlayers, 
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
 						this.name, this.view);
 			} else {
-				this.clientPlayer = new ComputerPlayer(numberPlayers,
+				this.player = new ComputerPlayer(numberPlayers,
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
 						this.name, thinkingtime);
@@ -359,12 +369,12 @@ public class Peer extends Observable implements Runnable {
 			
 		   //Also creates local player so we can keep track of the pieces and can be asked for moves
 			if (this.nature.equals(HUMAN_PLAYER)) {
-				this.clientPlayer = new HumanPalyer(numberPlayers, 
+				this.player = new HumanPalyer(numberPlayers, 
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
 						this.name, this.view);
 			} else {
-				this.clientPlayer = new ComputerPlayer(numberPlayers,
+				this.player = new ComputerPlayer(numberPlayers,
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
 						this.name, thinkingtime);
@@ -379,10 +389,10 @@ public class Peer extends Observable implements Runnable {
 			
 		   //Also creates local player so we can keep track of the pieces and can be asked for moves
 			if (this.nature.equals(HUMAN_PLAYER)) {
-				this.clientPlayer = new HumanPalyer(playerColors.get(name + PRIMARY), 
+				this.player = new HumanPalyer(playerColors.get(name + PRIMARY), 
 						name, this.view);
 			} else {
-				this.clientPlayer = new ComputerPlayer(
+				this.player = new ComputerPlayer(
 						playerColors.get(name + PRIMARY), name, thinkingtime);
 			}
 		}
@@ -409,12 +419,14 @@ public class Peer extends Observable implements Runnable {
      */
     public void shutDown() {
     	try {
+    		setChanged();
+    		notifyObservers("disco");
 			sock.close();
 		} catch (IOException e) {
 			System.err.println("sth wrong in shutdow");
 			e.printStackTrace();
 		} catch (StackOverflowError e) {
-			System.out.println(" Server closed ");
+			System.out.println(" StackOverflowError , should be here ");
 		}
     }
 
@@ -423,6 +435,13 @@ public class Peer extends Observable implements Runnable {
     */
     public String getName() {
         return name;
+    }
+    
+    /**
+     * @return the player type, "0" or "1".
+     */
+    public String getNature() {
+    	return nature;
     }
     
     /**

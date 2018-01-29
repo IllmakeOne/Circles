@@ -84,4 +84,12 @@ public interface View extends Observer {
 	 */
 	public /*pure*/ int timeTothink();
 	
+	
+	/**
+	 * this function displays a hint, which a possible move he/she could make.
+	 * @param play
+	 * @param board
+	 */
+	public /*pure*/ void showHint(Player play, Board board);
+	
 }
