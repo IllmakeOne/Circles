@@ -5,11 +5,7 @@ import java.util.Random;
 import ringz.Board;
 import ringz.Color;
 import ringz.Move;
-import strategies.FourPlayerSmart;
-import strategies.FourPlayerStrategy;
-import strategies.Strategy;
-import strategies.ThreePlayerStrategy;
-import strategies.TwoPlayerStragegy;
+import strategies.*;
 import view.TUI;
 
 public class ComputerPlayer implements Player {
@@ -20,38 +16,50 @@ public class ComputerPlayer implements Player {
 	private Strategy strateg;
 	
 	
-	public ComputerPlayer(Color c, String name) {
+	public ComputerPlayer(Color c, String name, int time) {
 		this.color = new Color[2];
 		this.color[0] = c;	
-		this.name = "computer four players " + name + " " + strateg.getName();
 		this.pieces = new int[5][5];
 		for (int i = 0; i < 5; i++) {
 			this.pieces[0][i] = 3;
 		}
-		this.strateg = new FourPlayerSmart(color);
+		if (time < 2) {
+			this.strateg = new FourPlayerStrategy(color);
+		} else {
+			this.strateg = new FourPlayerSmart(color);
+		}	
+		this.name = "computer four players " + name + " " + strateg.getName();
 	}
 	
-	public ComputerPlayer(int nrplayers, Color c1, Color c2, String nam) {
+	public ComputerPlayer(int nrplayers, Color c1, Color c2, String nam, int time) {
 		this.color = new Color[2];
 		this.color[0] = c1;
 		this.color[1] = c2;
-		this.name = "computer";
 		this.pieces = new int[5][5];
 		for (int i = 0; i < 5; i++) {
 			this.pieces[0][i] = 3;
 		}
 		if (nrplayers == 2) {
-			this.strateg = new TwoPlayerStragegy(this.color);
+			if (time < 2) {
+				this.strateg = new TwoPlayerStragegy(color);
+			} else {
+				this.strateg = new TwoPlayerSmart(color);
+			}
 			for (int i = 0; i < 5; i++) {
 				this.pieces[1][i] = 3;
 			} 
 			
 		} else {
-			this.strateg = new ThreePlayerStrategy(this.color);
+			if (time < 2) {
+				this.strateg = new ThreePlayerStrategy(color);
+			} else {
+				this.strateg = new ThreePlayerSmart(color);
+			}
 			for (int i = 0; i < 5; i++) {
 				this.pieces[1][i] = 1;
 			}
 		}
+		this.name = "computer four players " + name + " " + strateg.getName();
 	}
 
 	

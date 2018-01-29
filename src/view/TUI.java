@@ -221,21 +221,51 @@ public class TUI implements Observer, View {
 			}
 		}
 	}
+	
+	/**
+	 * this asks the client for a number (1,2,3.
+	 * which will be the amount of time the AI can calculate.
+	 */
+	
+	/*@ensures \result == 1 || \result == 2 || result == 3*/
+	public /*pure*/ int timeTothink() {
+		System.out.println("You have an AI as your player");
+    	System.out.println("How much time will it have to think? "
+    			+ "(1 for not so smart 2 or 3 for smarter)");
+    	String input = readString("][< ");
+    	int result;
+    	int flag = 0;
+		while (flag == 0) {
+			if (input.equals("1")) {
+				flag = 1;
+			} else if (input.equals("2")) {
+				flag = 1;
+			} else if (input.equals("3")) {
+				flag = 1;
+			} else {
+				System.out.println("Please give valid input 1, 2 or 3");
+				input = readString("][< ");
+			}
+		}
+    	result = Integer.valueOf(input);
+    	return result;
+    	
+	}
 
 	
 	@Override
-	public void notAbletoPlay() {
+	public /*pure*/ void notAbletoPlay() {
 		System.out.println(getName() + ",you are not able to place any pieces");
 	}
 
-	public void disconnected(String disconee) {
+	public /*pure*/ void disconnected(String disconee) {
 		System.out.println(disconee + " has disconnected, game canceled");
 	}
 	
 	/**
 	 * this function displays the end score.
 	 */
-	public void displayEnd(String[] words) {
+	public /*pure*/ void displayEnd(String[] words) {
 		System.out.println("The game has ended, the results are :");
 		for (int i = 1; i < words.length; i += 2) {
 			System.out.println("Player " + words[i] + " has " 
@@ -245,7 +275,7 @@ public class TUI implements Observer, View {
 	}
 
 	@Override
-	public void update(Observable arg0, Object arg1) {
+	public /*pure*/ void update(Observable arg0, Object arg1) {
 		if (arg1.equals("notCompEmpty")) {
 			System.out.println("Cant put base, it is not completly empty \n");
 			
@@ -295,9 +325,11 @@ public class TUI implements Observer, View {
 	
 	/**
 	 * this functions determine what the clients wants to do while he/she is in the lobby.
-	 * 
 	 */
-	public String whattoDo(String nature) {
+	/*
+	 * @ensure \result.equals("Request game") || \result.equals("exit")
+	 */
+	public /*pure*/ String whattoDo(String nature) {
 		String stringy = "";
 		System.out.println("For now just look for a game , type Request game\n");
 		String input = readString("[]>");
@@ -321,6 +353,8 @@ public class TUI implements Observer, View {
 		
 		return stringy;
 	}
+	
+	
 	
 //	/**
 //	 * this function display the oponents.

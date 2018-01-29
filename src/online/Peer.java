@@ -85,6 +85,7 @@ public class Peer extends Observable implements Runnable {
     private int numberPlayers;
     private boolean gameinProgress;
     private boolean yourTurn = false;
+    public int thinkingtime;
 
 
     /*@
@@ -106,6 +107,9 @@ public class Peer extends Observable implements Runnable {
     	in = new BufferedReader(new InputStreamReader(sockArg.getInputStream()));
     	out = new BufferedWriter(new OutputStreamWriter(sockArg.getOutputStream()));
     	sendfirstPack();
+    	if (this.nature.equals(COMPUTER_PLAYER)) {
+    		thinkingtime = view.timeTothink();
+    	}
     }
 
     /**
@@ -318,10 +322,11 @@ public class Peer extends Observable implements Runnable {
     }
     
     /**
-     * this creates the Hashmap with the colors and players and createas a player for this socket.
+     * this creates the Hashmap with the colors and players,and it creates a player for this socket.
      * @param words
      */
     public void createBoard(String[] words) {
+    	
     	this.board = new Board();
     	if (numberPlayers == 2) {
 			//Creates Hashmap with name of the player + SECONDARY/PRIMARY color
@@ -340,7 +345,7 @@ public class Peer extends Observable implements Runnable {
 				this.clientPlayer = new ComputerPlayer(numberPlayers,
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
-						this.name);
+						this.name, thinkingtime);
 			}
 		} else if (numberPlayers == 3) {
 			//Creates Hashmap with the first three color being unique to a player
@@ -348,9 +353,9 @@ public class Peer extends Observable implements Runnable {
 			playerColors.put(words[1] + PRIMARY, Color.BLUE);
 			playerColors.put(words[2] + PRIMARY, Color.PURPLE);
 			playerColors.put(words[3] + PRIMARY, Color.YELLOW);
-			playerColors.put(words[1] + SECONDARY, Color.BLUE);
-			playerColors.put(words[2] + SECONDARY, Color.PURPLE);
-			playerColors.put(words[3] + SECONDARY, Color.YELLOW);
+			playerColors.put(words[1] + SECONDARY, Color.GREEN);
+			playerColors.put(words[2] + SECONDARY, Color.GREEN);
+			playerColors.put(words[3] + SECONDARY, Color.GREEN);
 			
 		   //Also creates local player so we can keep track of the pieces and can be asked for moves
 			if (this.nature.equals(HUMAN_PLAYER)) {
@@ -362,22 +367,23 @@ public class Peer extends Observable implements Runnable {
 				this.clientPlayer = new ComputerPlayer(numberPlayers,
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
-						this.name);
+						this.name, thinkingtime);
 			}
 				
 		} else if (numberPlayers == 4) {
 			//this just gives a color to everyone
-			playerColors.put(words[1], Color.BLUE);
-			playerColors.put(words[2], Color.PURPLE);
-			playerColors.put(words[3], Color.YELLOW);
-			playerColors.put(words[4], Color.GREEN);
+			playerColors.put(words[1] + PRIMARY, Color.BLUE);
+			playerColors.put(words[2] + PRIMARY, Color.PURPLE);
+			playerColors.put(words[3] + PRIMARY, Color.YELLOW);
+			playerColors.put(words[4] + PRIMARY, Color.GREEN);
 			
 		   //Also creates local player so we can keep track of the pieces and can be asked for moves
 			if (this.nature.equals(HUMAN_PLAYER)) {
 				this.clientPlayer = new HumanPalyer(playerColors.get(name + PRIMARY), 
 						name, this.view);
 			} else {
-				this.clientPlayer = new ComputerPlayer(playerColors.get(name + PRIMARY), name);
+				this.clientPlayer = new ComputerPlayer(
+						playerColors.get(name + PRIMARY), name, thinkingtime);
 			}
 		}
 	} 
@@ -403,8 +409,6 @@ public class Peer extends Observable implements Runnable {
      */
     public void shutDown() {
     	try {
-    		//System.out.println("'his bin shot");
-    		//System.out.println(Thread.currentThread().getStackTrace());
 			sock.close();
 		} catch (IOException e) {
 			System.err.println("sth wrong in shutdow");

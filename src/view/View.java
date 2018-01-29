@@ -28,5 +28,6 @@ public interface View extends Observer {
 	
 	public String whattoDo(String nature);
 	
-//	public void showOponents(String[] oponents);
+	public int timeTothink();
+	
 }

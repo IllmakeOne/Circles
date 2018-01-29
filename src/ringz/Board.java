@@ -78,39 +78,40 @@ public class Board extends Observable {
 	 * @param color the color of player's possible moves 
 	 * @return ArrayList<Move> list with all the possible moves
 	 */
-	
+	/*@requires color[0] != null*/
 	public /*@ pure */ ArrayList<Move> getPossibleMoves(Color[] color, int[][] pieces) {
-//		int nrmoves = 0;
 		Move move = null;
 		ArrayList<Move> list = new ArrayList<Move>();
-		for (int cnr = 0; cnr < color.length; cnr++){
-			for (int i = 0; i < DIM; i++) {
-				for (int j = 0; j < DIM; j++) {
-					if (hasFriend(i, j, color[cnr])) {
-						if (isCompletlyEmpty(i, j) &&
-								pieces[cnr][0] != 0) {
-							move = new Move(createArray(i, j, 0), color[cnr]);
-							//System.out.println(getRing(j, j, 0));
-							//System.out.println(move);
-							list.add(move);
-							//return move;
-						} 
-						if (getRing(i, j, 0) == Color.EMPTY) {
-							for (int k = 1; k < DIFFPIECES; k++) {
-								if (getRing(i, j, k) == Color.EMPTY &&
-										pieces[cnr][k] != 0) {
-									//	System.out.println(getRing(j, j, 0));
-									//	System.out.println(getRing(j, j, k));
-									move = new Move(createArray(i, j, k), color[cnr]);
-									list.add(move);
-									//	System.out.println(move);
-									//	return move;
+		for (int indexcolor = 0; indexcolor < color.length; indexcolor++) {
+			if (color[indexcolor] != null) {
+				for (int i = 0; i < DIM; i++) {
+					for (int j = 0; j < DIM; j++) {
+						if (hasFriend(i, j, color[indexcolor])) {
+							if (isCompletlyEmpty(i, j) &&
+									pieces[indexcolor][0] != 0) {
+								move = new Move(createArray(i, j, 0), color[indexcolor]);
+								//System.out.println(getRing(j, j, 0));
+								//System.out.println(move);
+								list.add(move);
+								//return move;
+							} 
+							if (getRing(i, j, 0) == Color.EMPTY) {
+								for (int k = 1; k < DIFFPIECES; k++) {
+									if (getRing(i, j, k) == Color.EMPTY &&
+											pieces[indexcolor][k] != 0) {
+										//	System.out.println(getRing(j, j, 0));
+										//	System.out.println(getRing(j, j, k));
+										move = new Move(createArray(i, j, k), color[indexcolor]);
+										list.add(move);
+										//	System.out.println(move);
+										//	return move;
+									}
 								}
 							}
 						}
 					}
-				}
-			}	
+				}	
+			}
 		}
 		
 		return list;
