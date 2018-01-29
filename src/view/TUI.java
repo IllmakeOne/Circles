@@ -29,36 +29,50 @@ public class TUI implements Observer, View {
 	}
 	
 	
-    public String acceptGame(String[] message) {
-    	System.out.println("A game has been found");
-    	System.out.println("You would play against:");
-    	for (int i = 1; i < message.length; i++) {
-    		if (!message[i].equals(this.name)) {
-    			System.out.println(i + ".  " + message[i]);
-    		}
-    	}
-    	System.out.println("Do you wish to accept Accept or Decline");
-    	String input = readString("][< ");
-    	int flag = 0;
-		while (flag == 0) {
-			if (input.equals("Accept")) {
-				flag = 1;
-			} else if (input.equals("Decline")) {
-				flag = 1;
-			} else {
-				System.out.println("Please give valid input");
-				input = readString("[]>");
+	@Override
+	public void updateDisplay(Board board) {
+		for (int i = 0; i < Board.DIM; i++) {
+			String croth = "";
+			for (int j = 0; j < Board.DIM; j++) {
+				String stringy = "";
+				for (int circlesize = 0; circlesize < Board.DIFFPIECES; circlesize++) {
+					switch (board.getRing(j, i, circlesize)) {
+						case EMPTY: {
+							stringy += "E";
+							break;
+						}
+						case BLUE: {
+							stringy += "B";
+							break;
+						}
+						case YELLOW: {
+							stringy += "Y";
+							break;
+						}
+						case PURPLE: {
+							stringy += "P";
+							break;
+						}
+						case GREEN: {
+							stringy += "G";
+							break;
+						}
+					}
+				}
+				croth += stringy + "    ";
 			}
-		}
-    	
-    	if (input.equals("Accept")) {
-    		return "0";
-    	} else {
-    		return "1";
-    	}
-    	
-    }
+			System.out.println(croth);
+		}		
+	}
+
 	
+    @Override
+	public void outOfPieces() {
+		System.out.println(getName() + " ,you are out of pieces");
+		
+	}
+
+
 	@Override
 	public Move askMove(Player play, Board board) {
 		Scanner in = new Scanner(System.in);
@@ -100,6 +114,37 @@ public class TUI implements Observer, View {
 		return new Move(move, play.getColor()[colorIndex]);
 	}
 	
+	public String acceptGame(String[] message) {
+		System.out.println("A game has been found");
+		System.out.println("You would play against:");
+		for (int i = 1; i < message.length; i++) {
+			if (!message[i].equals(this.name)) {
+				System.out.println(i + ".  " + message[i]);
+			}
+		}
+		System.out.println("Do you wish to accept Accept or Decline");
+		String input = readString("][< ");
+		int flag = 0;
+		while (flag == 0) {
+			if (input.equals("Accept")) {
+				flag = 1;
+			} else if (input.equals("Decline")) {
+				flag = 1;
+			} else {
+				System.out.println("Please give valid input");
+				input = readString("[]>");
+			}
+		}
+		
+		if (input.equals("Accept")) {
+			return "0";
+		} else {
+			return "1";
+		}
+		
+	}
+
+
 	public void showHint(Player play, Board board) {
 		ArrayList<Move> move = board.getPossibleMoves(play.getColor(), play.getPieces());
 		Random rand = new Random();
@@ -115,46 +160,6 @@ public class TUI implements Observer, View {
 		}
 	}
 
-	@Override
-	public void updateDisplay(Board board) {
-		for (int i = 0; i < Board.DIM; i++) {
-			String croth = "";
-			for (int j = 0; j < Board.DIM; j++) {
-				String stringy = "";
-				for (int circlesize = 0; circlesize < Board.DIFFPIECES; circlesize++) {
-					switch (board.getRing(j, i, circlesize)) {
-						case EMPTY: {
-							stringy += "E";
-							break;
-						}
-						case BLUE: {
-							stringy += "B";
-							break;
-						}
-						case YELLOW: {
-							stringy += "Y";
-							break;
-						}
-						case PURPLE: {
-							stringy += "P";
-							break;
-						}
-						case GREEN: {
-							stringy += "G";
-							break;
-						}
-					}
-				}
-				croth += stringy + "    ";
-			}
-			System.out.println(croth);
-		}
-			
-		
-		
-	}
-
-	
 
 	/**
 	 * this function returns a string of the colors of the player play.
@@ -174,11 +179,6 @@ public class TUI implements Observer, View {
 	
 	
 	
-	@Override
-	public void outOfPieces() {
-		System.out.println(getName() + " ,you are out of pieces");
-		
-	}
 	public String getName() {
 		return this.name;
 	}
@@ -227,11 +227,11 @@ public class TUI implements Observer, View {
 	 * which will be the amount of time the AI can calculate.
 	 */
 	
-	/*@ensures \result == 1 || \result == 2 || result == 3*/
+	/*@ensures (\result == 1) || (\result == 2); */
 	public /*pure*/ int timeTothink() {
 		System.out.println("You have an AI as your player");
     	System.out.println("How much time will it have to think? "
-    			+ "(1 for not so smart 2 or 3 for smarter)");
+    			+ "(1 for not so smart 2 for smarter)");
     	String input = readString("][< ");
     	int result;
     	int flag = 0;
@@ -239,8 +239,6 @@ public class TUI implements Observer, View {
 			if (input.equals("1")) {
 				flag = 1;
 			} else if (input.equals("2")) {
-				flag = 1;
-			} else if (input.equals("3")) {
 				flag = 1;
 			} else {
 				System.out.println("Please give valid input 1, 2 or 3");
@@ -344,7 +342,7 @@ public class TUI implements Observer, View {
 				}
 			} else if (input.equals("exit")) {
 				flag = 1;
-				stringy = input;
+				stringy = null;
 			} else {
 				System.out.println("Please give valid input");
 				input = readString("[]>");

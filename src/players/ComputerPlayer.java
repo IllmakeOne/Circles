@@ -115,9 +115,21 @@ public class ComputerPlayer implements Player {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see players.Player#decresePiece(ringz.Move)
+	 * @requires move != null;
+	 * @requires move.getColor() == getColor()[0] || move.getColor() == getColor()[1];
+	 */
 	@Override
-	public void decresePiece(int col, int circleSize) {
-		pieces[col][circleSize]--;		
+	public void decresePiece(Move move) {
+		int colorindex;
+		if (color[0] == move.getColor()) {
+			colorindex = 0;
+		} else {
+			colorindex = 1;
+		}
+		pieces[colorindex][move.getCircle()]--;
 	}
  
 }

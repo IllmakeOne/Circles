@@ -16,7 +16,7 @@ public class ServerRingz {
      * this functions asks the server manage to name the server.
      * @return their user name of the server
      */
-    public String getName() {
+    public /*pure*/ String getName() {
     	BufferedReader in = new BufferedReader(new InputStreamReader(
                   System.in));
     	System.out.println("Please give the name for the server");
@@ -33,7 +33,7 @@ public class ServerRingz {
      * this tests if @param testedport is a valid port.
      * @return true if it is.
      */
-    public boolean validPort(String testedport) {
+    public /*pure*/ boolean validPort(String testedport) {
     	if (testedport.length() < 6 && testedport.length() > 3) {
 			for (int i = 0; i < testedport.length(); i++) {
 				if (Character.isDigit(testedport.charAt(i)) == false) {
@@ -50,7 +50,7 @@ public class ServerRingz {
      * this functions asks the user to give the Port it will connect to.
      * @return the port
      */
-    public String getPort() {
+    public /*pure*/ String getPort() {
     	BufferedReader in = new BufferedReader(new InputStreamReader(
                   System.in));
     	System.out.println("Please give the port");

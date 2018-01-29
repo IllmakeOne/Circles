@@ -18,7 +18,7 @@ public class ClientRingz {
      * this functions asks the user for an IP address.
      * @return the nature of the IP address
      */
-    public String getAdress() {
+    public /*pure*/ String getAdress() {
     	BufferedReader in = new BufferedReader(new InputStreamReader(
                   System.in));
     	System.out.println("Please give the Internet Address");
@@ -37,7 +37,10 @@ public class ClientRingz {
      * 0 is AI and 1 is Human
      * @return the nature of the player
      */
-    public String getNature() {
+    /*
+     * @ensure \result.equals("1") || \result.equals("0");
+     */
+    public /*pure*/ String getNature() {
     	BufferedReader in = new BufferedReader(new InputStreamReader(
                   System.in));
     	System.out.println("Are you a computer(0) or a human(1)?");
@@ -63,7 +66,7 @@ public class ClientRingz {
      * this functions asks the user to put in their preferred username.
      * @return their user name
      */
-    public String getName() {
+    public /*pure*/ String getName() {
     	BufferedReader in = new BufferedReader(new InputStreamReader(
                   System.in));
     	System.out.println("Please give your username");
@@ -81,7 +84,7 @@ public class ClientRingz {
      * this tests if @param testedport is a valid port.
      * @return true if it is.
      */
-    public boolean validPort(String testedport) {
+    public /*pure*/ boolean validPort(String testedport) {
     	if (testedport.length() < 6 && testedport.length() > 3) {
 			for (int i = 0; i < testedport.length(); i++) {
 				if (Character.isDigit(testedport.charAt(i)) == false) {

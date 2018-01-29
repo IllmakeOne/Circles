@@ -17,9 +17,6 @@ public class Board extends Observable {
 	/**
 	 * initialize the  board with empty fields.
 	 */
-	/*@ ensures (\forAll int x, int y, int pieces;
-	 @ 0 <= x && x <= DIM && 0 <= y && y <= DIM && 
-	 @ 0 <= pieces && pieces <= DIFFPIECES; Color.EMPTY); assignable bord; */
 	public /*@ pure */ Board() {
 		this.bord = new Color[DIM][DIM][DIFFPIECES];
 		for (int x = 0; x < DIM; x++) {
@@ -32,12 +29,10 @@ public class Board extends Observable {
 	}
 	
 	/**
-	 * this function tests if the board is completely and utterly empty
+	 * this function tests if the board is completely and utterly empty.
 	 * @return false when not empty, @return true when empty
 	 */
-	/*@ ensures \result == (\forAll int x, int y, int pieces; 0 <= x && x <= DIM
-	* 	&& 0 <= y && y <= DIM && 0 <= pieces && pieces <= DIFFPIECES; Color.EMPTY);
-	@*/
+	
 	public  /*@ pure */ boolean emptyBoard() {
 		for (int i = 0; i < DIM; i++) {
 			for (int j = 0; j < DIM; j++) {
@@ -59,11 +54,11 @@ public class Board extends Observable {
 	 * @param circlesize is the circlesize
 	 * @return the array
 	 */
-	/*@ requires 0 <= x && x <= 4; */
-	/*@ requires x > 0 ;
-	 * 	requires 0 <= circlesize && circlesize <= 4;
-	 *	ensures (\result[0] == circlesize && \result[1] == x && \result[2] == y);
-	 @*/
+	/* @ requires 0 <= x && x <= 4; 
+	 * @ requires 0 <= y && y <= 4;
+	 * @ requires 0 <= circlesize && circlesize <= 4;
+	 */
+		 
 	public  /*@ pure */ int[] createArray(int x, int y, int circlesize) {
 		int[] cord = new int[3];
 		cord[0] = circlesize;
@@ -79,8 +74,11 @@ public class Board extends Observable {
 	 * @return ArrayList<Move> list with all the possible moves
 	 */
 	
+	/*
+	 * @requires color[0] != null;
+	 * @requires pieces != null;
+	 */
 	public /*@ pure */ ArrayList<Move> getPossibleMoves(Color[] color, int[][] pieces) {
-//		int nrmoves = 0;
 		Move move = null;
 		ArrayList<Move> list = new ArrayList<Move>();
 		for (int cnr = 0; cnr < color.length; cnr++) {
@@ -90,21 +88,14 @@ public class Board extends Observable {
 						if (isCompletlyEmpty(i, j) &&
 								pieces[cnr][0] != 0) {
 							move = new Move(createArray(i, j, 0), color[cnr]);
-							//System.out.println(getRing(j, j, 0));
-							//System.out.println(move);
 							list.add(move);
-							//return move;
 						} 
 						if (getRing(i, j, 0) == Color.EMPTY) {
 							for (int k = 1; k < DIFFPIECES; k++) {
 								if (getRing(i, j, k) == Color.EMPTY &&
 										pieces[cnr][k] != 0) {
-									//	System.out.println(getRing(j, j, 0));
-									//	System.out.println(getRing(j, j, k));
 									move = new Move(createArray(i, j, k), color[cnr]);
 									list.add(move);
-									//	System.out.println(move);
-									//	return move;
 								}
 							}
 						}
@@ -142,8 +133,8 @@ public class Board extends Observable {
 	 * @return this function returns the index of the maximum value in an array.
 	 * it will return -1 if there are multiple indexes with the same maximum value;
 	 */
-	/*@ ensures (/result >= -1 && /result <= array.length());
-	 * 	
+	/*
+	 * @ensures (/result >= -1) && (/result <= array.length());
 	 */
 	public static  /*@ pure */ int arrayMaximum(int[] array) {
 		int highestScore = 0, maxindex1 = 1;
@@ -168,8 +159,8 @@ public class Board extends Observable {
 	 * @param color, the colour which needs to be converted
 	 * @return integer correlated with the colour.
 	 */
-	/*@
-	 * ensures \result >= -1 && \result <= 3
+	/*
+	 * @ensures (\result >= -1) && (\result <= 3);
 	 */
 	public  /*@ pure */ int colorIndex(Color color) {
 		switch (color) {
@@ -195,9 +186,9 @@ public class Board extends Observable {
 	 * @param i, integer which needs to be converted.
 	 * @return color, the color correlated with this integer.
 	 */
-	/*@
-	 * ensures \result >= -1 && \result <= 3
-	 * ensures \result.instanceof(Color);
+	/*
+	 * @ensures (\result >= -1) && (\result <= 3);
+	 * @ensures \result.instanceof(Color);
 	 */
 	public  /*@ pure */ Color intIndex(int i) {
 		switch (i) {
@@ -222,12 +213,12 @@ public class Board extends Observable {
 	 * this function calculates the total amount of rings on a given place on the map.
 	 * stored in an array, value 0 if none rings of this colour present.
 	 * @return  it returns an array, index 0 is blue , 1 is purple, 2 is yellow, 3 is green.
-	 * @param x is line
-	 * @param y is column.
+	 * @param line is line
+	 * @param column is column.
 	 */
-	/*@ requires x >= 0 && x <= 4;
-	 * 	requires x >= 0 && x <= 4;
-	 * 	 
+	/*
+	 * @requires (line >= 0) && (line <= 4);
+	 * @requires (column >= 0) && (column <= 4);
 	 */
 	public  /*@ pure */ int[] tallyUp(int line, int column) {
 		int[] tally = new int[4];

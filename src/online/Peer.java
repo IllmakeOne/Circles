@@ -89,7 +89,7 @@ public class Peer extends Observable implements Runnable {
 
 
     /*@
-       requires (nameArg != null) && (sockArg != null); 
+       requires (playerName != null) && (sockArg != null); 
      */
     /**
      * Constructor. creates a peer object based in the given parameters.

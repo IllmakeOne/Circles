@@ -86,7 +86,6 @@ public class HumanPalyer implements Player {
 	}
 		
 	
-	@Override
 	public void decresePiece(int col, int circleSize) {
 		pieces[col][circleSize]--;
 	}
@@ -116,15 +115,24 @@ public class HumanPalyer implements Player {
 		return view.getStart();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see players.Player#decresePiece(ringz.Move)
+	 * @requires move != null;
+	 * @requires move.getColor() == getColor()[0] || move.getColor() == getColor()[1];
+	 */
+	@Override
+	public void decresePiece(Move move) {
+		int colorindex;
+		if (color[0] == move.getColor()) {
+			colorindex = 0;
+		} else {
+			colorindex = 1;
+		}
+		pieces[colorindex][move.getCircle()]--;
+	
+	}
 
 
-
-	
-	
-//	public static void main(String[] args) {
-//		HumanPalyer boi = new HumanPalyer(Color.BLUE);
-//		boi.determineMove();
-//	}
-	
 	
 }

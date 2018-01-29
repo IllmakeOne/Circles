@@ -99,6 +99,12 @@ public class ClientPlayer implements Player {
 		return true;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see players.Player#decresePiece(ringz.Move)
+	 * @requires move != null;
+	 * @requires move.getColor() == getColor()[0] || move.getColor() == getColor()[1];
+	 */
 	public void decresePiece(Move move) {
 		int colorindex;
 		if (color[0] == move.getColor()) {
@@ -128,13 +134,18 @@ public class ClientPlayer implements Player {
 		return this.sock;
 	}
 
-
 	@Override
 	public int[] getStart() {
 		return null;
 	}
 
-
+	/**
+	 * this function first sends the package "mm" so the client knows it is his/her turn to play.
+	 * then it receives an (hopefully protocol) string protocol move, 
+	 * convert it into a move and @return it.
+	 * if the associated client sends a non-protocol string, it will cancel the game.
+	 * 
+	 */
 	@Override
 	public Move determineMove(Board bord) { 
 		sock.sendPackage(ServerPeer.MAKE_MOVE);
@@ -160,10 +171,6 @@ public class ClientPlayer implements Player {
 		return this.sock.getName();
 	}
 
-	@Override
-	public void decresePiece(int col, int circleSize) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	
 }

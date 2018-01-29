@@ -74,14 +74,26 @@ public class ServerPeer extends Observable implements Runnable {
 	protected Socket sock;
     protected BufferedReader in;
     protected BufferedWriter out;
-    
-    protected boolean ready = false;
-    
     private boolean ingame = false;;
     private Lobby lobby;
     private String message;
     private String[] preferences;
     
+    
+    /**
+     * constructor
+     * @param socc the socket that with which it communicates 
+     * @param lobby the lobby in which the client is
+     * @param servertui the view
+     */
+    /*
+     * @requires socc != null;
+     * @requires lobby != null;
+     * @requires servertui != null;
+     * @ensure in != null;
+     * @ensure out != null;
+     * @ensure sock == socc && this.lobby == lobby;
+     */
     public ServerPeer(Socket socc, Lobby lobby, ServerTUI servertui) {
     	this.lobby = lobby;
     	this.sock = socc;
@@ -97,6 +109,9 @@ public class ServerPeer extends Observable implements Runnable {
     //	System.out.println(PLAYER_STATUS + DELIMITER + ACCEPT);
     }
     
+    /**
+     * this reads the messages from the associated client.
+     */
     public void  run() {
     	message = "";
     	try {
@@ -122,7 +137,12 @@ public class ServerPeer extends Observable implements Runnable {
    
     }
     
-
+    /**
+     * this functions deals in different ways with the message it got from the client.
+     * @param input the message from the associated client.
+     * if the message does not respect the protocol then it is ignored.
+     */
+    /* @requires input != null; */
     public void dealWithMessage(String input) {
     	String[] words = input.split(DELIMITER); 
 		setChanged();
@@ -173,28 +193,43 @@ public class ServerPeer extends Observable implements Runnable {
     	}
     }
     	
+    /**
+     * @return the prefferences of the associated client. 
+     * it can be empty as it can be called when the client has not requested a game yet.
+     */
     public String[] getPreferences() {
     	return this.preferences;
     }
     
+    /**
+     * @return the name of the client.
+     */
     public String getName() {
     	return this.name;
     }
     
+    /**
+     * @return the socket of the client.
+     */
     public Socket getSocket() {
     	return this.sock; 
     }
     
+    /**
+     * this function puts the client in game.
+     * when the client is in game, all the messages from the client are read elsewhere.
+     */
+    /* @ensure ingame == true ;*/
     public void inGame() {
     	ingame = true;
     }
     
+    /**
+     * this function sets the ingame variable to false, so the messages are read in run again.
+     */
+    /* @ensure ingame == false ;*/
     public void gameOver() {
     	ingame = false;
-    }
-    
-    public boolean isReady() {
-    	return ready;
     }
     
     /**
@@ -213,14 +248,15 @@ public class ServerPeer extends Observable implements Runnable {
 		}
     }
     
+    /**
+     * this returns the bufferreader of the class so other classes can read from it.
+     * @return
+     */
     public BufferedReader getIN() {
     	return this.in;
     }
     
     
-//    public String getCurretMessage() {
-//    	return this.message;
-//    }
     
     /**
      * this is just to make things easier when debugging in debugging view.
@@ -238,7 +274,6 @@ public class ServerPeer extends Observable implements Runnable {
      */
     public void sendPackage(String sendPackage) {
     	try {
-    	//	System.out.println(sendPackage + " in send packaage");
     		out.write(sendPackage);
     		out.newLine();
     		out.flush();

@@ -7,9 +7,11 @@ import java.util.HashMap;
 import view.ServerTUI;
 
 public class Lobby {
+	 //list of all the clients who are connected at the moment
+	private ArrayList<String> clients; 
 	
-	private ArrayList<String> clients; //list of all the clients who are connected at the moment
-	private ArrayList<String> alltimeclients; //list of all the clients who ever 
+	//list of all the clients who ever connected to the server
+	private ArrayList<String> alltimeclients;
 	
 	//list of all the clients who are looking for a game at the moment
 	private HashMap<ServerPeer, String[]> playersWaiting; 
@@ -17,6 +19,10 @@ public class Lobby {
 	private ArrayList<OnlineGame> ongoingGames; //list of all ongoing games
 	private ServerTUI tui;
 	
+	/**
+	 * constructor.
+	 * @param tui the visual interface 
+	 */
 	public Lobby(ServerTUI tui) {
 		this.tui = tui;
 		this.clients = new ArrayList<String>();
@@ -25,16 +31,41 @@ public class Lobby {
 		this.ongoingGames = new ArrayList<>();
 	} 
 	
+	/**
+	 * this functions tests if the clientname is already in use.
+	 * if it is not it will @return true and 
+	 * add the clientname to the clients who are currently online.
+	 * if it is not in a the alltimeclients lists, it adds it there too.
+	 * if the clientname is already online, it will @return false;
+	 * @param clientname the client who just connected
+	 */
+	/*
+	 * !getClients().contains(clientname) ==> \result true;
+	 * getClients().contains(clientname) ==> \result false;
+	 */
 	public boolean addtoClientList(String clientname) {
+		if (!alltimeclients.contains(clientname)) {
+			alltimeclients.add(clientname);
+		}
 		if (clients.contains(clientname)) {
 			return false;
 		} else {
-			alltimeclients.add(clientname);
 			clients.add(clientname);
 			return true;
 		}
 	}
 	
+	/**
+	 * this functions adds a client to the waiting list.
+	 * the waiting list is for the clients who are waiting to be connected to a game.s
+	 * @param socc the client.
+	 * @param preferences ; the preferences of the client.
+	 */
+	/*
+	 * @requires preferences.lenght == 2;
+	 * @ensure getPlayersWaiting().keyset().contains(socc) 
+	 * 		&& getPlayersWaiting().get(socc) == preferences;
+	 */
 	public void addtoWaitingList(ServerPeer socc, String[] preferences) {
 		playersWaiting.put(socc, preferences);
 		ServerPeer[] players = startableGame(socc);
@@ -51,6 +82,9 @@ public class Lobby {
 	 *  and select those who match in preference.
 	 * @param preferences
 	 * @return
+	 */
+	/*
+	 * @requires getPlayersWaiting().keyset().contains(current);
 	 */
 	public ServerPeer[] startableGame(ServerPeer current) {
 		//ServerPeer current is the new clients who entered the waiting list.
@@ -111,6 +145,14 @@ public class Lobby {
 		}
 	}
 
+	/**
+	 * this function starts a game.
+	 * when it is called , it is called in a new thread.
+	 * @param players are the players who are going into a game together.
+	 */
+	/*
+	 * @requires players.lenght > 1 && players.lenght < 5;
+	 */
 	public void startGame(ServerPeer[] players) {
 		for (int i = 0; i < players.length; i++) {
 			playersWaiting.remove(players[i]);
@@ -127,27 +169,14 @@ public class Lobby {
 		
 	}
 	
-//	/**
-//	 * this function removes someone form the lobby.
-//	 * it is called when someone dissconects while it is in a game.
-//	 * @param client
-//	 */
-//	public void diconectedWhileinGame(ServerPeer client) {
-//		removePlayerfromLobby(client);
-//		for (int i = 0; i < ongoingGames.size(); i++) {
-//			if (ongoingGames.get(i).getPlayersasList().contains(client)) {
-//				ongoingGames.get(i).someoneLeft(client);
-//				ongoingGames.remove(ongoingGames.get(i));
-//				break;
-//			}
-//		}
-//		client.shutDown();
-//	}
 	
 	/**
 	 * this function removes someone form the lobby.
 	 * it is called when someone disconnects while not in a game
 	 * @param client
+	 */
+	/*
+	 * @ensure !getClients().contains(client) && !getPlayerWaiting().keyset().contains(client);
 	 */
 	public void diconected(ServerPeer client) {
 		removePlayerfromLobby(client);
@@ -186,6 +215,34 @@ public class Lobby {
 		if (playersWaiting.containsKey(client)) {
 			playersWaiting.remove(client);
 		}
+	}
+	
+	/**
+	 * return a list of ongoing game.
+	 */
+	public /*pure */ ArrayList<OnlineGame> getOngoingGame() {
+		return ongoingGames;
+	}
+	
+	/**
+	 * returns the list of current clients online.
+	 */
+	public /*pure*/ ArrayList<String> getClients() {
+		return clients;
+	}
+	
+	/**
+	 * return a list of all the players who have ever been online in the server.
+	 */
+	public /*pure */ ArrayList<String> getAlltimeclients() {
+		return alltimeclients;
+	}
+	
+	/**
+	 * this return the map of the players waiting for a game and their preferences.
+	 */
+	public /*pure */ HashMap<ServerPeer, String[]> getPlayersWaiting() {
+		return playersWaiting;
 	}
 	
 	

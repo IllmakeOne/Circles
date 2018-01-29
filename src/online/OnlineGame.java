@@ -78,7 +78,7 @@ public class OnlineGame implements Runnable, Observer {
 	    		if (players.get(current).isOutOfPieces()) {
 	    			tappers[current] = 1;
 					current = (current + 1) % numberOfplayers;
-	    		} else if (!board.isStrillAbleToPlace(players.get(current))) {
+	    		} else if (!board.isStillAbleToPlace(players.get(current))) {
 	    			tappers[current] = 1;
 					current = (current + 1) % numberOfplayers;
 	    		} else {
