@@ -83,7 +83,7 @@ public class Board extends Observable {
 //		int nrmoves = 0;
 		Move move = null;
 		ArrayList<Move> list = new ArrayList<Move>();
-		for (int cnr = 0; cnr < color.length; cnr++){
+		for (int cnr = 0; cnr < color.length; cnr++) {
 			for (int i = 0; i < DIM; i++) {
 				for (int j = 0; j < DIM; j++) {
 					if (hasFriend(i, j, color[cnr])) {
@@ -374,7 +374,7 @@ public class Board extends Observable {
 		}
 		int[] score = tallyUp(x, y);
 		int total = 0;
-		for (int i = 0; i < DIFFPIECES; i++) {
+		for (int i = 0; i < 4; i++) {
 			total = total + score[i];
 		}
 		if (bord[x][y][0].equals(c)) {
@@ -399,6 +399,7 @@ public class Board extends Observable {
 				}
 			}
 		}
+		System.out.println(score[colorIndex(c)]);
 		if (score[colorIndex(c)] == 1 && total == 0) {
 			return true;
 		}
@@ -413,7 +414,7 @@ public class Board extends Observable {
 	 * @param play
 	 * @return true if is still able to play
 	 */
-	public  /*@ pure */ boolean isStrillAbleToPlace(Player play) {
+	public  /*@ pure */ boolean isStillAbleToPlace(Player play) {
 		ArrayList<Move> move = this.getPossibleMoves(play.getColor(), play.getPieces());
 		if (move.isEmpty()) {
 			return false;

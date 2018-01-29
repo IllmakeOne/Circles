@@ -174,7 +174,7 @@ public class BoardTest {
 		{0, 3, 2}, Color.PURPLE)));
 		assertTrue(bord.addCircle(new Move(new int[] 
 		{0, 3, 3}, Color.PURPLE)));
-		assertFalse(bord.isStrillAbleToPlace(blue));
+		assertFalse(bord.isStillAbleToPlace(blue));
 		System.out.println("something wrong in checking/placing"
 				+ " bases, size 3 is able to have one closeby, bases have not");
 	}
@@ -195,14 +195,16 @@ public class BoardTest {
 	@Test
 	public void testGetPossibleMoves() {
 		int[][] pieces = new int[5][5];
+		Color[] c = new Color[2];
+		c[0]  = Color.GREEN;
 		for (int i = 0; i < 5; i++) {
 			pieces[0][i] = 0;
 		}
-		assertEquals(0, bord.getPossibleMoves(Color.GREEN, pieces).size());
+		assertEquals(0, bord.getPossibleMoves(c, pieces).size());
 		pieces[0][3] = 1;
-		assertEquals(8, bord.getPossibleMoves(Color.GREEN, pieces).size());
+		assertEquals(8, bord.getPossibleMoves(c, pieces).size());
 		
-		ArrayList<Move> moves = bord.getPossibleMoves(Color.GREEN, pieces);
+		ArrayList<Move> moves = bord.getPossibleMoves(c, pieces);
 		Move o = new Move(bord.createArray(1, 1, 3), Color.GREEN);
 		Move o2 = new Move(bord.createArray(3, 3, 2), Color.GREEN);
 		Move o6 = new Move(bord.createArray(4, 4, 3), Color.GREEN);
@@ -214,7 +216,7 @@ public class BoardTest {
 		
 		assertTrue(bord.addCircle(new Move(new int[] 
 		{3, 3, 2}, Color.PURPLE)));
-		moves = bord.getPossibleMoves(Color.GREEN, pieces);
+		moves = bord.getPossibleMoves(c, pieces);
 		Move o3 = new Move(bord.createArray(3, 3, 2), Color.GREEN);
 		Move o4 = new Move(bord.createArray(3, 3, 1), Color.GREEN);
 		pieces[0][0] = 1;
@@ -223,15 +225,15 @@ public class BoardTest {
 		assertFalse(moves.toString().contains(o3.toString()));
 		assertFalse(moves.toString().contains(o5.toString()));
 		assertFalse(moves.toString().contains(o4.toString()));
-		moves = bord.getPossibleMoves(Color.GREEN, pieces);
+		moves = bord.getPossibleMoves(c, pieces);
 		assertTrue(moves.toString().contains(o7.toString()));
 		
 		pieces[0][2] = 3;
 		pieces[0][0] = 0;
-		assertEquals(15, bord.getPossibleMoves(Color.GREEN, pieces).size());
+		assertEquals(15, bord.getPossibleMoves(c, pieces).size());
 		pieces[0][0] = 1;
 		pieces[0][1] = 2;
-		assertEquals(30, bord.getPossibleMoves(Color.GREEN, pieces).size());
+		assertEquals(30, bord.getPossibleMoves(c, pieces).size());
 	}
 	@Test
 	public void testDeepCopy() {
@@ -245,6 +247,42 @@ public class BoardTest {
 				}	
 			}
 		}
+	}
+	@Test
+	public void testHasField() {
+		assertFalse(bord.hasField(1, 1, Color.PURPLE));
+		
+		assertTrue(bord.addCircle(new Move(new int[] 
+			{0, 1, 1}, Color.PURPLE)));
+		assertTrue(bord.hasField(1, 1, Color.PURPLE));
+		
+		assertTrue(bord.addCircle(new Move(new int[] //only 1 circle should be purple's
+			{3, 2, 1}, Color.PURPLE)));
+		assertTrue(bord.hasField(2, 1, Color.PURPLE));
+		
+		assertTrue(bord.addCircle(new Move(new int[] 
+			{4, 2, 1}, Color.YELLOW)));
+		assertFalse(bord.hasField(2, 1, Color.PURPLE));
+		
+		assertTrue(bord.addCircle(new Move(new int[] 
+			{2, 2, 1}, Color.PURPLE)));
+		assertTrue(bord.hasField(2, 1, Color.PURPLE));
+		
+		assertTrue(bord.addCircle(new Move(new int[] 
+			{1, 2, 1}, Color.GREEN)));
+		assertTrue(bord.hasField(2, 1, Color.PURPLE));
+		
+		assertTrue(bord.addCircle(new Move(new int[] 
+			{4, 4, 4}, Color.GREEN)));
+		assertTrue(bord.addCircle(new Move(new int[] 
+			{3, 4, 4}, Color.GREEN)));
+		assertTrue(bord.addCircle(new Move(new int[] 
+			{2, 4, 4}, Color.YELLOW)));
+		assertTrue(bord.addCircle(new Move(new int[] 
+			{1, 4, 4}, Color.YELLOW)));
+		assertFalse(bord.hasField(4, 4, Color.GREEN));
+		assertFalse(bord.hasField(4, 4, Color.PURPLE));
+		
 	}
 	@Test
 	public void testFieldHas() {

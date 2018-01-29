@@ -19,7 +19,15 @@ public class FourPlayerSmart implements Strategy {
 		//this.board = b;
 		
 	} 	
-	  
+	
+	/**
+	 * determines the move to be made. it will itterate till @param miniItteration 
+	 * is surpassed and the parameter @param returns true. this will happen when the
+	 * values no longer change
+	 * @param bord the current board, 
+	 * @param pieces the pieces the player currently has
+	 * 
+	 */
 	@Override
 	public Move determineMove(Board bord, int[][] pieces) {
 		boolean noMoreChange = true;
@@ -40,7 +48,7 @@ public class FourPlayerSmart implements Strategy {
 		return found;
 	}
 	public HashMap<Move, Double> findBestMove(Board bord, int[][] pieces) {
-		ArrayList<Move> moves = bord.getPossibleMoves(colors[0], pieces);
+		ArrayList<Move> moves = bord.getPossibleMoves(colors, pieces);
 		HashMap<Move, Double> gains = new HashMap<Move, Double>();
 		Double badMove;
 		Double newScore;
@@ -134,9 +142,9 @@ public class FourPlayerSmart implements Strategy {
 		//HashMap<Move, Double> moves = new HashMap<Move, Double>();
 		double begin = 0.00;
 		double after = 0.00;
-		begin = ((Integer) bord.getPossibleMoves(colors[0], 
+		begin = ((Integer) bord.getPossibleMoves(colors, 
 				pieces).size()).doubleValue(); //shit to get it to Double
-		after = ((Integer) copy.getPossibleMoves(colors[0], 
+		after = ((Integer) copy.getPossibleMoves(colors, 
 				remainPiece).size()).doubleValue(); //shit to get it to Double
 		Double modifier = begin - after;
 		
