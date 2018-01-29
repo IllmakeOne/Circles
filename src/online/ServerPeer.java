@@ -81,11 +81,8 @@ public class ServerPeer extends Observable implements Runnable {
     private Lobby lobby;
     private String message;
     private String[] preferences;
-    private boolean isON = true;
-    private ServerTUI serverTui;
     
     public ServerPeer(Socket socc, Lobby lobby, ServerTUI servertui) {
-    	this.serverTui = servertui;
     	this.lobby = lobby;
     	this.sock = socc;
     	addObserver(servertui);
@@ -101,12 +98,9 @@ public class ServerPeer extends Observable implements Runnable {
     }
     
     public void  run() {
+    	message = "";
     	try {
     		
-			message = in.readLine();
-			if (message != null) {
-    			dealWithMessage(message); 
-			}
     		while (message != null) { 
     			while (ingame) {
     				try {
@@ -116,16 +110,14 @@ public class ServerPeer extends Observable implements Runnable {
     				}
     			}
     			message = in.readLine();
-    		//	System.out.println(message + " message read in run " + this.name); 
     			dealWithMessage(message); 
     		}
-    		System.out.println("called in run");
-    		lobby.diconected(this);
+    		shutDown();
     	} catch (SocketException e) {
-			lobby.diconected(this);
+    		shutDown();
 		} catch (IOException e) {
-			System.out.println("Something else went wrong");
-			lobby.diconected(this);
+			System.out.println("Something unexpected went wrong");
+    		shutDown();
 		}
    
     }
@@ -143,7 +135,8 @@ public class ServerPeer extends Observable implements Runnable {
     				Thread.currentThread().setName(name);
     			} else {
     				sendPackage(CONNECT + DELIMITER + DECLINE);
-    				lobby.diconected(this);
+    				System.out.println("it was in delcined");
+    	    		shutDown();
     			}
     			break;
     		}
@@ -211,6 +204,7 @@ public class ServerPeer extends Observable implements Runnable {
     	try {
     		setChanged();
     		notifyObservers("disconected");
+    		lobby.diconected(this);
 			sock.close();
 		} catch (StackOverflowError e) {
 			System.out.println("cant shut down in servepeer");

@@ -11,12 +11,10 @@ public class TwoPlayerStragegy implements Strategy {
 	
 	
 	Random rand = new Random();
-	Board board;
 	Color[] colors;
 
 	public TwoPlayerStragegy(Color[] colors) {
 		this.colors = colors; 
-//		this.board = b;
 	}
 	
 	public Move determineMove(Board bord, int[][] pieces) {

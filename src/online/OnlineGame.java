@@ -66,6 +66,8 @@ public class OnlineGame implements Runnable, Observer {
 				}
 			} catch (StackOverflowError e) {
 				lobby.diconected(players.get(current).getSocket());
+			} catch (NullPointerException e) {
+				lobby.diconected(players.get(current).getSocket());
 			}
     		
 	    	
@@ -88,7 +90,7 @@ public class OnlineGame implements Runnable, Observer {
 	    					current = (current + 1) % numberOfplayers;
 	    				}
 	    			} catch (NullPointerException e) {
-	    				lobby.diconectedWhileinGame(players.get(current).getSocket());
+	    				lobby.diconected(players.get(current).getSocket());
 	    			}
 	    		}
 	    	}
@@ -171,9 +173,9 @@ public class OnlineGame implements Runnable, Observer {
 			players.add(new ClientPlayer(2, Color.BLUE, Color.PURPLE, player.get(0)));
 			players.add(new ClientPlayer(2, Color.YELLOW, Color.GREEN, player.get(1)));
 		} else if (player.size() == 3) {
-			players.add(new ClientPlayer(2, Color.BLUE, Color.GREEN, player.get(0)));
-			players.add(new ClientPlayer(2, Color.PURPLE, Color.GREEN, player.get(1)));
-			players.add(new ClientPlayer(2, Color.YELLOW, Color.GREEN, player.get(2)));
+			players.add(new ClientPlayer(3, Color.BLUE, Color.GREEN, player.get(0)));
+			players.add(new ClientPlayer(3, Color.PURPLE, Color.GREEN, player.get(1)));
+			players.add(new ClientPlayer(3, Color.YELLOW, Color.GREEN, player.get(2)));
 		} else {
 			players.add(new ClientPlayer(Color.BLUE, player.get(0)));
 			players.add(new ClientPlayer(Color.PURPLE, player.get(1)));
@@ -245,7 +247,7 @@ public class OnlineGame implements Runnable, Observer {
 					+ players.get(1).getName() + ServerPeer.DELIMITER 
 					+ results[1] + ServerPeer.DELIMITER 
 					+ players.get(2).getName() + ServerPeer.DELIMITER 
-					+ results[2]
+					+ results[2] + ServerPeer.DELIMITER 
 					+ players.get(3).getName() + ServerPeer.DELIMITER 
 					+ results[3];
 		}
