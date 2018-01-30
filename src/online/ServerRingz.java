@@ -24,7 +24,7 @@ public class ServerRingz {
 		try {
 			name = in.readLine();
 		} catch (IOException e) {
-			System.out.println("Cant read name");
+			System.out.println("Cant read name"); 
 		}
     	return name;
     }

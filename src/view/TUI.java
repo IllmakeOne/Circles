@@ -280,6 +280,9 @@ public class TUI implements Observer, View {
 		} else if (arg1.equals("notEmpty")) {
 			System.out.println("Cant put piece there, field not empty \n");
 			
+		} else if (arg1.equals("disco")) {
+			System.out.println("Cant put piece there, field not empty \n");
+			
 		} else if (arg1.equals("noFriend")) {
 			System.out.println("Cant put piece there, it has no friends around it \n");
 		
