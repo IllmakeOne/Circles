@@ -7,21 +7,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
-import java.security.MessageDigest;
-import java.util.HashMap;
 import java.util.Observable;
 import java.util.concurrent.TimeUnit;
-import java.util.prefs.PreferencesFactory;
-
-import javax.management.Notification;
-
-import org.junit.platform.commons.util.ReflectionUtils;
-
-import players.Player;
-import ringz.Board;
-import ringz.Color;
 import view.ServerTUI;
-import view.TUI;
+
 
 public class ServerPeer extends Observable implements Runnable {
 	

@@ -23,7 +23,7 @@ class MoveTest {
 		assertEquals(2, mastermove.getCircle());
 		assertEquals(Color.BLUE, mastermove.getColor());
 		
-		assertEquals(mastermove.toString(),"Line 3 Column  1 Circle sieze 2 Color: BLUE");
+		assertEquals(mastermove.toString(), "Line 3 Column  1 Circle sieze 2 Color: BLUE");
 	}
 
 }

@@ -283,7 +283,6 @@ public class OnlineGame implements Runnable, Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		String[] words = arg.toString().split(ServerPeer.DELIMITER);
 		if (arg.equals("gameaccepted")) {
 			replies++;
 		} else if (arg.equals("gamedeny")) {
@@ -363,7 +362,6 @@ public class OnlineGame implements Runnable, Observer {
 	 */
 	public void sendallConnected(ArrayList<ClientPlayer> players) {
 		String message = ServerPeer.ALL_PLAYERS_CONNECTED;
-		String words;
 		for (int i = 0; i < players.size(); i++) {
 			message += ServerPeer.DELIMITER + players.get(i).getName();
 		}

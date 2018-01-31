@@ -60,9 +60,6 @@ public class SmartStrategy implements Strategy {
 				&& !hasBases(pieces)) {
 			result += 40;
 		}
-		if (fromPintoEnemies(board.getPin(move.getLine(), move.getColumn())) < 0) {
-			
-		}
 		return result;
 	}
 	
@@ -160,7 +157,6 @@ public class SmartStrategy implements Strategy {
 		if (numberPlayers == 2) {
 			int en1 = 0;
 			int en2 = 0;
-			int neutral = 0;
 			int own1 = 0;
 			int own2 = 0;
 			for (int i = 1; i < pin.length; i++) {
@@ -168,8 +164,6 @@ public class SmartStrategy implements Strategy {
 					en1 += 1;
 				} else if (pin[i] == encolor[1]) {
 					en2 += 1;
-				} else if (pin[i] == Color.GREEN) {
-					neutral += 1;
 				} else if (pin[i] == colors[0]) {
 					own1 += 1;
 				} else if (pin[i] == colors[1]) {
@@ -306,16 +300,7 @@ public class SmartStrategy implements Strategy {
 		return sum;
 	}
 	
-	public int stateofThePin(Color[] pincolors) {
-		int result;
-		int index;
-		HashMap<Color, Integer> map = createMap(pincolors);
-		if (colors[1] == null) {
-			index = colortoint(colors[0]);
-			
-		}
-		return 0;
-	}
+	
 	
 	public HashMap<Color, Integer> createMap(Color[] pincolors) {
 		HashMap<Color, Integer> result = new HashMap<>();
@@ -365,8 +350,9 @@ public class SmartStrategy implements Strategy {
 			case YELLOW: {
 				return 3;
 			}
+			default:
+				return -1;
 		}
-		return 0;
 	}
 	
 	public int[] createInt(Color[] pincolors) {

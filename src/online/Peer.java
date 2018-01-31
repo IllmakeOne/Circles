@@ -5,13 +5,10 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Observable;
-import java.util.Scanner;
-
 
 import players.ComputerPlayer;
 import players.HumanPalyer;
