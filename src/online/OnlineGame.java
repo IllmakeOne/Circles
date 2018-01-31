@@ -20,6 +20,7 @@ public class OnlineGame implements Runnable, Observer {
 	private int numberOfplayers;
 	private Lobby lobby;
 	private boolean somoneoneDisconected = false;
+	private ServerPeer decliner;
 	
 	/*
 	 * @requires plays.length < 5 && plays.length > 1;
@@ -287,6 +288,7 @@ public class OnlineGame implements Runnable, Observer {
 			replies++;
 		} else if (arg.equals("gamedeny")) {
 			startable = false;
+			decliner = (ServerPeer) o;
 			replies++;
 		} else if (arg.equals("disco")) {
 			somoneoneDisconected = true;
@@ -295,7 +297,7 @@ public class OnlineGame implements Runnable, Observer {
 //					words[3].equals(ServerPeer.STARTING_BASE)) {
 //			currentMove = ClientPlayer;
 //		}
-	}
+	}  
 	
 	/**
 	 * return the players as a list.
@@ -377,11 +379,14 @@ public class OnlineGame implements Runnable, Observer {
 	 * this sends a package with LOBBY in case someone decline a game.
 	 * @param client
 	 */
-	public void someoneDecline(ServerPeer[] client) {
+	public void someoneDecline(ServerPeer[] clients) {
 		String stringy = ServerPeer.JOINED_LOBBY;
-		System.out.println(stringy + " in someone declined");
-		for (int i = 0; i < client.length; i++) {
-			client[i].sendPackage(stringy);
+		decliner.gameOver();
+		for (int i = 0; i < clients.length; i++) {
+			if (clients[i] != decliner) {
+				lobby.addtoWaitingList(clients[i], clients[i].getPreferences());
+				clients[i].sendPackage(stringy);
+			}
 		}
 	}
 	

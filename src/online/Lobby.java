@@ -51,7 +51,7 @@ public class Lobby {
 	 */
 	public boolean addtoClientList(String clientname) {
 		if (!alltimeclients.contains(clientname)) {
-			alltimeclients.add(clientname);
+			alltimeclients.add(clientname); 
 		}
 		if (clients.contains(clientname)) {
 			return false;

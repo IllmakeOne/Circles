@@ -211,7 +211,7 @@ public class Peer extends Observable implements Runnable {
     			if (gameinProgress == true) { 
     				//System.exit(0);
     				notifyObservers("sdeclined");
-    				lobby();
+    				//lobby();
     				gameinProgress = false;
     			}
     			break;

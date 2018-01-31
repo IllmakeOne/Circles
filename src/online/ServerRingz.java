@@ -23,7 +23,7 @@ public class ServerRingz {
                   System.in));
     	System.out.println("Please give the name for the server");
     	String name = "";
-		try {
+		try { 
 			name = in.readLine(); 
 		} catch (IOException e) {
 			System.out.println("Cant read name"); 
@@ -48,24 +48,29 @@ public class ServerRingz {
 		}
     }
     
-    /** 
-     * reads only one string from the console.
-     * @param prompt
-     * @return
+    
+    /**
+     * this function was supposed to close the server neatly from a single "exit" input.
+     * not enough time to implemnt fully.
      */
-    public static void readExit(boolean shut) {
-        System.out.print("If you type at any time exit, it will shut down");
-        BufferedReader in = new BufferedReader(new InputStreamReader(
-                System.in));
-        String input = "";
-        while (!input.equals("exit")) {
-        	try {
-        		input = in.readLine();
-        	} catch (IOException e) {
-        		System.out.println("error in readExit");
-        	}
-        }
-    }
+//    /** 
+//     * reads only one string from the console.
+//     * @param prompt
+//     * @return
+//     */
+//    public static void readExit(boolean shut) {
+//        System.out.print("If you type at any time exit, it will shut down");
+//        BufferedReader in = new BufferedReader(new InputStreamReader(
+//                System.in));
+//        String input = "";
+//        while (!input.equals("exit")) {
+//        	try {
+//        		input = in.readLine();
+//        	} catch (IOException e) {
+//        		System.out.println("error in readExit");
+//        	}
+//        }
+//    }
     
     /**
      * this functions asks the user to give the Port it will connect to.
@@ -129,7 +134,7 @@ public class ServerRingz {
     	}
 
 
-    	System.out.println("Server Started");
+    	System.out.println("Server Started on port " + port);
 //    	thread = new Thread(() -> readExit(ison));
 //    	thread.start(); 
 	    while (ison) {

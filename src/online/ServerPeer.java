@@ -146,7 +146,7 @@ public class ServerPeer extends Observable implements Runnable {
     				Thread.currentThread().setName(name);
     			} else {
     				sendPackage(CONNECT + DELIMITER + DECLINE);
-    				System.out.println("it was in delcined");
+    			//	System.out.println("it was in delcined");
     	    		shutDown();
     			}
     			break;

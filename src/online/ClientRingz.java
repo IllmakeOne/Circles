@@ -21,8 +21,8 @@ public class ClientRingz {
     public static  /*pure*/ String getAdress() {
     	BufferedReader in = new BufferedReader(new InputStreamReader(
                   System.in));
-    	System.out.println("Please give the Internet Address");
-    	String addres = "";
+    	System.out.println("Please give the IP Address");
+    	String addres = ""; 
 		try {
 			addres = in.readLine(); 
 		} catch (IOException e) {
