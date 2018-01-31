@@ -60,9 +60,6 @@ public class SmartStrategy implements Strategy {
 				&& !hasBases(pieces)) {
 			result += 40;
 		}
-		if (fromPintoEnemies(board.getPin(move.getLine(), move.getColumn())) < 0) {
-			
-		}
 		return result;
 	}
 	
@@ -126,7 +123,7 @@ public class SmartStrategy implements Strategy {
 			} else if (colors[0] == Color.YELLOW) {
 				result[0] = Color.PURPLE;
 				result[1] = Color.BLUE;
-			}
+			} 
 		} else {
 			if (colors[0] == Color.BLUE) {
 				result[0] = Color.YELLOW;
@@ -160,7 +157,6 @@ public class SmartStrategy implements Strategy {
 		if (numberPlayers == 2) {
 			int en1 = 0;
 			int en2 = 0;
-			int neutral = 0;
 			int own1 = 0;
 			int own2 = 0;
 			for (int i = 1; i < pin.length; i++) {
@@ -168,8 +164,6 @@ public class SmartStrategy implements Strategy {
 					en1 += 1;
 				} else if (pin[i] == encolor[1]) {
 					en2 += 1;
-				} else if (pin[i] == Color.GREEN) {
-					neutral += 1;
 				} else if (pin[i] == colors[0]) {
 					own1 += 1;
 				} else if (pin[i] == colors[1]) {
@@ -277,11 +271,11 @@ public class SmartStrategy implements Strategy {
 			}
 		}
 		
-		return sum;
+		return sum; 
 	}
 	 
 	
-	
+	 
 	/**
 	 * this function transforms a pin into an int array where.
 	 *  if the position has 1 then it means an enemy(diff color) is there
@@ -298,12 +292,12 @@ public class SmartStrategy implements Strategy {
 			} else if (pincolors[i] != this.colors[0] && pincolors[i] != Color.EMPTY &&
 					pincolors[i] != this.colors[1]) {
 				sum += -1;
-			} else {
+			} else {   
 				sum += 1;
 			}
 		}
 		//return result;
-		return sum;
+		return sum;  
 	}
 
 }

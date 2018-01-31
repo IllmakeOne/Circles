@@ -2,15 +2,9 @@ package view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
-import java.util.Random;
-
-import org.junit.platform.commons.util.ReflectionUtils;
-
-import players.HumanPalyer;
 import players.Player;
 import ringz.*;
 import strategies.SmartStrategy;
@@ -116,7 +110,7 @@ public class TUI implements Observer, View {
 		} else {
 			readMove(move, colorIndex, play);
 		}
-		
+		in.close();
 		//((HumanPalyer) play).decresePiece(colorIndex, move[0]);
 		return new Move(move, play.getColor()[colorIndex]);
 	}
@@ -508,6 +502,7 @@ public class TUI implements Observer, View {
 			
 			in = new Scanner(System.in);
 		}
+		in.close();
 		return choce;
 	}
 	
@@ -563,6 +558,7 @@ public class TUI implements Observer, View {
     		}
     		in = new Scanner(System.in);
     	}
+    	in.close();
     	return move;
     }
    

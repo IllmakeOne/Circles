@@ -5,14 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Set;
+
 
 import view.ServerTUI;
 
 
 public class ServerRingz {
 
-	private static Thread thread;
+	
 
 	/**
      * this functions asks the server manage to name the server.
@@ -65,7 +65,6 @@ public class ServerRingz {
         		System.out.println("error in readExit");
         	}
         }
-        shut = false;
     }
     
     /**
@@ -100,8 +99,6 @@ public class ServerRingz {
 	 * @param args should be empty
 	 */
 	public static void main(String[] args) {
-		//String name = args[0];
-		String name = getName();
 		int port = 0;
 		ServerSocket ssock = null;
 		Socket sock = null;
