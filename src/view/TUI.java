@@ -76,7 +76,6 @@ public class TUI implements Observer, View {
     
 	@Override
 	public Move askMove(Player play, Board board) {
-		Scanner in = new Scanner(System.in);
 		System.out.println("What would you like to do?" + 
 				" \n 'show' to display the board again" +
 				" \n 'pieces' to show your pieces " +
@@ -85,7 +84,7 @@ public class TUI implements Observer, View {
 		int flag = 1; 
 		String imput;
 		while (flag != 0) {
-			imput = in.nextLine();
+			imput = readString("[]>");
 			if (imput.equals(SHOW)) {
 				updateDisplay(board);
 			} else if (imput.equals(PIECES)) {
@@ -110,7 +109,6 @@ public class TUI implements Observer, View {
 		} else {
 			readMove(move, colorIndex, play);
 		}
-		in.close();
 		//((HumanPalyer) play).decresePiece(colorIndex, move[0]);
 		return new Move(move, play.getColor()[colorIndex]);
 	}
@@ -502,7 +500,6 @@ public class TUI implements Observer, View {
 			
 			in = new Scanner(System.in);
 		}
-		in.close();
 		return choce;
 	}
 	
@@ -521,6 +518,7 @@ public class TUI implements Observer, View {
             input = in.readLine();
         } catch (IOException e) {
         	System.out.println("error in ReadString");
+        	System.exit(0);
         }
         
         if (input == null) {
@@ -558,7 +556,6 @@ public class TUI implements Observer, View {
     		}
     		in = new Scanner(System.in);
     	}
-    	in.close();
     	return move;
     }
    

@@ -266,6 +266,7 @@ public class ServerPeer extends Observable implements Runnable {
     public void sendPackage(String sendPackage) {
     	try {
     		out.write(sendPackage);
+    		System.err.println(sendPackage);
     		out.newLine();
     		out.flush();
     	} catch (IOException e) {

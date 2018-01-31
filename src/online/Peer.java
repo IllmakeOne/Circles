@@ -111,20 +111,25 @@ public class Peer extends Observable implements Runnable {
     * @ensure nature.equals(COMPUTER_PLAYER) ==> thinkingtime != 0;
      */
     public Peer(String playerName, String playerType, Socket sockArg) throws IOException {
-    	this.nature = playerType;
-    	this.playerColors = new HashMap<String, Color>();
-    	this.sock = sockArg;
-    	this.gameinProgress = false;
-    	this.name = playerName;
-    	this.view = new TUI(name);
-    	this.addObserver(view);	
-    	in = new BufferedReader(new InputStreamReader(sockArg.getInputStream()));
-    	out = new BufferedWriter(new OutputStreamWriter(sockArg.getOutputStream()));
-    	sendfirstPack();
-    	if (this.nature.equals(COMPUTER_PLAYER)) {
-    		thinkingtime = view.timeTothink(); 
-    	}
-    }
+    	try {
+    		this.nature = playerType;
+    		this.playerColors = new HashMap<String, Color>();
+    		this.sock = sockArg;
+    		this.gameinProgress = false;
+    		this.name = playerName;
+    		this.view = new TUI(name);
+    		this.addObserver(view);	
+    		in = new BufferedReader(new InputStreamReader(sockArg.getInputStream()));
+    		out = new BufferedWriter(new OutputStreamWriter(sockArg.getOutputStream()));
+    		sendfirstPack();
+    		if (this.nature.equals(COMPUTER_PLAYER)) {
+    			thinkingtime = view.timeTothink(); 
+    		}
+    	} catch (IOException e) {
+    		System.out.println("shouldnt be any problem here");
+    		System.exit(0);
+		}
+    } 
 
     /**
      * Reads strings of the stream of the socket-connection and

@@ -384,6 +384,7 @@ public class OnlineGame implements Runnable, Observer {
 		decliner.gameOver();
 		for (int i = 0; i < clients.length; i++) {
 			if (clients[i] != decliner) {
+				clients[i].gameOver();
 				lobby.addtoWaitingList(clients[i], clients[i].getPreferences());
 				clients[i].sendPackage(stringy);
 			}
