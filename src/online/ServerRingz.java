@@ -100,11 +100,6 @@ public class ServerRingz {
 	 * @param args should be empty
 	 */
 	public static void main(String[] args) {
-		if (args.length != 2) {
-			System.out.println("wrong arguments"); 
-			System.exit(0);
-		}
-		  
 		//String name = args[0];
 		String name = getName();
 		int port = 0;
@@ -139,7 +134,7 @@ public class ServerRingz {
 
     	System.out.println("Server Started");
 //    	thread = new Thread(() -> readExit(ison));
-//    	thread.start();
+//    	thread.start(); 
 	    while (ison) {
     	
 	    	try {
@@ -148,15 +143,9 @@ public class ServerRingz {
 	    		System.out.println("sth wrong in accept");
 	    	}
      
-	//	try {
             ServerPeer client = new ServerPeer(sock, lobby, tui);
 			Thread clientHandler = new Thread(client);
 			clientHandler.start();
-		//	server.shutDown();
-
-		//} catch (IOException e) {
-//			e.printStackTrace();
-		//}
 	    }
 	}
 	

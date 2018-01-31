@@ -8,11 +8,11 @@ import players.Player;
 
 public class Board extends Observable {
 	
-	private Color[][][] bord; //x, y, pin
+	private Color[][][] bord; //line, column, circlesize
 	public static final int DIM = 5;
 	public static final int DIFFPIECES = 5; 
 	//different amount of pieces(12 rings in 4 sizes, 3 bases)
-//	public enum Color { BLUE, PURPLE, YELLOW, GREEN, EMPTY };
+	//	public enum Color { BLUE, PURPLE, YELLOW, GREEN, EMPTY };
 	
 	/**
 	 * initialize the  board with empty fields.
@@ -86,13 +86,14 @@ public class Board extends Observable {
 				for (int j = 0; j < DIM; j++) {
 					if (hasFriend(i, j, color[cnr])) {
 						if (isCompletlyEmpty(i, j) &&
-								pieces[cnr][0] != 0) {
+								pieces[cnr][0] != 0 &&
+								hasSameColor(i, j, color[cnr]) == false) {
 							move = new Move(createArray(i, j, 0), color[cnr]);
 							list.add(move);
 						} 
 						if (getRing(i, j, 0) == Color.EMPTY) {
 							for (int k = 1; k < DIFFPIECES; k++) {
-								if (getRing(i, j, k) == Color.EMPTY &&
+								if (getRing(i, j, k) == Color.EMPTY && 
 										pieces[cnr][k] != 0) {
 									move = new Move(createArray(i, j, k), color[cnr]);
 									list.add(move);
@@ -238,7 +239,7 @@ public class Board extends Observable {
 	 */
 	public  /*@ pure */ int[] tallyUp(int line, int column) {
 		int[] tally = new int[4];
-		for (int ringsize = 0; ringsize < DIFFPIECES; ringsize++) {
+		for (int ringsize = 1; ringsize < DIFFPIECES; ringsize++) {
 			if (colorIndex(getRing(line, column, ringsize)) != -1) {
 				tally[colorIndex(getRing(line, column, ringsize))]++;
 			}	
@@ -304,10 +305,10 @@ public class Board extends Observable {
 	}
 	
 	/**
-	 * this tests if the field at coordites x, y is complety empty.
-	 * @param x
-	 * @param y
-	 * @return
+	 * this tests if the field at coordinates x, y is completly empty.
+	 * @param x the line
+	 * @param y the column
+	 * @return true if it complelty empty.
 	 */
 	public /*@ pure */ boolean isCompletlyEmpty(int x, int y) {
 		for (int i = 0; i < DIFFPIECES; i++) {
@@ -325,16 +326,34 @@ public class Board extends Observable {
 		int[] handy = {-1, 0, 1};
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				if (this.inBounds(x + handy[i], y + handy[j])) {
-					if (fieldHas(x + handy[i], y + handy[j], col)) {
-						return true;
+				if (handy[i] != handy[j] && (handy[i] + handy[j]) != 0) {
+					if (this.inBounds(x + handy[i], y + handy[j])) {
+						if (fieldHas(x + handy[i], y + handy[j], col)) {
+							return true;
+						}
 					}
 				}
 			}
 		}
 		return false;
-		
 	}
+	
+	public boolean hasSameColor(int x, int y, Color col) {
+		int[] handy = {-1, 0, 1};
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				if (handy[i] != handy[j] && (handy[i] + handy[j]) != 0) {
+					if (this.inBounds(x + handy[i], y + handy[j])) {
+						if (getRing(x + handy[i], y + handy[j], 0) == col) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 	
 	/**
 	 * tests if the move is valid.
@@ -350,7 +369,11 @@ public class Board extends Observable {
 			if (this.hasFriend(x, y, col)) {
 				if (circleSize == 0) {
 					if (this.isCompletlyEmpty(x, y)) {
-						//notifyObservers("added");
+						if (hasSameColor(x, y, col)) {
+							notifyObservers("neightborbase");
+							return false;
+						}
+						//notifyObservers("added"); 
 						return true;
 					} else {
 						//System.out.println("There are peices here, cant put base");
@@ -379,8 +402,8 @@ public class Board extends Observable {
 	}
 	/**
 	 * checks if the player with color c has the field.
-	 * @param x x
-	 * @param y y
+	 * @param x line
+	 * @param y column
 	 * @param c color
 	 * @return true if person has won this field, false if not
 	 */

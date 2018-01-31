@@ -30,7 +30,9 @@ public class TUI implements Observer, View {
 		this.name = playername;
 	}
 	
-	
+	/**
+	 * it displays the @param board.
+	 */
 	@Override
 	public void updateDisplay(Board board) {
 		for (int i = 0; i < Board.DIM; i++) {
@@ -67,7 +69,9 @@ public class TUI implements Observer, View {
 		}		
 	}
 
-	
+	/**
+	 * it prints out a message saying that tha player is out of pieces.
+	 */
     @Override
 	public void outOfPieces() {
 		System.out.println(getName() + " ,you are out of pieces");
@@ -75,6 +79,7 @@ public class TUI implements Observer, View {
 	}
 
 
+    
 	@Override
 	public Move askMove(Player play, Board board) {
 		Scanner in = new Scanner(System.in);
@@ -245,7 +250,7 @@ public class TUI implements Observer, View {
 			} else if (input.equals("2")) {
 				flag = 1;
 			} else {
-				System.out.println("Please give valid input 1 or 3");
+				System.out.println("Please give valid input 1 or 2");
 				input = readString("][< ");
 			}
 		}

@@ -11,11 +11,15 @@ import ringz.Move;
 
 public class ClientPlayer implements Player {
 
-	private int[][] pieces;
+	private int[][] pieces; 
 	private Color[] color;
 	private ServerPeer sock;
 	int numberplayers;
 	
+	/**
+	 * Constructor , @param c the colors the client will have.
+	 * @param socc the socket to which it communicates.
+	 */
 	public ClientPlayer(Color c, ServerPeer socc) { 
 		this.numberplayers = 4;
 		this.sock = socc;
@@ -28,7 +32,14 @@ public class ClientPlayer implements Player {
 	}
 
 	
-	
+	/**
+	 * Constructor.
+	 * @param nrplayers is the number of player in the game, 
+	 * it is used for strategy and to know how many pieces to assign to the client.
+	 * @param c1 the primary color.
+	 * @param c2 the secondary color.
+	 * @param socc the socket to which it communicates.
+	 */
 	public ClientPlayer(int nrplayers, Color c1, Color c2, ServerPeer socc) {
 
 		this.numberplayers = nrplayers;
@@ -70,6 +81,11 @@ public class ClientPlayer implements Player {
 //		
 //	}
 
+	/**
+	 * this transforms a (protocol) String into a move.
+	 * @param words is the message which came from client split at DELIMITER
+	 * @return the move made out of @param words
+	 */
 	public Move stringTomove(String[] words) {
 		int line, column, cirlcesize;
 		Color colorr;

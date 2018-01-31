@@ -95,7 +95,7 @@ public class OnlineGame implements Runnable, Observer {
 	    			} catch (NullPointerException e) {
 	    				lobby.diconected(players.get(current).getSocket());
 	    			}
-	    		}
+	    		} 
 	    	}
 	    	
 	    	if (somoneoneDisconected != true) {
@@ -323,7 +323,6 @@ public class OnlineGame implements Runnable, Observer {
 				lobby.addtoWaitingList(plays[i], plays[i].getPreferences());
 			}
 		}
-		System.exit(0);
 	}
 	
 	/**

@@ -26,7 +26,7 @@ public class BoardTest {
 
 	@Before
 	public void setUp() {
-		int[] a = {2, 2};
+		int[] a = {2, 2}; 
 		bord = new Board();
 		bord.placeStart(a);
 		

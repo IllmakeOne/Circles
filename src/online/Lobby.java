@@ -23,6 +23,12 @@ public class Lobby {
 	 * constructor.
 	 * @param tui the visual interface 
 	 */
+	/*
+	 * @require tui != null;
+	 * @ensure getClients() != null;
+	 * @ensure getPlayersWaiting != null;
+	 * @ensure getOngoingGame() != null;
+	 */
 	public Lobby(ServerTUI tui) {
 		this.tui = tui;
 		this.clients = new ArrayList<String>();
@@ -159,8 +165,8 @@ public class Lobby {
 		}
 		OnlineGame game = new OnlineGame(players, this);
 		ongoingGames.add(game);
-		game.run();
 		tui.gameStarted(players);
+		game.run();
 		
 		if (ongoingGames.contains(game)) {
 			ongoingGames.remove(game);
@@ -192,9 +198,12 @@ public class Lobby {
 	}
 	
 
-	/**
+	/** 
 	 * this functions removes the players who started a game, from the waiting list.
 	 * @param players
+	 */
+	/*
+	 * @requires players.lenght > 1 && players.lenght < 5;
 	 */
 	public void removePlayerSfromWaiting(ServerPeer[] players) {
 		for (int i = 0; i < players.length; i++) {

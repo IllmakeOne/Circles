@@ -105,7 +105,7 @@ public class ServerPeer extends Observable implements Runnable {
 		} catch (IOException e) {
 			System.err.println("Sth wrong in ServerPeer creation");
 			e.printStackTrace();
-		}
+		} 
     //	System.out.println(PLAYER_STATUS + DELIMITER + ACCEPT);
     }
     

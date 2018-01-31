@@ -129,12 +129,8 @@ public class ClientRingz {
     /**
      * starts the client.
      * @param args should be empty
-     */
+     */ 
     public static void main(String[] args) {
-        if (args.length != 4) {
-            System.out.println(USAGE); 
-            System.exit(0);
-        } 
  
 //        String name = args[1];
 //        String nature = args[0];

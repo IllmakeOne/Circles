@@ -32,7 +32,7 @@ public class NotsoSmartStrategy implements Strategy {
 			return mov;
 		} else {
 			return null;
-		} 
+		}  
 	}
 	
 	public boolean isBase(Move move) {

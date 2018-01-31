@@ -31,19 +31,11 @@ public class SmartStrategy implements Strategy {
 	 */
 	@Override
 	public Move determineMove(Board bord, int[][] pieces) {
-		ArrayList<Move> move = bord.getPossibleMoves(colors, pieces);
+		ArrayList<Move> move = bord.getPossibleMoves(colors, pieces); 
 		int random = rand.nextInt(move.size());
 		Move mov = move.get(random);
 		if (!move.isEmpty()) {
-			if (movesetHasBases(move)) {
-				while (isBase(mov) != true) {
-					random = rand.nextInt(move.size());
-					mov = move.get(random);
-				}
-			} else {
-				mov = getMove(bord, pieces);
-			}
-			
+			mov = getMove(bord, pieces);
 			return mov;
 		} else {
 			return null;
@@ -99,8 +91,6 @@ public class SmartStrategy implements Strategy {
 		for (int i = 0; i < move.size(); i++) {
 			movescores.put(move.get(i), casePoints(move.get(i), board));
 		}
-		
-		
 		return maxScore(movescores);
 	}
 	
@@ -182,7 +172,7 @@ public class SmartStrategy implements Strategy {
 					neutral += 1;
 				} else if (pin[i] == colors[0]) {
 					own1 += 1;
-				}else if (pin[i] == colors[1]) {
+				} else if (pin[i] == colors[1]) {
 					own2 += 1;
 				}
 			}
@@ -200,7 +190,7 @@ public class SmartStrategy implements Strategy {
 				sum += 150;
 			} else  if (en1 == 0 && en2 == 0 && own1 == 1 && move.getColor() == colors[0]) {
 				sum += 150;
-			} else  if (en1 == 2 && en2 == 0 ||en1 == 0 && en2 == 2) {
+			} else  if (en1 == 2 && en2 == 0 || en1 == 0 && en2 == 2) {
 				sum += -10;
 			} else  if (en1 == 2 && en2 == 0 && own1 == 1 && move.getColor() == colors[0]) {
 				sum += 50;
@@ -208,6 +198,11 @@ public class SmartStrategy implements Strategy {
 				sum += 50;
 			} else  if (en1 == 1 && en2 == 0 || en1 == 0 && en2 == 1) {
 				sum += 25;
+			} else  if (en1 == 0 && en2 == 0 && own1 == 0 && own2 == 1 &&
+						move.getColor() == colors[0] ||
+						en1 == 0 && en2 == 0 && own1 == 1 && own2 == 2 
+						&& move.getColor() == colors[1]) {
+				sum += 100;
 			}
 			
 		} else if (numberPlayers == 3) {

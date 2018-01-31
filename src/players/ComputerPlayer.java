@@ -99,7 +99,7 @@ public class ComputerPlayer implements Player {
 		return firstMove;
 	}
 
-	@Override
+	@Override 
 	public Color[] getColor() {
 		return color;
 	}

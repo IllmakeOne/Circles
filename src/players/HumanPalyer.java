@@ -17,7 +17,7 @@ public class HumanPalyer implements Player {
 	/**
 	 * contrustor of the human player.  if the games has 4 players.
 	 * it receives a color which will be the players's color
-	 * @param c
+	 * @param c 
 	 */
 	public HumanPalyer(Color c, String name, View view) {
 		numberplayers = 4;

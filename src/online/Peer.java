@@ -99,7 +99,7 @@ public class Peer extends Observable implements Runnable {
     //the thinking time is basically the level of smartness of the AI if the client has one.
     public int thinkingtime;
 
-
+ 
    
     /**
      * Constructor. creates a peer object based in the given parameters.
@@ -125,7 +125,7 @@ public class Peer extends Observable implements Runnable {
     	out = new BufferedWriter(new OutputStreamWriter(sockArg.getOutputStream()));
     	sendfirstPack();
     	if (this.nature.equals(COMPUTER_PLAYER)) {
-    		thinkingtime = view.timeTothink();
+    		thinkingtime = view.timeTothink(); 
     	}
     }
 
@@ -137,7 +137,7 @@ public class Peer extends Observable implements Runnable {
     	try {
     		String message = in.readLine();
     		while (message != null) {
-    			System.out.println(message);
+    			//System.out.println(message); was used for testing
     			dealWithMessage(message);  
     			message = in.readLine();
     		}
@@ -151,6 +151,10 @@ public class Peer extends Observable implements Runnable {
 		}
     }
 
+    /**
+     * sends the first pack to the server, which contains the request to connect and the name.
+     * this function is called in the constructor.
+     */
     public void sendfirstPack() {
     	sendPackage(CONNECT + DELIMITER + this.name);
     }
@@ -172,10 +176,13 @@ public class Peer extends Observable implements Runnable {
     	
     }
     
+    /**
+     * sends the @param sendPackage to the server.
+     */
     public void sendPackage(String sendPackage) {
     	try {
     		out.write(sendPackage);
-    		System.out.println(sendPackage);
+    	//	System.out.println(sendPackage); was used for testing
     		out.newLine();
     		out.flush();
     	} catch (IOException e) {
@@ -183,7 +190,10 @@ public class Peer extends Observable implements Runnable {
     	}
     }
 
-    
+    /**
+     * deals with messages comming from the server.
+     * @param message
+     */
     public void dealWithMessage(String message) {
     	String[] words = message.split(DELIMITER);
     	this.setChanged();
@@ -345,8 +355,9 @@ public class Peer extends Observable implements Runnable {
     public void createBoard(String[] words) {
     	
     	this.board = new Board();
-
+    	//adds the view as observer to the board, so the player is informed why a move is not valid.
     	this.board.addObserver(view);
+    	
     	if (numberPlayers == 2) {
 			//Creates Hashmap with name of the player + SECONDARY/PRIMARY color
 			playerColors.put(words[1] + PRIMARY, Color.BLUE);
