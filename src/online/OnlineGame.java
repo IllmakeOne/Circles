@@ -7,6 +7,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
+import players.ClientPlayer;
 import ringz.Board;
 import ringz.Color;
 import ringz.Move;
@@ -20,6 +21,10 @@ public class OnlineGame implements Runnable, Observer {
 	private Lobby lobby;
 	private boolean somoneoneDisconected = false;
 	
+	/*
+	 * @requires plays.length < 5 && plays.length > 1;
+	 * \forall(int i; 0 <= i < plays.length; plays[i]
+	 */
 	public OnlineGame(ServerPeer[] plays, Lobby lobby) {
 		this.lobby = lobby;
 		this.plays = plays;
@@ -75,16 +80,14 @@ public class OnlineGame implements Runnable, Observer {
 	    	//this keep track of who is still able to play, 0 if still able to , and 1 if is out.
 	    	
 	    	while (!board.isFull() && !allTapped(tappers) && !somoneoneDisconected) {
-	    		if (players.get(current).isOutOfPieces()) {
+	    		if (!canPlace(players.get(current), board)) {
 	    			tappers[current] = 1;
 					current = (current + 1) % numberOfplayers;
-	    		} else if (!board.isStillAbleToPlace(players.get(current))) {
-	    			tappers[current] = 1;
-					current = (current + 1) % numberOfplayers;
+	    			
 	    		} else {
 	    			Move currentmove = players.get(current).determineMove(board);
 	    			try {
-	    				if (board.addCircle(currentmove)) {
+	    				if (board.addCircle(currentmove)) { 
 	    					players.get(current).decresePiece(currentmove);
 	    					sendMoveToall(currentmove, players.get(current).getName());
 	    					current = (current + 1) % numberOfplayers;
@@ -99,6 +102,7 @@ public class OnlineGame implements Runnable, Observer {
 	    		//send the result to the involved players if one one disconected
 		    	sendResults(board, numberOfplayers, players);	
 	    	}
+	    
 	    	
 		} else {
 			someoneDecline(plays);
@@ -106,6 +110,19 @@ public class OnlineGame implements Runnable, Observer {
 	}
 
 
+	/**
+	 * this function @returns false if the @param player cannot place pieces on this turn.
+	 */
+	public boolean canPlace(ClientPlayer player, Board board) {
+		if (player.isOutOfPieces() == true) {
+			return false;
+		}
+		if (!board.isStillAbleToPlace(player)) {
+			return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * this function send the move to all players.
 	 * @param move
@@ -228,7 +245,7 @@ public class OnlineGame implements Runnable, Observer {
 		//results is of this form : 
 		//[0]Blue points;[1] Purple points;[2]Yellow points;[3] Green points
 		int[] results = board.total();
-		String stringy = ServerPeer.GAME_ENDED + ServerPeer.DELIMITER;
+		String stringy = ServerPeer.GAME_ENDED + ServerPeer.DELIMITER; 
 		if (numberPlayers == 2) {
 			stringy += players.get(0).getName() + ServerPeer.DELIMITER 
 					+ (results[0] + results[1]) + ServerPeer.DELIMITER
@@ -236,11 +253,11 @@ public class OnlineGame implements Runnable, Observer {
 					+ (results[2] + results[3]);
 		} else if (numberPlayers == 3) {
 			stringy += players.get(0).getName() + ServerPeer.DELIMITER 
-					+ results[0] + ServerPeer.DELIMITER
+					+ results[0] + ServerPeer.DELIMITER 
 					+ players.get(1).getName() + ServerPeer.DELIMITER 
 					+ results[1] + ServerPeer.DELIMITER 
 					+ players.get(2).getName() + ServerPeer.DELIMITER 
-					+ results[3];
+					+ results[2];
 		} else {
 			stringy += players.get(0).getName() + ServerPeer.DELIMITER 
 					+ results[0] + ServerPeer.DELIMITER
@@ -257,6 +274,7 @@ public class OnlineGame implements Runnable, Observer {
 			players.get(i).getSocket().gameOver();
 		}
 		
+
 		
 		
 	}
@@ -280,6 +298,9 @@ public class OnlineGame implements Runnable, Observer {
 //		}
 	}
 	
+	/**
+	 * return the players as a list.
+	 */
 	public ArrayList<ServerPeer> getPlayersasList() {
 		ArrayList<ServerPeer> aux = new ArrayList<>();
 		for (int i = 0; i < numberOfplayers; i++) {
@@ -288,6 +309,11 @@ public class OnlineGame implements Runnable, Observer {
 		return aux;
 	}
 	
+	/**
+	 * if someone leaves the game is cancelled.
+	 *  and all the other players get a package saying that it's over.
+	 * @param leaver the player who left
+	 */
 	public void someoneLeft(ServerPeer leaver) {
 		this.somoneoneDisconected = true;
 		String stringy = ServerPeer.PLAYER_DISCONNECTED + ServerPeer.DELIMITER + leaver.getName();
@@ -297,11 +323,19 @@ public class OnlineGame implements Runnable, Observer {
 				lobby.addtoWaitingList(plays[i], plays[i].getPreferences());
 			}
 		}
+		System.exit(0);
+	}
+	
+	/**
+	 * @return the players as an array.
+	 */
+	public ServerPeer[] getPlayersasArray() {
+		return plays;
 	}
 
 	
 	
-//-----------------------Asking for aproval------------------
+//-----------------------Asking for approval------------------
 	
 	/**
 	 * this functions asks all the clients who have.
@@ -337,40 +371,6 @@ public class OnlineGame implements Runnable, Observer {
 		for (int i = 0; i < players.size(); i++) {
 			players.get(i).getSocket().sendPackage(message);
 		}
-//		
-//		try {
-//			words = plays[0].getIN().readLine();
-//			if (words.equals(ServerPeer.PLAYER_STATUS 
-//					+ ServerPeer.DELIMITER + ServerPeer.ACCEPT)) {
-//				replies++;
-//			} else if (words.equals(ServerPeer.PLAYER_STATUS 
-//					+ ServerPeer.DELIMITER + ServerPeer.DECLINE)) {
-//				replies++;
-//				startable = false;
-//			}
-//		} catch (IOException e) {
-//			System.out.println("Sth wrong in sendallConnected");
-//			e.printStackTrace();
-//		}
-//		
-//		for (int i = 0; i < players.length; i++) {
-//			try {
-//				words = players[i].getIN().readLine();
-//				System.out.println(words + " -=- "+i);
-//				
-//				if (words.equals(ServerPeer.PLAYER_STATUS 
-//						+ ServerPeer.DELIMITER + ServerPeer.ACCEPT)) {
-//					replies++;
-//				} else if (words.equals(ServerPeer.PLAYER_STATUS 
-//						+ ServerPeer.DELIMITER + ServerPeer.DECLINE)) {
-//					replies++;
-//					startable = false;
-//				}
-//			} catch (IOException e) {
-//				System.out.println("Sth wrong in sendallConnected");
-//				e.printStackTrace();
-//			}
-//		}
 		
 	}
 	

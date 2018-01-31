@@ -30,7 +30,7 @@ public class Move {
 	
 	public Color getColor() {
 		return this.color;
-	}
+	} 
 	
 	public String toString() {
 		return "Line " + line +

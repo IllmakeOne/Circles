@@ -44,5 +44,10 @@ public interface Player {
 	 * decrease the player;s pieces based on a move.
 	 */
 	void decresePiece(Move move);
+	
+	/**
+	 * return the number of players.
+	 */
+	int getnumberPlayers();
 }
  

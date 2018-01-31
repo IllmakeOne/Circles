@@ -133,6 +133,8 @@ public class ServerPeer extends Observable implements Runnable {
 		} catch (IOException e) {
 			System.out.println("Something unexpected went wrong");
     		shutDown();
+		} catch (NullPointerException e) {
+			shutDown();
 		}
    
     }

@@ -13,6 +13,8 @@ import org.junit.platform.commons.util.ReflectionUtils;
 import players.HumanPalyer;
 import players.Player;
 import ringz.*;
+import strategies.SmartStrategy;
+import strategies.Strategy;
  
 public class TUI implements Observer, View {
 	
@@ -34,7 +36,7 @@ public class TUI implements Observer, View {
 		for (int i = 0; i < Board.DIM; i++) {
 			String croth = "";
 			for (int j = 0; j < Board.DIM; j++) {
-				String stringy = "";
+				String stringy = ""; 
 				for (int circlesize = 0; circlesize < Board.DIFFPIECES; circlesize++) {
 					switch (board.getRing(j, i, circlesize)) {
 						case EMPTY: {
@@ -81,7 +83,7 @@ public class TUI implements Observer, View {
 				" \n 'pieces' to show your pieces " +
 				" \n 'move' to make a move" +
 				" \n 'hint' if you need a hint");
-		int flag = 1;
+		int flag = 1; 
 		String imput;
 		while (flag != 0) {
 			imput = in.nextLine();
@@ -145,16 +147,18 @@ public class TUI implements Observer, View {
 	}
 
 
+	/**
+	 * this function displays a hit which is calculated by the SmartStrategyAI.
+	 */
 	public void showHint(Player play, Board board) {
-		ArrayList<Move> move = board.getPossibleMoves(play.getColor(), play.getPieces());
-		Random rand = new Random();
-		if (!move.isEmpty()) {
-			int random = rand.nextInt(move.size());
+		Strategy strateg = new SmartStrategy(play.getColor(), play.getnumberPlayers());
+		Move move = strateg.determineMove(board, play.getPieces());
+		if (move != null) {
 			System.out.println("A move could be for example \n");
-			System.out.println("Line: " + move.get(random).getLine());
-			System.out.println("Column: " + move.get(random).getColumn());
-			System.out.println("Circle size: " + move.get(random).getCircle());
-			System.out.println("Color :" + move.get(random).getColor());
+			System.out.println("Line: " + move.getLine());
+			System.out.println("Column: " + move.getColumn());
+			System.out.println("Circle size: " + 	(move.getCircle() + 1));
+			System.out.println("Color :" + move.getColor());
 		} else {
 			System.out.println("You shoulndt be in this situation");
 		}
@@ -223,7 +227,7 @@ public class TUI implements Observer, View {
 	}
 	
 	/**
-	 * this asks the client for a number (1,2,3.
+	 * this asks the client for a number (1,2).
 	 * which will be the amount of time the AI can calculate.
 	 */
 	
@@ -241,7 +245,7 @@ public class TUI implements Observer, View {
 			} else if (input.equals("2")) {
 				flag = 1;
 			} else {
-				System.out.println("Please give valid input 1, 2 or 3");
+				System.out.println("Please give valid input 1 or 3");
 				input = readString("][< ");
 			}
 		}
@@ -281,7 +285,7 @@ public class TUI implements Observer, View {
 			System.out.println("Cant put piece there, field not empty \n");
 			
 		} else if (arg1.equals("disco")) {
-			System.out.println("Cant put piece there, field not empty \n");
+			System.out.println("You exited\n");
 			
 		} else if (arg1.equals("noFriend")) {
 			System.out.println("Cant put piece there, it has no friends around it \n");
@@ -373,7 +377,7 @@ public class TUI implements Observer, View {
 	public String[] requestGame() {
 		
 		String[] end = new String[2];
-		System.out.println("What type of gmae, 2 , 3, 4 players?");
+		System.out.println("What type of game, 2 , 3, 4 players?");
 		String input = readString("[]>");
 		int flag = 0;
 		while (flag == 0) {

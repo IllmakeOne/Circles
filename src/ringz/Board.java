@@ -35,7 +35,7 @@ public class Board extends Observable {
 	
 	public  /*@ pure */ boolean emptyBoard() {
 		for (int i = 0; i < DIM; i++) {
-			for (int j = 0; j < DIM; j++) {
+			for (int j = 0; j < DIM; j++) { 
 				for (int k = 0; k < DIFFPIECES; k++) {
 					if (getRing(i, j, k) != Color.EMPTY) {
 						return false;
@@ -126,6 +126,22 @@ public class Board extends Observable {
 	}
 	
 	/**
+	 * this returns a copy of just the board (pieces and stuff without the functions).
+	 * @return
+	 */
+	public  /*@ pure */ Color[][][] deepBoardCopy() {
+		Color[][][] copy = new Color[DIM][DIM][DIFFPIECES];
+		for (int i = 0; i < DIM; i++) {
+			for (int j = 0; j < DIM; j++) {
+				for (int k = 0; k < DIFFPIECES; k++) {
+					copy[i][j][k] = getRing(i, j, k);
+				}
+			}
+		}
+		return copy;	
+	}
+	
+	/**
 	 * crutch function
 	 * this function calculates the index of the maximum value in an array.
 	 * it will return -1 if there are multiple indexes with the same maximum value;
@@ -187,7 +203,7 @@ public class Board extends Observable {
 	 * @return color, the color correlated with this integer.
 	 */
 	/*
-	 * @ensures (\result >= -1) && (\result <= 3);
+	 * @require (i >= -1) && (i <= 3);
 	 * @ensures \result.instanceof(Color);
 	 */
 	public  /*@ pure */ Color intIndex(int i) {
@@ -257,10 +273,13 @@ public class Board extends Observable {
 	
 	/**
 	 * places the first piece of the game.
-	 * @param a
+	 * @param a is an int array which has the coordinates
+	 */
+	/*
+	 * @requires a[0] > 0 && a[0] < 4;
+	 * @requires a[1] > 0 && a[1] < 4;
 	 */
 	public void placeStart(int[] a) {
-		//ads a multicolored cirlc on a random place so the game can start
 		bord[a[0]][a[1]][4] = Color.BLUE;
 		bord[a[0]][a[1]][1] = Color.GREEN;
 		bord[a[0]][a[1]][2] = Color.PURPLE;
@@ -284,6 +303,12 @@ public class Board extends Observable {
 		return false;
 	}
 	
+	/**
+	 * this tests if the field at coordites x, y is complety empty.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public /*@ pure */ boolean isCompletlyEmpty(int x, int y) {
 		for (int i = 0; i < DIFFPIECES; i++) {
 			if (this.bord[x][y][i] != Color.EMPTY) {
@@ -325,7 +350,7 @@ public class Board extends Observable {
 			if (this.hasFriend(x, y, col)) {
 				if (circleSize == 0) {
 					if (this.isCompletlyEmpty(x, y)) {
-						notifyObservers("added");
+						//notifyObservers("added");
 						return true;
 					} else {
 						//System.out.println("There are peices here, cant put base");
@@ -359,7 +384,7 @@ public class Board extends Observable {
 	 * @param c color
 	 * @return true if person has won this field, false if not
 	 */
-	public boolean hasField(int x, int y, Color c) {
+	public /*@ pure */ boolean hasField(int x, int y, Color c) {
 		if (!fieldHas(x, y, c)) {
 			return false;
 		}
@@ -405,6 +430,9 @@ public class Board extends Observable {
 	 * @param play
 	 * @return true if is still able to play
 	 */
+	/*
+	 * @requires play != null;
+	 */
 	public  /*@ pure */ boolean isStillAbleToPlace(Player play) {
 		ArrayList<Move> move = this.getPossibleMoves(play.getColor(), play.getPieces());
 		if (move.isEmpty()) {
@@ -416,15 +444,21 @@ public class Board extends Observable {
 	
 	
 	/**
-	 * ads a cricle if it is valid. 
+	 * ads a circle if it is valid. 
 	 * @param circleSeize the seize of the circle
 	 * @param col the color of the circle
 	 * @param x the line
 	 * @param y the column
 	 */
+	/*
+	 * @requires move != null;
+	 * @requires move.getLine() < 5 && move.getLine() > -1;
+	 * @requires move.getColumn() < 5 && move.getColumn() > -1;
+	 * @requires move.getCircle() < 5 && move.getCircle() > -1;
+	 */
 	public boolean addCircle(Move move) {
 		int x, y, circleSeize;
-		Color col;
+		Color col; 
 		x = move.getLine();
 		y = move.getColumn();
 		circleSeize = move.getCircle();
@@ -437,8 +471,10 @@ public class Board extends Observable {
 			return  false;
 		}
 	}
+	
 	/**
-	 * ads a cricle does not check if it is valid. 
+	 * ads a circle does not check if it is valid. 
+	 * critch function in the creation of a copy.
 	 * @param copy 
 	 * @param circleSeize the seize of the circle
 	 * @param col the color of the circle
@@ -462,7 +498,7 @@ public class Board extends Observable {
 	 * return the specific ring. 
 	 * @param x line
 	 * @param y column
-	 * @param circleSeize hight
+	 * @param circleSeize height
 	 * @return 
 	 */
 	public  /*@ pure */ Color getRing(int x, int y, int circleSeize) {
@@ -470,7 +506,7 @@ public class Board extends Observable {
 	}
 	
 	/**
-	 * gives all the cirlces in a board coordinate.
+	 * gives all the circles in a board coordinate.
 	 * @param x line
 	 * @param y column 
 	 * @return a vector of Color 
@@ -481,9 +517,6 @@ public class Board extends Observable {
 			pin[i] = this.getRing(x, y, i);
 		}
 		return pin;
-	}
-	public /*@ pure */ Color[][][] getBoard() {
-		return bord;
 	}
 	
 	/**
@@ -526,7 +559,9 @@ public class Board extends Observable {
 		return true;
 	}
 	
-
+	/**
+	 * primitive display fucntion which was used only in testing.
+	 */
 	public /*@ pure */ void display() {
 		for (int i = 0; i < 5; i++) {
 			String croth = "";
@@ -563,6 +598,11 @@ public class Board extends Observable {
 		
 	}
 	
+	/**
+	 * this tests a move without notifying observers of why a move was not executed.
+	 * this was for the AI which made a copy of the board, 
+	 * so it does not notify obsevers each time it tests a move
+	 */
 	public /*@ pure */ boolean validMoveWithoutObservers(int x, int y, Color col, int circleSize) {
 		//display();
 		if (getRing(x, y, 0) == Color.EMPTY) {	

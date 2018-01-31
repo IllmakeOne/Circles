@@ -29,7 +29,7 @@ public class Lobby {
 		this.alltimeclients = new ArrayList<String>();
 		this.playersWaiting = new HashMap<ServerPeer, String[]>();
 		this.ongoingGames = new ArrayList<>();
-	} 
+	}  
 	
 	/**
 	 * this functions tests if the clientname is already in use.
@@ -184,6 +184,7 @@ public class Lobby {
 		for (int i = 0; i < ongoingGames.size(); i++) {
 			if (ongoingGames.get(i).getPlayersasList().contains(client)) {
 				ongoingGames.get(i).someoneLeft(client);
+				tui.gameEnded(ongoingGames.get(i).getPlayersasArray());
 				ongoingGames.remove(ongoingGames.get(i));
 				break;
 			}

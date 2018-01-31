@@ -1,10 +1,10 @@
-package online;
+package players;
 
 
 import java.io.IOException;
 import java.net.SocketException;
 
-import players.Player;
+import online.ServerPeer;
 import ringz.Board;
 import ringz.Color;
 import ringz.Move;
@@ -14,10 +14,10 @@ public class ClientPlayer implements Player {
 	private int[][] pieces;
 	private Color[] color;
 	private ServerPeer sock;
-	
+	int numberplayers;
 	
 	public ClientPlayer(Color c, ServerPeer socc) { 
-	
+		this.numberplayers = 4;
 		this.sock = socc;
 		this.color = new Color[2];
 		this.color[0] = c;
@@ -31,6 +31,7 @@ public class ClientPlayer implements Player {
 	
 	public ClientPlayer(int nrplayers, Color c1, Color c2, ServerPeer socc) {
 
+		this.numberplayers = nrplayers;
 		this.sock = socc;
 		this.color = new Color[2];    	
 		this.color[0] = c1;
@@ -170,6 +171,12 @@ public class ClientPlayer implements Player {
 	public String toString() {
 		return this.sock.getName();
 	}
+	
+
+	public int getnumberPlayers() {
+		return numberplayers;
+	}
+
 
 	
 	

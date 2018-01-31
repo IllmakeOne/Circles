@@ -5,24 +5,26 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+import java.util.Set;
 
 import view.ServerTUI;
 
 
 public class ServerRingz {
 
+	private static Thread thread;
+
 	/**
      * this functions asks the server manage to name the server.
      * @return their user name of the server
      */
-    public /*pure*/ String getName() {
+    public static /*pure*/ String getName() {
     	BufferedReader in = new BufferedReader(new InputStreamReader(
                   System.in));
     	System.out.println("Please give the name for the server");
     	String name = "";
 		try {
-			name = in.readLine();
+			name = in.readLine(); 
 		} catch (IOException e) {
 			System.out.println("Cant read name"); 
 		}
@@ -33,7 +35,7 @@ public class ServerRingz {
      * this tests if @param testedport is a valid port.
      * @return true if it is.
      */
-    public /*pure*/ boolean validPort(String testedport) {
+    public static /*pure*/ boolean validPort(String testedport) {
     	if (testedport.length() < 6 && testedport.length() > 3) {
 			for (int i = 0; i < testedport.length(); i++) {
 				if (Character.isDigit(testedport.charAt(i)) == false) {
@@ -46,11 +48,31 @@ public class ServerRingz {
 		}
     }
     
+    /** 
+     * reads only one string from the console.
+     * @param prompt
+     * @return
+     */
+    public static void readExit(boolean shut) {
+        System.out.print("If you type at any time exit, it will shut down");
+        BufferedReader in = new BufferedReader(new InputStreamReader(
+                System.in));
+        String input = "";
+        while (!input.equals("exit")) {
+        	try {
+        		input = in.readLine();
+        	} catch (IOException e) {
+        		System.out.println("error in readExit");
+        	}
+        }
+        shut = false;
+    }
+    
     /**
      * this functions asks the user to give the Port it will connect to.
      * @return the port
      */
-    public /*pure*/ String getPort() {
+    public static/*pure*/ String getPort() {
     	BufferedReader in = new BufferedReader(new InputStreamReader(
                   System.in));
     	System.out.println("Please give the port");
@@ -83,7 +105,8 @@ public class ServerRingz {
 			System.exit(0);
 		}
 		  
-		String name = args[0];
+		//String name = args[0];
+		String name = getName();
 		int port = 0;
 		ServerSocket ssock = null;
 		Socket sock = null;
@@ -92,24 +115,33 @@ public class ServerRingz {
 		boolean ison = true;
 		
 		try {
-			port = Integer.parseInt(args[1]);
+			//port = Integer.parseInt(args[1]);
+			port = Integer.parseInt(getPort());
 		} catch (NumberFormatException e) {
 			System.out.println("ERROR: port " + args[1]
          		           + " is not an integer");
 			System.exit(0);
 		}
-
-    	System.out.println("Server Started");
+		
     	
-    	try {
-    		ssock = new ServerSocket(port);
-    	} catch (IOException e) {
-    		System.out.println("ERROR: could not create a socket ");
+    	int fine = 0;
+    	while (fine == 0) {
+    		try {
+    			ssock = new ServerSocket(port);
+    			fine = 1;
+    		} catch (IOException e) {
+    			System.out.println("ERROR: could not create a socket ");
+    			System.out.println("port already in use");
+    			port = Integer.parseInt(getPort());
+    		}
     	}
 
-  	
+
+    	System.out.println("Server Started");
+//    	thread = new Thread(() -> readExit(ison));
+//    	thread.start();
 	    while (ison) {
-	    	
+    	
 	    	try {
 	    		sock = ssock.accept();
 	    	} catch (IOException e) {

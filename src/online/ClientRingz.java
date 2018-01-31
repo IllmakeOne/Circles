@@ -18,13 +18,13 @@ public class ClientRingz {
      * this functions asks the user for an IP address.
      * @return the nature of the IP address
      */
-    public /*pure*/ String getAdress() {
+    public static  /*pure*/ String getAdress() {
     	BufferedReader in = new BufferedReader(new InputStreamReader(
                   System.in));
     	System.out.println("Please give the Internet Address");
     	String addres = "";
 		try {
-			addres = in.readLine();
+			addres = in.readLine(); 
 		} catch (IOException e) {
 			System.out.println("Cant read address");
 		}
@@ -40,7 +40,7 @@ public class ClientRingz {
     /*
      * @ensure \result.equals("1") || \result.equals("0");
      */
-    public /*pure*/ String getNature() {
+    public static /*pure*/ String getNature() {
     	BufferedReader in = new BufferedReader(new InputStreamReader(
                   System.in));
     	System.out.println("Are you a computer(0) or a human(1)?");
@@ -66,7 +66,7 @@ public class ClientRingz {
      * this functions asks the user to put in their preferred username.
      * @return their user name
      */
-    public /*pure*/ String getName() {
+    public static /*pure*/ String getName() {
     	BufferedReader in = new BufferedReader(new InputStreamReader(
                   System.in));
     	System.out.println("Please give your username");
@@ -84,7 +84,7 @@ public class ClientRingz {
      * this tests if @param testedport is a valid port.
      * @return true if it is.
      */
-    public /*pure*/ boolean validPort(String testedport) {
+    public static /*pure*/ boolean validPort(String testedport) {
     	if (testedport.length() < 6 && testedport.length() > 3) {
 			for (int i = 0; i < testedport.length(); i++) {
 				if (Character.isDigit(testedport.charAt(i)) == false) {
@@ -101,7 +101,7 @@ public class ClientRingz {
      * this functions asks the user to give the Port it will connect to.
      * @return the port
      */
-    public String getPort() {
+    public static String getPort() {
     	BufferedReader in = new BufferedReader(new InputStreamReader(
                   System.in));
     	System.out.println("Please give the port");
@@ -136,15 +136,18 @@ public class ClientRingz {
             System.exit(0);
         } 
  
-        String name = args[1];
-        String nature = args[0];
+//        String name = args[1];
+//        String nature = args[0];
+        String name = getName();
+        String nature = getNature();
         InetAddress addr = null;
         int port = 0;
         Socket sock = null;
 
         
         try {
-            addr = InetAddress.getByName(args[2]);
+            //addr = InetAddress.getByName(args[2]);
+        	addr = InetAddress.getByName(getAdress());
         } catch (UnknownHostException e) {
             System.out.println(USAGE);
             System.out.println("ERROR: host " + args[2] + " unknown");
@@ -153,7 +156,8 @@ public class ClientRingz {
 
         
         try {
-            port = Integer.parseInt(args[3]);
+          //  port = Integer.parseInt(args[3]);
+        	port = Integer.parseInt(getPort());
         } catch (NumberFormatException e) {
             System.out.println(USAGE);
             System.out.println("ERROR: port " + args[3]

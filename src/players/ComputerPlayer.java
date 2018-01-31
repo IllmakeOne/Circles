@@ -14,52 +14,58 @@ public class ComputerPlayer implements Player {
 	private Color[] color;
 	private String name;
 	private Strategy strateg;
+	private int numberplayers;
 	
 	
 	public ComputerPlayer(Color c, String name, int time) {
+		numberplayers = 4;
 		this.color = new Color[2];
 		this.color[0] = c;	
-		this.pieces = new int[5][5];
+		this.pieces = new int[2][5];
 		for (int i = 0; i < 5; i++) {
-			this.pieces[0][i] = 3;
+			this.pieces[0][i] = 3; 
 		}
-		if (time < 2) {
-			this.strateg = new FourPlayerStrategy(color);
+		if (time == 1) {
+			this.strateg = new NotsoSmartStrategy(color);
 		} else {
-			this.strateg = new FourPlayerSmart(color);
+			this.strateg = new SmartStrategy(color, 4);
 		}	
-		this.name = "computer four players " + name + " " + strateg.getName();
+		this.name = "computer " + name + " " + strateg.getName();
 	}
 	
 	public ComputerPlayer(int nrplayers, Color c1, Color c2, String nam, int time) {
 		this.color = new Color[2];
 		this.color[0] = c1;
-		this.color[1] = c2;
-		this.pieces = new int[5][5];
+		this.color[1] = c2;	
+		this.pieces = new int[2][5];
 		for (int i = 0; i < 5; i++) {
 			this.pieces[0][i] = 3;
 		}
 		if (nrplayers == 2) {
-			if (time < 2) {
-				this.strateg = new TwoPlayerStragegy(color);
+
+			numberplayers = 2;
+			if (time == 1) {
+				this.strateg = new NotsoSmartStrategy(color);
 			} else {
-				this.strateg = new TwoPlayerSmart(color);
+				this.strateg = new SmartStrategy(color, 2);
 			}
 			for (int i = 0; i < 5; i++) {
 				this.pieces[1][i] = 3;
 			} 
 			
 		} else {
-			if (time < 2) {
-				this.strateg = new ThreePlayerStrategy(color);
+
+			numberplayers = 3;
+			if (time == 1) {
+				this.strateg = new NotsoSmartStrategy(color);
 			} else {
-				this.strateg = new ThreePlayerSmart(color);
+				this.strateg = new SmartStrategy(color, 3);
 			}
 			for (int i = 0; i < 5; i++) {
 				this.pieces[1][i] = 1;
 			}
 		}
-		this.name = "computer four players " + name + " " + strateg.getName();
+		this.name = "computer " + name + " " + strateg.getName();
 	}
 
 	
@@ -76,10 +82,13 @@ public class ComputerPlayer implements Player {
 	public String getName() {
 		return this.name;
 	}
-
 	
-
 	
+	@Override
+	public int getnumberPlayers() {
+		return numberplayers;
+	}
+
 
 	@Override
 	public int[] getStart() {

@@ -27,7 +27,7 @@ public class ServerTUI implements Observer {
 			System.out.println(o.toString() + " disconected");
 		}
 		
-	}
+	} 
 
 	
 	

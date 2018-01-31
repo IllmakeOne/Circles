@@ -12,6 +12,7 @@ public class HumanPalyer implements Player {
 	private Color[] color;
 	private String name;
 	private View view;
+	private int numberplayers;
 	
 	/**
 	 * contrustor of the human player.  if the games has 4 players.
@@ -19,6 +20,7 @@ public class HumanPalyer implements Player {
 	 * @param c
 	 */
 	public HumanPalyer(Color c, String name, View view) {
+		numberplayers = 4;
 		this.view = view;
 		this.color = new Color[2];
 		this.color[0] = c;
@@ -27,7 +29,7 @@ public class HumanPalyer implements Player {
 		for (int i = 0; i < Board.DIFFPIECES; i++) {
 			this.pieces[0][i] = 3;
 		}
-	}
+	} 
 
 	/**
 	 * constructor of the human player.  if the games has 2 or 3 players.
@@ -45,11 +47,13 @@ public class HumanPalyer implements Player {
 			this.pieces[0][i] = 3;
 		}
 		if (nrplayers == 2) {
+			numberplayers = 2;
 			for (int i = 0; i < 5; i++) {
 				this.pieces[1][i] = 3;
 			}
 			
 		} else {
+			numberplayers = 3;
 			for (int i = 0; i < 5; i++) {
 				this.pieces[1][i] = 1;
 			}
@@ -83,6 +87,11 @@ public class HumanPalyer implements Player {
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public int getnumberPlayers() {
+		return numberplayers;
 	}
 		
 	

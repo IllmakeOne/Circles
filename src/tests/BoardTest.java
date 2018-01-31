@@ -11,6 +11,7 @@ import ringz.Move;
 import view.TUI;
 import view.View;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -44,7 +45,7 @@ public class BoardTest {
 					}
 				}
 			}
-		}
+		} 
 	}
 	
 	@Test
@@ -131,8 +132,7 @@ public class BoardTest {
 		assertNotEquals(Color.YELLOW, bord.getRing(1, 2, 1));
 		Color[] pin = new Color[] {Color.EMPTY,
 			Color.GREEN, Color.PURPLE, Color.YELLOW, Color.BLUE};
-		assertEquals(bord.getPin(2, 2), pin);
-		//ta will get back to us, cannot fix now.
+		assertArrayEquals(bord.getPin(2, 2), pin);
 	}
 	@Test
 	public void testValidMove() {
@@ -239,7 +239,7 @@ public class BoardTest {
 	public void testDeepCopy() {
 		//nullpointer exception, probably in initiation of copy in method.
 		Board copy = bord.deepCopy();
-		assertNotEquals(bord.getBoard(), copy);
+		assertNotEquals(bord.emptyBoard(), copy);
 		for (int x = 0; x < Board.DIM; x++) {
 			for (int y = 0; y < Board.DIM; y++) {
 				for (int piece = 0; piece < Board.DIFFPIECES; piece++) {

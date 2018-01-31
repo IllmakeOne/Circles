@@ -120,7 +120,7 @@ public class Peer extends Observable implements Runnable {
     	this.gameinProgress = false;
     	this.name = playerName;
     	this.view = new TUI(name);
-    	this.addObserver(view);
+    	this.addObserver(view);	
     	in = new BufferedReader(new InputStreamReader(sockArg.getInputStream()));
     	out = new BufferedWriter(new OutputStreamWriter(sockArg.getOutputStream()));
     	sendfirstPack();
@@ -144,6 +144,7 @@ public class Peer extends Observable implements Runnable {
     		shutDown();
 		} catch (SocketException e) {
 			shutDown();
+			
 		} catch (IOException e) {
 			System.out.println("Something else went wrong");
 			shutDown();
@@ -163,7 +164,7 @@ public class Peer extends Observable implements Runnable {
     	this.setChanged();
     	notifyObservers("joined");
     	String todo = view.whattoDo(this.nature);
-    	if (!todo.equals("exit")) {
+    	if (todo != null && !todo.equals("exit")) {
     		sendPackage(todo);
     	} else {
     		shutDown();
@@ -200,7 +201,8 @@ public class Peer extends Observable implements Runnable {
     		}
     		case JOINED_LOBBY: {
     			this.notifyObservers("lobby");
-    			if (gameinProgress == true) {
+    			if (gameinProgress == true) { 
+    				//System.exit(0);
     				notifyObservers("sdeclined");
     				lobby();
     				gameinProgress = false;
@@ -278,10 +280,15 @@ public class Peer extends Observable implements Runnable {
      * @return
      */
     public String moveTostring(Move move) {
+    	Move mov = move;
+    	while (!this.board.validMove(
+    			mov.getLine(), mov.getColumn(), mov.getColor(), mov.getCircle())) {
+    		mov = player.determineMove(board);
+    	}
     	String stringy = MOVE + DELIMITER;
-    	stringy += move.getLine() + DELIMITER 
-    				+ move.getColumn() + DELIMITER 
-    				+ (move.getCircle() + 1);
+    	stringy += mov.getLine() + DELIMITER 
+    				+ mov.getColumn() + DELIMITER 
+    				+ (mov.getCircle() + 1);
     	if (numberPlayers != 4) {
     		if (move.getColor() == player.getColor()[0]) {
     			stringy += DELIMITER + PRIMARY;
@@ -338,6 +345,8 @@ public class Peer extends Observable implements Runnable {
     public void createBoard(String[] words) {
     	
     	this.board = new Board();
+
+    	this.board.addObserver(view);
     	if (numberPlayers == 2) {
 			//Creates Hashmap with name of the player + SECONDARY/PRIMARY color
 			playerColors.put(words[1] + PRIMARY, Color.BLUE);
@@ -352,7 +361,7 @@ public class Peer extends Observable implements Runnable {
 						playerColors.get(name + SECONDARY), 
 						this.name, this.view);
 			} else {
-				this.player = new ComputerPlayer(numberPlayers,
+				this.player = new ComputerPlayer(numberPlayers, 
 						playerColors.get(name + PRIMARY),
 						playerColors.get(name + SECONDARY), 
 						this.name, thinkingtime);
@@ -421,7 +430,7 @@ public class Peer extends Observable implements Runnable {
     	try {
     		setChanged();
     		notifyObservers("disco");
-			sock.close();
+			sock.close(); 
 		} catch (IOException e) {
 			System.err.println("sth wrong in shutdow");
 			e.printStackTrace();
