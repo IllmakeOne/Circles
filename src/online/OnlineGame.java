@@ -28,7 +28,7 @@ public class OnlineGame implements Runnable, Observer {
 	public OnlineGame(ServerPeer[] plays, Lobby lobby) {
 		this.lobby = lobby;
 		this.plays = plays;
-		for (int i = 0; i < plays.length; i++) {
+		for (int i = 0; i < plays.length; i++) { 
 			this.plays[i].addObserver(this);
 		}
 		this.numberOfplayers = plays.length;
@@ -323,6 +323,7 @@ public class OnlineGame implements Runnable, Observer {
 				lobby.addtoWaitingList(plays[i], plays[i].getPreferences());
 			}
 		}
+		System.exit(0);
 	}
 	
 	/**
